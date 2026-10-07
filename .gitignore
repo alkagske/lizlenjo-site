@@ -1,0 +1,17 @@
+# Source zip (extracted into design/)
+*.zip
+# 8 MB original photos — 1920px web versions are kept
+design/assets/piano.jpg
+design/assets/red-twirl.jpg
+design/assets/reflection.jpg
+design/uploads/more_photos-*.jpg
+design/uploads/Liz Lenjo (3)/birthday-33.jpg
+# Local tooling
+.claude/
+.DS_Store
+node_modules/
+dist/
+.wrangler/
+.astro/
+.dev.vars
+.env*

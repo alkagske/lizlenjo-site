@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@500;600&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#fff;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none;transition:color .3s ease}
+a:hover{color:#0c6b9d}
+::selection{background:#0c6b9d;color:#fff}
+:focus-visible{outline:1px solid #0c6b9d;outline-offset:3px}
+input::placeholder,textarea::placeholder{color:#8a90a0}
+[contenteditable] h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:30px;line-height:1.2;margin:36px 0 12px}
+[contenteditable] blockquote{margin:28px 0;padding-left:24px;border-left:1px solid #0c6b9d;font-family:'Instrument Serif',serif;font-style:italic;font-size:26px;line-height:1.35}
+[contenteditable] p{margin:0 0 18px}
+[contenteditable] aside{font-family:Caveat,cursive;font-size:23px;line-height:1.25;color:#c4372c;border-left:1px dashed #c4372c;padding:2px 0 2px 14px;margin:-6px 0 20px 40px}
+[contenteditable] figure{margin:24px 0;aspect-ratio:16/8;display:flex;align-items:center;justify-content:center;font:11px 'IBM Plex Mono',monospace;color:#6a7186;background:repeating-linear-gradient(135deg,#eef0f5 0 10px,#fff 10px 20px);outline:1px dashed #14213d;outline-offset:-8px}
+[contenteditable] hr{border:0;border-top:1px dashed #0c6b9d;margin:32px 0}
+</style>
+</helmet>
+<div style="font-family:Manrope,sans-serif;font-weight:300;color:#14213d;font-size:15px;line-height:1.7;min-height:100vh;background-color:#fbfaf7;background-image:linear-gradient(#ebe8f0 1px,transparent 1px),linear-gradient(90deg,#ebe8f0 1px,transparent 1px);background-size:32px 32px">
+
+<sc-if value="{{ isReader }}" hint-placeholder-val="{{ true }}">
+<header style="position:sticky;top:0;z-index:20;background:rgba(251,250,247,.92);backdrop-filter:blur(10px)">
+<div style="position:absolute;left:0;right:0;bottom:-10px;height:10px;border-top:1px solid #14213d;background:repeating-linear-gradient(90deg,#14213d 0 1px,transparent 1px 8px) 0 0/100% 4px no-repeat,repeating-linear-gradient(90deg,#14213d 0 1px,transparent 1px 40px) 0 0/100% 9px no-repeat;background-color:#fbfaf7"><div ref="{{ readRef }}" style="position:absolute;inset:0;background:#0c6b9d;opacity:.85;transform-origin:0 50%;transform:scaleX(0)"></div></div>
+<div style="font-family:'IBM Plex Mono',monospace;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;padding:0 clamp(20px,4vw,56px);height:68px;font-size:11px;letter-spacing:.12em;text-transform:uppercase">
+<nav style="display:flex;gap:clamp(18px,2.4vw,36px)"><a href="Home Atelier.dc.html">About</a><a href="#" onClick="{{ goIndex }}" style="color:#0c6b9d">Liz Notes</a></nav>
+<a href="Home Atelier.dc.html" aria-label="Liz Lenjo home"><img src="assets/logo-9-crop.png" alt="Liz Lenjo" style="height:40px;display:block"></a>
+<nav style="display:flex;justify-content:flex-end"><a href="Home Atelier.dc.html#enquire" style="border:1px solid #14213d;padding:10px 18px;border-radius:6px" style-hover="background:#14213d;color:#fff">Speaking</a></nav>
+</div>
+</header>
+
+<sc-if value="{{ isIndex }}" hint-placeholder-val="{{ true }}">
+<section data-screen-label="Blog index" style="max-width:1200px;margin:0 auto;padding:clamp(56px,8vw,110px) clamp(20px,4vw,56px) 0;display:flex;flex-direction:column;gap:48px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:40px;align-items:end">
+<div style="display:flex;flex-direction:column;gap:18px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#0c6b9d">PATTERN BOOK — LIZ NOTES</div>
+<h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:300;font-size:clamp(40px,5vw,64px);line-height:1.02">Notes on entertainment, fashion and <span style="font-style:italic">intellectual property law.</span></h1>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:center;gap:12px;border-bottom:1px solid #14213d;max-width:460px">
+<input ref="{{ searchRef }}" value="{{ q }}" onChange="{{ setQ }}" placeholder="Search Liz Notes" style="all:unset;flex:1;padding:12px 0;font-size:14px">
+<span style="font-family:'IBM Plex Mono',monospace;font-size:10px;border:1px solid #b9bfcc;border-radius:4px;padding:1px 6px;color:#6a7186">/</span>
+<span style="font-family:'IBM Plex Mono',monospace;padding:12px 0;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a7186;white-space:nowrap">{{ resultCount }}</span>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<sc-for list="{{ cats }}" as="c" hint-placeholder-count="6">
+<button onClick="{{ c.pick }}" style="all:unset;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:8px 14px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.fg }};transition:all .3s ease;border-radius:6px">{{ c.name }}</button>
+</sc-for>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a7186">
+<div style="display:flex;gap:14px;align-items:center">
+<span>Sort</span>
+<sc-for list="{{ sorts }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.pick }}" style="all:unset;cursor:pointer;color:{{ o.fg }};border-bottom:1px solid {{ o.line }}">{{ o.label }}</button></sc-for>
+<sc-if value="{{ filtersOn }}" hint-placeholder-val="{{ false }}"><button onClick="{{ clearFilters }}" style="all:unset;cursor:pointer;color:#c4372c">Clear ×</button></sc-if>
+</div>
+<div style="display:flex;border:1px solid #14213d;border-radius:6px;overflow:hidden">
+<sc-for list="{{ layouts }}" as="l" hint-placeholder-count="2"><button onClick="{{ l.pick }}" style="all:unset;cursor:pointer;padding:7px 14px;background:{{ l.bg }};color:{{ l.fg }}">{{ l.label }}</button></sc-for>
+</div>
+</div>
+</div>
+</div>
+
+<sc-if value="{{ isGrid }}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{ hasFeatured }}" hint-placeholder-val="{{ true }}">
+<a href="#" onClick="{{ featured.open }}" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(28px,5vw,64px);align-items:center;border-top:1px dashed #c9cdd8;padding-top:48px" style-hover="color:#14213d">
+<div style="aspect-ratio:3/2;background:#fff repeating-linear-gradient(135deg,#eef0f5 0 10px,#fff 10px 20px);outline:1px dashed #14213d;outline-offset:-8px;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6a7186">cover image</div>
+<div style="display:flex;flex-direction:column;gap:18px">
+<div style="font-family:'IBM Plex Mono',monospace;display:flex;gap:14px;flex-wrap:wrap;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#6a7186"><span style="color:#0c6b9d">Latest</span><span>{{ featured.cat }}</span><span>{{ featured.date }}</span></div>
+<div style="font-family:Caveat,cursive;font-size:26px;color:#c4372c;transform:rotate(-2deg);transform-origin:0 50%;line-height:1.1;margin-top:14px">fresh off the cutting table ↓</div>
+<div style="font-family:'Instrument Serif',serif;font-weight:300;font-size:clamp(30px,3.4vw,46px);line-height:1.08;text-wrap:pretty">{{ featured.title }}</div>
+<p style="margin:0;color:#3a4256;max-width:520px">{{ featured.excerpt }}</p>
+<sc-if value="{{ featured.inSeries }}" hint-placeholder-val="{{ false }}"><span style="align-self:flex-start;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;border:1px dashed #0c6b9d;color:#0c6b9d;padding:5px 10px;border-radius:4px">Pattern set · {{ featured.partLabel }}</span></sc-if>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:14px;padding-top:6px"><span style="width:40px;height:1px;background:currentColor"></span>Read · {{ featured.read }}</div>
+</div>
+</a>
+</sc-if>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:56px clamp(24px,3vw,40px);border-top:1px dashed #c9cdd8;padding-top:48px">
+<sc-for list="{{ rest }}" as="p" hint-placeholder-count="5">
+<a href="#" onClick="{{ p.open }}" style="display:flex;flex-direction:column;gap:14px" style-hover="color:#14213d;opacity:.72">
+<div style="aspect-ratio:4/3;background:#fff repeating-linear-gradient(135deg,#eef0f5 0 10px,#fff 10px 20px);outline:1px dashed #14213d;outline-offset:-8px;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6a7186">{{ p.piece }} · cover image</div>
+<div style="font-family:'IBM Plex Mono',monospace;display:flex;justify-content:space-between;gap:12px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6a7186"><span>{{ p.cat }}</span><span>{{ p.date }}</span></div>
+<div style="font-family:'Instrument Serif',serif;font-size:25px;line-height:1.18;text-wrap:pretty">{{ p.title }}</div>
+<div style="font-size:14px;color:#4a5268;line-height:1.6">{{ p.excerpt }}</div>
+<sc-if value="{{ p.inSeries }}" hint-placeholder-val="{{ false }}"><span style="align-self:flex-start;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;border:1px dashed #0c6b9d;color:#0c6b9d;padding:5px 10px;border-radius:4px">Pattern set · {{ p.partLabel }}</span></sc-if>
+</a>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isArchive }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:44px">
+<sc-for list="{{ archive }}" as="y" hint-placeholder-count="1">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:24px 48px;border-top:1px solid #14213d;padding-top:22px">
+<div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:'Instrument Serif',serif;font-size:64px;line-height:1">{{ y.year }}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6a7186">{{ y.count }}</span></div>
+<div style="grid-column:span 3;display:flex;flex-direction:column;gap:30px;min-width:0">
+<sc-for list="{{ y.months }}" as="m" hint-placeholder-count="3">
+<div style="display:flex;flex-direction:column">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#0c6b9d;padding-bottom:6px">{{ m.month }}</div>
+<sc-for list="{{ m.posts }}" as="ap" hint-placeholder-count="2">
+<a href="#" onClick="{{ ap.open }}" style="display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap;padding:12px 0;border-bottom:1px dashed #c9cdd8" style-hover="color:#0c6b9d"><span style="font-family:'Instrument Serif',serif;font-size:23px;line-height:1.25">{{ ap.title }}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#6a7186;white-space:nowrap">{{ ap.cat }} · {{ ap.day }}</span></a>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+<div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#4a5268;padding:20px 0 60px">Nothing matches that search yet.</div>
+</sc-if>
+</section>
+</sc-if>
+
+<sc-if value="{{ isArticle }}" hint-placeholder-val="{{ false }}">
+<article data-screen-label="Article">
+<div style="max-width:760px;margin:0 auto;padding:clamp(48px,7vw,96px) clamp(20px,4vw,40px) 40px;display:flex;flex-direction:column;gap:24px;text-align:center;align-items:center">
+<button onClick="{{ goIndex }}" style="all:unset;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a7186" style-hover="color:#0c6b9d">← All posts</button>
+<div style="font-family:'IBM Plex Mono',monospace;display:flex;gap:14px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#6a7186;flex-wrap:wrap;justify-content:center"><span style="color:#0c6b9d;white-space:nowrap">{{ cur.cat }}</span><span style="white-space:nowrap">{{ cur.date }}</span><span style="white-space:nowrap">{{ cur.read }} read</span></div>
+<h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:300;font-size:clamp(36px,5vw,60px);line-height:1.05;text-wrap:balance">{{ cur.title }}</h1>
+<p style="margin:0;font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;line-height:1.45;color:#3a4256;max-width:600px">{{ cur.excerpt }}</p>
+<div style="display:flex;gap:12px;align-items:center;font-size:13px;padding-top:8px"><img src="assets/reflection-1920.jpg" alt="" style="width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:50% 25%"><span>Liz Lenjo, Esq.</span></div>
+</div>
+<div style="max-width:1100px;margin:0 auto;padding:0 clamp(20px,4vw,40px)">
+<div style="aspect-ratio:16/8;background:#fff repeating-linear-gradient(135deg,#eef0f5 0 10px,#fff 10px 20px);outline:1px dashed #14213d;outline-offset:-8px;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6a7186">cover image</div>
+</div>
+
+<div style="max-width:1180px;margin:0 auto;padding:clamp(48px,6vw,80px) clamp(20px,4vw,40px);display:flex;flex-wrap:wrap;gap:40px clamp(28px,4vw,64px);justify-content:center">
+<aside style="flex:1 1 170px;max-width:190px;font-family:'IBM Plex Mono',monospace;display:flex;flex-direction:column;gap:26px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a7186;position:sticky;top:100px;align-self:flex-start">
+<div style="display:flex;flex-direction:column;gap:6px"><span style="font-family:'Instrument Serif',serif;font-size:30px;letter-spacing:0;text-transform:none;color:#14213d;line-height:1">{{ minLeft }}</span><span>min left</span></div>
+<sc-if value="{{ hasToc }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:10px;border-top:1px dashed #b9bfcc;padding-top:16px">
+<span>Contents</span>
+<sc-for list="{{ toc }}" as="t" hint-placeholder-count="3"><button onClick="{{ t.go }}" style="all:unset;cursor:pointer;font-family:Manrope,sans-serif;font-size:13px;letter-spacing:0;text-transform:none;line-height:1.4;color:{{ t.fg }};border-left:2px solid {{ t.line }};padding-left:10px;transition:all .3s ease">{{ t.t }}</button></sc-for>
+</div>
+</sc-if>
+<div style="display:flex;flex-direction:column;gap:10px;border-top:1px dashed #b9bfcc;padding-top:16px">
+<span>Text size</span>
+<div style="display:flex;gap:4px">
+<sc-for list="{{ sizes }}" as="z" hint-placeholder-count="3"><button onClick="{{ z.pick }}" aria-label="{{ z.aria }}" style="all:unset;cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:{{ z.px }};letter-spacing:0;text-transform:none;border:1px solid {{ z.border }};background:{{ z.bg }};color:{{ z.fg }};border-radius:6px">A</button></sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;border-top:1px dashed #b9bfcc;padding-top:16px">
+<span>Share</span>
+<a href="{{ liShare }}" target="_blank" rel="noopener" style="color:#14213d">LinkedIn ↗</a>
+<button onClick="{{ copyLink }}" style="all:unset;cursor:pointer;color:#14213d">{{ copyLabel }}</button>
+<span style="font-family:Caveat,cursive;font-size:19px;letter-spacing:0;text-transform:none;color:#c4372c;line-height:1.15">select any line to quote it</span>
+</div>
+</aside>
+
+<div style="flex:999 1 520px;max-width:900px;min-width:0">
+<sc-if value="{{ inSeries }}" hint-placeholder-val="{{ false }}">
+<div style="max-width:640px;margin-bottom:44px;background:#fff;border:1px solid #14213d;outline:1px dashed #14213d;outline-offset:-7px;box-shadow:4px 4px 0 #14213d;padding:22px 24px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase"><span style="color:#0c6b9d">Pattern set</span><span>{{ seriesPart }}</span></div>
+<div style="font-family:'Instrument Serif',serif;font-size:24px;line-height:1.15">{{ seriesName }}</div>
+<div style="display:flex;flex-direction:column">
+<sc-for list="{{ seriesParts }}" as="sp" hint-placeholder-count="3"><button onClick="{{ sp.open }}" style="all:unset;cursor:pointer;display:grid;grid-template-columns:28px 1fr;gap:8px;padding:8px 0;border-top:1px dashed #c9cdd8;font-size:14px;color:{{ sp.fg }};font-weight:{{ sp.w }}"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px">{{ sp.n }}</span><span>{{ sp.title }}</span></button></sc-for>
+</div>
+</div>
+</sc-if>
+
+<div onMouseUp="{{ onSelect }}" style="font-size:{{ fsPx }};line-height:1.85;color:#1f2a44">
+<sc-for list="{{ cur.blocks }}" as="b" hint-placeholder-count="6">
+<div style="display:flex;flex-wrap:wrap;gap:0 44px;align-items:flex-start">
+<div style="flex:1 1 420px;max-width:640px;min-width:0">
+<sc-if value="{{ b.isFirst }}" hint-placeholder-val="{{ false }}"><p style="margin:0 0 22px;text-wrap:pretty"><span style="float:left;font-family:'Instrument Serif',serif;font-size:76px;line-height:.82;padding:6px 10px 0 0;color:#0c6b9d">{{ b.cap }}</span>{{ b.rest }}</p></sc-if>
+<sc-if value="{{ b.isP }}" hint-placeholder-val="{{ true }}"><p style="margin:0 0 22px;text-wrap:pretty">{{ b.t }}</p></sc-if>
+<sc-if value="{{ b.isH }}" hint-placeholder-val="{{ false }}"><h2 id="{{ b.hid }}" data-h="1" style="margin:44px 0 14px;font-family:'Instrument Serif',serif;font-weight:400;font-size:1.8em;line-height:1.2">{{ b.t }}</h2></sc-if>
+<sc-if value="{{ b.isQ }}" hint-placeholder-val="{{ false }}"><blockquote style="margin:40px 0;padding:0 0 0 28px;border-left:1px solid #0c6b9d;font-family:'Instrument Serif',serif;font-style:italic;font-weight:300;font-size:1.75em;line-height:1.3;color:#14213d">{{ b.t }}</blockquote></sc-if>
+<sc-if value="{{ b.isImg }}" hint-placeholder-val="{{ false }}"><figure style="margin:32px 0;display:flex;flex-direction:column;gap:10px"><div style="aspect-ratio:16/9;background:#fff repeating-linear-gradient(135deg,#eef0f5 0 10px,#fff 10px 20px);outline:1px dashed #14213d;outline-offset:-8px"></div><figcaption style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;color:#6a7186">{{ b.t }}</figcaption></figure></sc-if>
+<sc-if value="{{ b.isHr }}" hint-placeholder-val="{{ false }}"><div style="display:flex;align-items:center;gap:12px;margin:36px 0;color:#0c6b9d"><span>✂</span><span style="flex:1;border-top:1px dashed #0c6b9d"></span></div></sc-if>
+</div>
+<div style="flex:0 1 200px;min-width:160px">
+<sc-if value="{{ b.hasNote }}" hint-placeholder-val="{{ false }}"><div style="font-family:Caveat,cursive;font-size:22px;line-height:1.2;color:#c4372c;transform:rotate(-1.5deg);border-left:1px dashed #c4372c;padding:2px 0 2px 12px;margin:4px 0 20px">{{ b.note }}</div></sc-if>
+</div>
+</div>
+</sc-for>
+</div>
+
+<div style="max-width:640px">
+<div style="display:flex;gap:8px;flex-wrap:wrap;padding-top:20px">
+<sc-for list="{{ cur.tags }}" as="t" hint-placeholder-count="3"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;border:1px dashed #b9bfcc;color:#4a5268;border-radius:4px">{{ t }}</span></sc-for>
+</div>
+
+<sc-if value="{{ inSeries }}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px;margin-top:40px">
+<sc-if value="{{ hasPrev }}" hint-placeholder-val="{{ false }}"><button onClick="{{ prevPart.open }}" style="all:unset;cursor:pointer;border:1px dashed #14213d;border-radius:6px;padding:16px 18px;display:flex;flex-direction:column;gap:4px" style-hover="border-style:solid"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#6a7186">← Previous part</span><span style="font-family:'Instrument Serif',serif;font-size:19px;line-height:1.25">{{ prevPart.title }}</span></button></sc-if>
+<sc-if value="{{ hasNext }}" hint-placeholder-val="{{ false }}"><button onClick="{{ nextPart.open }}" style="all:unset;cursor:pointer;border:1px solid #14213d;background:#14213d;color:#fbfaf7;border-radius:6px;padding:16px 18px;display:flex;flex-direction:column;gap:4px;text-align:right" style-hover="background:#0c6b9d;border-color:#0c6b9d"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#aab1c2">Next part →</span><span style="font-family:'Instrument Serif',serif;font-size:19px;line-height:1.25">{{ nextPart.title }}</span></button></sc-if>
+</div>
+</sc-if>
+
+<div style="margin-top:56px;background:#fff;border:1px solid #14213d;outline:1px dashed #14213d;outline-offset:-8px;box-shadow:5px 5px 0 #0c6b9d;padding:30px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+<img src="assets/piano-1920.jpg" alt="Liz Lenjo" style="width:76px;height:76px;border-radius:50%;object-fit:cover;object-position:62% 30%">
+<div style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:200px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0c6b9d">Written by</span><span style="font-family:'Instrument Serif',serif;font-size:26px;line-height:1.1">Liz Lenjo, Esq.</span></div>
+</div>
+<div style="display:flex;flex-direction:column;font-size:14px">
+<sc-for list="{{ authorRoles }}" as="r" hint-placeholder-count="3"><div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:9px 0;border-top:1px dashed #c9cdd8"><span>{{ r.org }}</span><span style="color:#4a5268">{{ r.role }}</span></div></sc-for>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<a href="Home Atelier.dc.html#enquire" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:#14213d;color:#fff;padding:12px 18px;border-radius:6px" style-hover="background:#0c6b9d;color:#fff">Book Liz to speak on {{ cur.cat }} →</a>
+<a href="https://www.linkedin.com/in/lizlenjo/" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;border:1px solid #14213d;padding:11px 16px;border-radius:6px">Follow on LinkedIn ↗</a>
+</div>
+</div>
+
+<div style="margin-top:72px;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid #14213d;padding-bottom:14px"><div style="font-family:'Instrument Serif',serif;font-size:28px">Conversation</div><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6a7186">{{ curCommentCount }}</span></div>
+<sc-for list="{{ curComments }}" as="c" hint-placeholder-count="2">
+<div style="display:flex;flex-direction:column;gap:6px;border-bottom:1px dashed #c9cdd8;padding-bottom:22px">
+<div style="display:flex;justify-content:space-between;font-size:13px"><span style="font-weight:500">{{ c.name }}</span><span style="color:#6a7186">{{ c.when }}</span></div>
+<div style="font-size:15px;color:#2a3550;line-height:1.7">{{ c.text }}</div>
+</div>
+</sc-for>
+<sc-if value="{{ sentComment }}" hint-placeholder-val="{{ false }}">
+<div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:21px;color:#0c6b9d">Thank you. Your comment will appear once it has been reviewed.</div>
+</sc-if>
+<sc-if value="{{ canComment }}" hint-placeholder-val="{{ true }}">
+<form onSubmit="{{ submitComment }}" style="display:flex;flex-direction:column;gap:14px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px">
+<input required name="name" placeholder="Name" style="all:unset;border-bottom:1px dashed #b9bfcc;padding:12px 0;font-size:14px">
+<input required type="email" name="email" placeholder="Email (not published)" style="all:unset;border-bottom:1px dashed #b9bfcc;padding:12px 0;font-size:14px">
+</div>
+<textarea required name="text" rows="4" placeholder="Add to the conversation" style="all:unset;border-bottom:1px dashed #b9bfcc;padding:12px 0;font-size:14px;line-height:1.7;resize:vertical"></textarea>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+<span style="font-size:12px;color:#6a7186">Protected by Cloudflare Turnstile. Comments are reviewed before publishing.</span>
+<button type="submit" style="all:unset;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:#14213d;color:#fff;padding:14px 22px;border-radius:6px" style-hover="background:#0c6b9d">Post comment</button>
+</div>
+</form>
+</sc-if>
+</div>
+</div>
+</div>
+</div>
+
+<div style="background:#fff;border-top:1px solid #14213d">
+<div style="max-width:1200px;margin:0 auto;padding:clamp(56px,7vw,96px) clamp(20px,4vw,56px);display:flex;flex-direction:column;gap:36px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap"><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#0c6b9d">Keep reading</div><span style="font-family:Caveat,cursive;font-size:22px;color:#c4372c">cut from the same cloth</span></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:clamp(24px,3vw,40px)">
+<sc-for list="{{ related }}" as="p" hint-placeholder-count="3">
+<a href="#" onClick="{{ p.open }}" style="display:flex;flex-direction:column;gap:12px" style-hover="color:#0c6b9d">
+<div style="aspect-ratio:16/10;background:#fff repeating-linear-gradient(135deg,#eef0f5 0 10px,#fff 10px 20px);outline:1px dashed #14213d;outline-offset:-8px"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#6a7186;display:flex;justify-content:space-between;gap:10px"><span>{{ p.why }}</span><span>{{ p.read }}</span></div>
+<div style="font-family:'Instrument Serif',serif;font-size:24px;line-height:1.2">{{ p.title }}</div>
+</a>
+</sc-for>
+</div>
+</div>
+</div>
+</article>
+</sc-if>
+
+<footer style="background:#14213d;color:#aab1c2;margin-top:clamp(72px,9vw,120px)">
+<div style="max-width:1200px;margin:0 auto;padding:56px clamp(20px,4vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:40px;align-items:end">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-family:'Instrument Serif',serif;font-weight:300;font-size:30px;color:#fbfaf7">New posts, by email.</div>
+<sc-if value="{{ subscribed }}" hint-placeholder-val="{{ false }}"><div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:20px;color:#8fc3e0">Thank you for subscribing.</div></sc-if>
+<sc-if value="{{ notSubscribed }}" hint-placeholder-val="{{ true }}">
+<form onSubmit="{{ subscribe }}" style="display:flex;border-bottom:1px solid #5a6684;max-width:420px"><input required type="email" placeholder="Email address" style="all:unset;flex:1;padding:12px 0;font-size:14px;color:#fbfaf7"><button type="submit" style="all:unset;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#fbfaf7;padding:12px 0 12px 16px">Subscribe →</button></form>
+</sc-if>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;display:flex;justify-content:flex-end;align-items:center;gap:28px;flex-wrap:wrap;font-size:11px;letter-spacing:.14em;text-transform:uppercase">
+<img src="assets/logo-white-crop.png" alt="Liz Lenjo" style="height:48px">
+<a href="https://www.linkedin.com/in/lizlenjo/">LinkedIn</a><a href="https://myip.lawyer/">MyIP Legal Studio</a><span style="color:#6a7186">© 2026</span>
+</div>
+</div>
+</footer>
+
+<sc-if value="{{ hlOn }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;left:{{ hlX }};top:{{ hlY }};transform:translate(-50%,calc(-100% - 12px));z-index:60;display:flex;gap:2px;background:#14213d;padding:4px;border-radius:8px;box-shadow:0 12px 30px -10px rgba(20,33,61,.5);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap">
+<button onMouseDown="{{ hlLinkedIn }}" style="all:unset;cursor:pointer;color:#fff;padding:8px 12px;border-radius:5px" style-hover="background:#0c6b9d">Quote on LinkedIn</button>
+<button onMouseDown="{{ hlX2 }}" style="all:unset;cursor:pointer;color:#fff;padding:8px 12px;border-radius:5px" style-hover="background:#0c6b9d">Post on X</button>
+<button onMouseDown="{{ hlCopy }}" style="all:unset;cursor:pointer;color:#8fc3e0;padding:8px 12px;border-radius:5px" style-hover="background:#0c6b9d;color:#fff">{{ hlCopyLabel }}</button>
+</div>
+</sc-if>
+</sc-if>
+
+<sc-if value="{{ isStudio }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Studio" style="display:grid;grid-template-columns:clamp(180px,18vw,232px) minmax(0,1fr);min-height:100vh;background-color:#2f4a3f;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(rgba(255,255,255,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.16) 1px,transparent 1px);background-size:20px 20px,20px 20px,100px 100px,100px 100px">
+<aside style="background:#14213d;color:#d4d8e2;padding:28px 20px;display:flex;flex-direction:column;gap:36px;position:sticky;top:0;height:100vh;box-sizing:border-box">
+<div style="display:flex;flex-direction:column;gap:6px"><img src="assets/logo-white-crop.png" alt="Liz Lenjo" style="height:44px;align-self:flex-start"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#7f88a0;padding-top:8px">Workroom</span></div>
+<nav style="display:flex;flex-direction:column;gap:2px;font-size:13px">
+<sc-for list="{{ studioNav }}" as="n" hint-placeholder-count="4">
+<button onClick="{{ n.go }}" style="all:unset;cursor:pointer;display:flex;justify-content:space-between;padding:10px 12px;background:{{ n.bg }};color:{{ n.fg }};border-radius:6px" style-hover="color:#fff">{{ n.label }}<span style="color:#7f88a0;font-size:12px">{{ n.count }}</span></button>
+</sc-for>
+</nav>
+<button onClick="{{ newPost }}" style="all:unset;font-family:'IBM Plex Mono',monospace;cursor:pointer;text-align:center;font-size:11px;letter-spacing:.12em;text-transform:uppercase;border:1px solid #fbfaf7;color:#fbfaf7;padding:12px;border-radius:6px" style-hover="background:#fbfaf7;color:#14213d">New post</button>
+<div style="margin-top:auto;display:flex;flex-direction:column;gap:6px;font-size:12px;color:#7f88a0;border-top:1px solid #2a3a5c;padding-top:18px">
+<span style="color:#d4d8e2">Liz Lenjo</span><span>Signed in with Cloudflare Access</span><button onClick="{{ toReader }}" style="all:unset;cursor:pointer;color:#8fc3e0;padding-top:6px">View site ↗</button>
+</div>
+</aside>
+
+<main style="padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;gap:28px;min-width:0">
+
+<sc-if value="{{ tabPosts }}" hint-placeholder-val="{{ true }}">
+<div style="flex:none;display:flex;justify-content:space-between;align-items:flex-end;gap:14px 20px;flex-wrap:wrap">
+<div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#cfe0d6">Workroom</div><h1 style="margin:6px 0 0;font-family:'Instrument Serif',serif;font-weight:400;font-size:44px;line-height:1.05;color:#fbfaf7">Posts</h1></div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;row-gap:6px">
+<sc-for list="{{ statusTabs }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.pick }}" style="all:unset;white-space:nowrap;flex:none;cursor:pointer;font-size:12px;padding:8px 14px;border:1px solid #cfe0d6;background:{{ t.bg }};color:{{ t.fg }};border-radius:6px">{{ t.label }} <span style="opacity:.6">{{ t.count }}</span></button></sc-for>
+</div>
+</div>
+<div style="flex:none;background:#fff;border:1px dashed #c9cdd8;overflow-x:auto">
+<div style="min-width:640px">
+<div style="font-family:'IBM Plex Mono',monospace;display:grid;grid-template-columns:minmax(0,1fr) 130px 110px 160px;gap:20px;padding:14px 24px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6a7186;border-bottom:1px dashed #c9cdd8"><span>Title</span><span>Category</span><span>Status</span><span>Date</span></div>
+<sc-for list="{{ studioPosts }}" as="p" hint-placeholder-count="6">
+<button onClick="{{ p.edit }}" style="all:unset;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) 130px 110px 160px;gap:20px;padding:18px 24px;border-bottom:1px dashed #e1e3ea;align-items:center;font-size:14px;width:100%;box-sizing:border-box" style-hover="background:#faf9f7">
+<span style="font-family:'Instrument Serif',serif;font-size:20px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ p.title }}</span>
+<span style="color:#4a5268">{{ p.cat }}</span>
+<span style="display:flex;align-items:center;gap:8px"><span style="width:7px;height:7px;border-radius:50%;background:{{ p.dot }}"></span>{{ p.status }}</span>
+<span style="color:#4a5268">{{ p.dateLabel }}</span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ tabEditor }}" hint-placeholder-val="{{ false }}">
+<div style="flex:none;display:flex;justify-content:space-between;align-items:center;gap:12px 16px;flex-wrap:wrap">
+<button onClick="{{ backToPosts }}" style="all:unset;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#cfe0d6" style-hover="color:#fff">← Posts</button>
+<div style="display:flex;gap:12px 14px;align-items:center;flex-wrap:wrap;justify-content:flex-end;font-size:12px;color:#cfe0d6">
+<span style="display:flex;align-items:center;gap:8px;white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:{{ saveDot }}"></span>{{ saveState }}</span>
+<div style="display:flex;border:1px solid #cfe0d6;border-radius:6px;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase">
+<sc-for list="{{ pvModes }}" as="v" hint-placeholder-count="4"><button onClick="{{ v.pick }}" style="all:unset;cursor:pointer;padding:9px 12px;white-space:nowrap;background:{{ v.bg }};color:{{ v.fg }}">{{ v.label }}</button></sc-for>
+</div>
+<button onClick="{{ publish }}" style="all:unset;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:#0c6b9d;color:#fff;padding:12px 20px;white-space:nowrap;border-radius:6px" style-hover="background:#14213d">{{ publishLabel }}</button>
+</div>
+</div>
+<div style="flex:none;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<div style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column">
+<div style="display:{{ writeDisp }};background:#fff;border:1px dashed #c9cdd8;padding:clamp(28px,4vw,56px);flex-direction:column;gap:20px;min-width:0">
+<div style="aspect-ratio:16/7;background:#fff repeating-linear-gradient(135deg,#eef0f5 0 10px,#fff 10px 20px);outline:1px dashed #14213d;outline-offset:-8px;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6a7186">drop cover image · served via Cloudflare Images</div>
+<input value="{{ ed.title }}" onChange="{{ setTitle }}" placeholder="Title" style="all:unset;font-family:'Instrument Serif',serif;font-weight:300;font-size:clamp(32px,3.6vw,48px);line-height:1.1">
+<input value="{{ ed.excerpt }}" onChange="{{ setExcerpt }}" placeholder="A one-line standfirst" style="all:unset;font-family:'Instrument Serif',serif;font-style:italic;font-size:21px;color:#3a4256">
+<div style="position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;background:#fff;border-top:1px dashed #c9cdd8;border-bottom:1px dashed #c9cdd8;padding:6px 0">
+<div style="display:flex;gap:2px;flex-wrap:wrap">
+<sc-for list="{{ tools }}" as="t" hint-placeholder-count="7"><button onMouseDown="{{ t.run }}" title="{{ t.title }}" style="all:unset;cursor:pointer;min-width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#2a3550;padding:0 8px;border-radius:6px" style-hover="background:#f1f2f5">{{ t.label }}</button></sc-for>
+</div>
+<span style="font-family:Caveat,cursive;font-size:20px;color:#c4372c;padding-right:6px">type / for headings, notes, citations…</span>
+</div>
+<div ref="{{ bodyRef }}" contenteditable="true" onInput="{{ onBody }}" onKeyDown="{{ edKeyDown }}" onKeyUp="{{ edKeyUp }}" onBlur="{{ edBlur }}" style="outline:none;min-height:360px;font-size:17px;line-height:1.85;color:#1f2a44"></div>
+</div>
+
+<sc-if value="{{ pvPage }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;justify-content:center">
+<div style="width:{{ pvW }};max-width:100%;background:#fbfaf7;border:1px solid #14213d;border-radius:{{ pvR }};overflow:hidden;box-shadow:6px 6px 0 #14213d">
+<div style="display:flex;gap:10px;align-items:center;padding:10px 14px;background:#14213d;color:#aab1c2;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em"><span style="display:flex;gap:5px"><span style="width:8px;height:8px;border-radius:50%;background:#5a6684"></span><span style="width:8px;height:8px;border-radius:50%;background:#5a6684"></span><span style="width:8px;height:8px;border-radius:50%;background:#5a6684"></span></span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">lizlenjo.com/notes/{{ slug }}</span></div>
+<div style="padding:{{ pvPad }};display:flex;flex-direction:column;gap:16px;max-height:760px;overflow:auto">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#0c6b9d;text-align:center">{{ ed.cat }} · {{ pvRead }} read</div>
+<div style="font-family:'Instrument Serif',serif;font-weight:300;font-size:{{ pvH }};line-height:1.06;text-align:center;text-wrap:balance">{{ ogTitle }}</div>
+<div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:19px;line-height:1.4;color:#3a4256;text-align:center">{{ ed.excerpt }}</div>
+<div style="aspect-ratio:16/8;background:#fff repeating-linear-gradient(135deg,#eef0f5 0 10px,#fff 10px 20px);outline:1px dashed #14213d;outline-offset:-8px;margin:8px 0"></div>
+<div style="font-size:16px;line-height:1.8;color:#1f2a44;display:flex;flex-direction:column;gap:14px">
+<sc-for list="{{ pvBlocks }}" as="b" hint-placeholder-count="4">
+<sc-if value="{{ b.isP }}" hint-placeholder-val="{{ true }}"><p style="margin:0">{{ b.t }}</p></sc-if>
+<sc-if value="{{ b.isH }}" hint-placeholder-val="{{ false }}"><div style="font-family:'Instrument Serif',serif;font-size:26px;line-height:1.2;margin-top:14px">{{ b.t }}</div></sc-if>
+<sc-if value="{{ b.isQ }}" hint-placeholder-val="{{ false }}"><div style="border-left:1px solid #0c6b9d;padding-left:18px;font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;line-height:1.3">{{ b.t }}</div></sc-if>
+<sc-if value="{{ b.isNote }}" hint-placeholder-val="{{ false }}"><div style="font-family:Caveat,cursive;font-size:21px;color:#c4372c;border-left:1px dashed #c4372c;padding-left:12px;margin-left:{{ pvNoteIndent }}">{{ b.t }}</div></sc-if>
+<sc-if value="{{ b.isImg }}" hint-placeholder-val="{{ false }}"><div style="aspect-ratio:16/9;background:repeating-linear-gradient(135deg,#eef0f5 0 10px,#fff 10px 20px);outline:1px dashed #14213d;outline-offset:-8px"></div></sc-if>
+<sc-if value="{{ b.isHr }}" hint-placeholder-val="{{ false }}"><div style="border-top:1px dashed #0c6b9d;margin:10px 0"></div></sc-if>
+</sc-for>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ pvLinked }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;justify-content:center">
+<div style="width:552px;max-width:100%;background:#fff;border:1px solid #d9dce3;border-radius:10px;overflow:hidden;font-family:Manrope,sans-serif;color:#191919">
+<div style="display:flex;gap:10px;padding:14px 16px 8px"><img src="assets/reflection-1920.jpg" alt="" style="width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:50% 25%"><div style="display:flex;flex-direction:column;line-height:1.35"><span style="font-weight:600;font-size:14px">Liz Lenjo</span><span style="font-size:12px;color:#666">Advocate · Chairperson, Copyright Tribunal</span><span style="font-size:12px;color:#666">Now</span></div></div>
+<div style="padding:4px 16px 12px;font-size:14px;line-height:1.5;font-weight:400">New on Liz Notes: {{ ogTitle }}. {{ ed.excerpt }}</div>
+<div style="background:#f3f2ef">
+<div style="aspect-ratio:1.91/1;background:repeating-linear-gradient(135deg,#e7e9ef 0 10px,#f6f7f9 10px 20px);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6a7186">cover image · 1200 × 627</div>
+<div style="padding:10px 14px;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600;font-size:14px;line-height:1.35">{{ ogTitle }}</span><span style="font-size:12px;color:#666">lizlenjo.com · {{ pvRead }} read</span></div>
+</div>
+<div style="display:flex;justify-content:space-around;padding:10px 8px;border-top:1px solid #e8e8e8;font-size:13px;font-weight:600;color:#666"><span>Like</span><span>Comment</span><span>Repost</span><span>Send</span></div>
+</div>
+</div>
+<div style="text-align:center;font-family:Caveat,cursive;font-size:22px;color:#fbfaf7;padding-top:16px">keep titles under 70 characters so LinkedIn doesn’t cut them</div>
+</sc-if>
+</div>
+
+<div style="flex:1 1 280px;display:flex;flex-direction:column;gap:20px;position:sticky;top:24px">
+<div style="background:#fff;border:1px dashed #c9cdd8;padding:22px;display:flex;flex-direction:column;gap:16px;font-size:13px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a7186">Publishing</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{ pubModes }}" as="m" hint-placeholder-count="3">
+<button onClick="{{ m.pick }}" style="all:unset;cursor:pointer;display:flex;gap:10px;align-items:center"><span style="width:12px;height:12px;border-radius:50%;border:1px solid #14213d;box-shadow:inset 0 0 0 2px #fff;background:{{ m.fill }}"></span>{{ m.label }}</button>
+</sc-for>
+</div>
+<sc-if value="{{ isScheduled }}" hint-placeholder-val="{{ false }}">
+<input type="datetime-local" value="{{ ed.when }}" onChange="{{ setWhen }}" style="font:inherit;border:1px dashed #b9bfcc;padding:8px 10px;background:#faf9f7;border-radius:6px">
+</sc-if>
+</div>
+<div style="background:#fff;border:1px dashed #c9cdd8;padding:22px;display:flex;flex-direction:column;gap:12px;font-size:13px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a7186">Category</div>
+<select value="{{ ed.cat }}" onChange="{{ setCat }}" style="font:inherit;border:1px dashed #b9bfcc;padding:8px 10px;background:#faf9f7;border-radius:6px"><sc-for list="{{ catNames }}" as="c" hint-placeholder-count="5"><option value="{{ c }}">{{ c }}</option></sc-for></select>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a7186;padding-top:6px">Pattern set</div>
+<select value="{{ ed.series }}" onChange="{{ setSeries }}" style="font:inherit;border:1px dashed #b9bfcc;padding:8px 10px;background:#faf9f7;border-radius:6px"><sc-for list="{{ seriesNames }}" as="c" hint-placeholder-count="2"><option value="{{ c }}">{{ c }}</option></sc-for></select>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a7186;padding-top:6px">Tags</div>
+<input value="{{ ed.tags }}" onChange="{{ setTags }}" placeholder="copyright, licensing" style="font:inherit;border:1px dashed #b9bfcc;padding:8px 10px;background:#faf9f7;border-radius:6px">
+<div style="font-size:12px;color:#4a5268;word-break:break-all;padding-top:4px">lizlenjo.com/notes/<span style="color:#14213d">{{ slug }}</span></div>
+</div>
+<div style="background:#fff;border:1px dashed #c9cdd8;padding:22px;display:flex;flex-direction:column;gap:10px;font-size:13px">
+<div style="display:flex;justify-content:space-between;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a7186"><span>Version history</span><span>{{ wordCount }}</span></div>
+<sc-for list="{{ versions }}" as="v" hint-placeholder-count="3">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px dashed #e1e3ea">
+<div style="display:flex;flex-direction:column;line-height:1.35"><span style="color:#14213d">{{ v.label }}</span><span style="font-size:11px;color:#6a7186">{{ v.meta }}</span></div>
+<sc-if value="{{ v.canRestore }}" hint-placeholder-val="{{ true }}"><button onClick="{{ v.restore }}" style="all:unset;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid #14213d;padding:5px 9px;border-radius:6px" style-hover="background:#14213d;color:#fff">Restore</button></sc-if>
+<sc-if value="{{ v.isCurrent }}" hint-placeholder-val="{{ false }}"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#2f7d4f">Current</span></sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+
+<sc-if value="{{ slashOn }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;left:{{ slashX }};top:{{ slashY }};z-index:70;width:260px;background:#fff;border:1px solid #14213d;border-radius:8px;box-shadow:5px 5px 0 #14213d;padding:6px;display:flex;flex-direction:column">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#6a7186;padding:6px 10px">Insert</div>
+<sc-for list="{{ slashItems }}" as="it" hint-placeholder-count="6"><button onMouseDown="{{ it.pick }}" style="all:unset;cursor:pointer;display:flex;flex-direction:column;padding:8px 10px;border-radius:6px;background:{{ it.bg }}"><span style="font-size:14px;color:#14213d;font-weight:400">{{ it.label }}</span><span style="font-size:11px;color:#6a7186">{{ it.hint }}</span></button></sc-for>
+<sc-if value="{{ slashEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:8px 10px;font-size:13px;color:#6a7186">No matching block</div></sc-if>
+</div>
+</sc-if>
+</sc-if>
+
+<sc-if value="{{ tabCal }}" hint-placeholder-val="{{ false }}">
+<div style="flex:none;display:flex;justify-content:space-between;align-items:flex-end;gap:14px 20px;flex-wrap:wrap">
+<div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#cfe0d6">Workroom</div><h1 style="margin:6px 0 0;font-family:'Instrument Serif',serif;font-weight:400;font-size:44px;line-height:1.05;color:#fbfaf7">Calendar</h1></div>
+<div style="display:flex;align-items:center;gap:8px;color:#fbfaf7">
+<button onClick="{{ calPrev }}" aria-label="Previous month" style="all:unset;cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid #cfe0d6;border-radius:6px" style-hover="background:#fbfaf7;color:#14213d">←</button>
+<span style="font-family:'Instrument Serif',serif;font-size:26px;min-width:190px;text-align:center">{{ calLabel }}</span>
+<button onClick="{{ calNext }}" aria-label="Next month" style="all:unset;cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid #cfe0d6;border-radius:6px" style-hover="background:#fbfaf7;color:#14213d">→</button>
+</div>
+</div>
+<div style="flex:none;display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<div style="flex:999 1 620px;min-width:0;background:#fff;border:1px dashed #c9cdd8;overflow-x:auto">
+<div style="min-width:620px">
+<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#6a7186;border-bottom:1px dashed #c9cdd8">
+<sc-for list="{{ weekdays }}" as="w" hint-placeholder-count="7"><div style="padding:10px 10px">{{ w }}</div></sc-for>
+</div>
+<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr))">
+<sc-for list="{{ calCells }}" as="c" hint-placeholder-count="35">
+<div onDragOver="{{ c.over }}" onDragLeave="{{ c.leave }}" onDrop="{{ c.drop }}" style="min-height:112px;padding:8px;border-right:1px dashed #e1e3ea;border-bottom:1px dashed #e1e3ea;background:{{ c.bg }};display:flex;flex-direction:column;gap:5px;box-sizing:border-box;transition:background .2s ease">
+<span style="align-self:flex-start;font-family:'IBM Plex Mono',monospace;font-size:11px;color:{{ c.numFg }};background:{{ c.numBg }};border-radius:999px;padding:1px 7px">{{ c.day }}</span>
+<sc-for list="{{ c.posts }}" as="cp" hint-placeholder-count="0"><div draggable="{{ cp.draggable }}" onDragStart="{{ cp.drag }}" onClick="{{ cp.edit }}" title="{{ cp.title }}" style="cursor:{{ cp.cursor }};font-size:11px;line-height:1.3;padding:5px 7px;border-radius:5px;background:{{ cp.bg }};color:{{ cp.fg }};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ cp.title }}</div></sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="flex:1 1 240px;display:flex;flex-direction:column;gap:14px">
+<div style="background:#fff;border:1px dashed #c9cdd8;padding:20px;display:flex;flex-direction:column;gap:10px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6a7186">Unscheduled drafts</div>
+<sc-for list="{{ drafts }}" as="d" hint-placeholder-count="2"><div draggable="true" onDragStart="{{ d.drag }}" style="cursor:grab;font-size:13px;line-height:1.35;padding:9px 11px;border-radius:6px;background:#eceae6;color:#3a4256">{{ d.title }}</div></sc-for>
+<sc-if value="{{ noDrafts }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#6a7186">No drafts waiting.</span></sc-if>
+</div>
+<div style="font-family:Caveat,cursive;font-size:22px;line-height:1.2;color:#fbfaf7;transform:rotate(-1.5deg)">drag a draft onto a date to schedule it, or drag a scheduled post to move it</div>
+<div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:#cfe0d6">
+<span style="display:flex;gap:8px;align-items:center"><span style="width:10px;height:10px;border-radius:3px;background:#dcebe1"></span>Published</span>
+<span style="display:flex;gap:8px;align-items:center"><span style="width:10px;height:10px;border-radius:3px;background:#d6e7f2"></span>Scheduled</span>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ tabComments }}" hint-placeholder-val="{{ false }}">
+<div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#cfe0d6">Workroom</div><h1 style="margin:6px 0 0;font-family:'Instrument Serif',serif;font-weight:400;font-size:44px;line-height:1.05;color:#fbfaf7">Comments</h1></div>
+<div style="font-size:13px;color:#cfe0d6;max-width:620px">Turnstile screens every submission. Workers AI then scores the text; anything likely to be spam waits here instead of publishing.</div>
+<div style="flex:none;display:flex;flex-direction:column;gap:12px">
+<sc-for list="{{ modQueue }}" as="c" hint-placeholder-count="3">
+<div style="background:#fff;border:1px dashed #c9cdd8;padding:22px 24px;display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:flex-start">
+<div style="display:flex;flex-direction:column;gap:8px;min-width:0;flex:1 1 360px">
+<div style="display:flex;gap:14px;font-size:12px;color:#6a7186;flex-wrap:wrap"><span style="color:#14213d;font-weight:500">{{ c.name }}</span><span>on “{{ c.post }}”</span><span>{{ c.when }}</span></div>
+<div style="font-size:15px;line-height:1.65;color:#1f2a44">{{ c.text }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:{{ c.scoreColor }}"><span style="width:60px;height:3px;background:#f1eee9;position:relative;overflow:hidden"><span style="position:absolute;left:0;top:0;bottom:0;width:{{ c.scoreW }};background:currentColor"></span></span>{{ c.verdict }}</div>
+</div>
+<div style="display:flex;gap:8px">
+<button onClick="{{ c.approve }}" style="all:unset;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid #14213d;padding:9px 14px;border-radius:6px" style-hover="background:#14213d;color:#fff">Approve</button>
+<button onClick="{{ c.remove }}" style="all:unset;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6a7186;padding:9px 10px;border-radius:6px" style-hover="color:#b3261e">Delete</button>
+</div>
+</div>
+</sc-for>
+<sc-if value="{{ queueEmpty }}" hint-placeholder-val="{{ false }}"><div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#cfe0d6;padding:24px 0">All caught up.</div></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ tabInsights }}" hint-placeholder-val="{{ false }}">
+<div style="flex:none;display:flex;justify-content:space-between;align-items:flex-end;gap:14px 20px;flex-wrap:wrap">
+<div><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#cfe0d6">Workroom</div><h1 style="margin:6px 0 0;font-family:'Instrument Serif',serif;font-weight:400;font-size:44px;line-height:1.05;color:#fbfaf7">Insights</h1></div>
+<span style="font-size:12px;color:#cfe0d6">Last 30 days · Cloudflare Web Analytics, no cookies</span>
+</div>
+<div style="flex:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px">
+<sc-for list="{{ tiles }}" as="t" hint-placeholder-count="3">
+<div style="background:#fff;border:1px solid #14213d;outline:1px dashed #14213d;outline-offset:-7px;padding:22px 24px;display:flex;flex-direction:column;gap:4px">
+<span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#6a7186">{{ t.k }}</span>
+<span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:1">{{ t.v }}</span>
+<span style="font-size:12px;color:#2f7d4f">{{ t.d }}</span>
+</div>
+</sc-for>
+</div>
+<div style="flex:none;background:#fff;border:1px dashed #c9cdd8;overflow-x:auto">
+<div style="min-width:700px">
+<div style="font-family:'IBM Plex Mono',monospace;display:grid;grid-template-columns:minmax(0,1fr) 80px 170px 90px 130px;gap:20px;padding:14px 24px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#6a7186;border-bottom:1px dashed #c9cdd8"><span>Post</span><span>Reads</span><span>Read to the end</span><span>Sign-ups</span><span>14 days</span></div>
+<sc-for list="{{ stats }}" as="r" hint-placeholder-count="6">
+<button onClick="{{ r.open }}" style="all:unset;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) 80px 170px 90px 130px;gap:20px;padding:16px 24px;border-bottom:1px dashed #e1e3ea;align-items:center;font-size:14px;width:100%;box-sizing:border-box" style-hover="background:#faf9f7">
+<span style="font-family:'Instrument Serif',serif;font-size:19px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.title }}</span>
+<span>{{ r.reads }}</span>
+<span style="display:flex;align-items:center;gap:10px"><span style="flex:1;height:6px;background:#eef0f5;border-radius:3px;overflow:hidden"><span style="display:block;height:100%;width:{{ r.doneW }};background:#0c6b9d"></span></span><span style="font-size:12px;color:#4a5268;width:34px">{{ r.doneW }}</span></span>
+<span>{{ r.subs }}</span>
+<span style="display:flex;align-items:flex-end;gap:2px;height:28px"><sc-for list="{{ r.spark }}" as="h" hint-placeholder-count="14"><span style="flex:1;height:{{ h }};background:#9fc4dc;border-radius:1px"></span></sc-for></span>
+</button>
+</sc-for>
+</div>
+</div>
+<div style="font-family:Caveat,cursive;font-size:22px;color:#fbfaf7">“read to the end” counts readers who scrolled past the final paragraph</div>
+</sc-if>
+</main>
+</div>
+</sc-if>
+
+<div style="font-family:'IBM Plex Mono',monospace;position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:50;display:flex;background:#14213d;padding:4px;border-radius:999px;box-shadow:0 12px 30px -12px rgba(0,0,0,.45);font-size:11px;letter-spacing:.14em;text-transform:uppercase">
+<sc-for list="{{ modeSwitch }}" as="m" hint-placeholder-count="2"><button onClick="{{ m.go }}" style="all:unset;cursor:pointer;padding:9px 16px;border-radius:999px;background:{{ m.bg }};color:{{ m.fg }}">{{ m.label }}</button></sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const CATS = ['All', 'Copyright', 'Fashion law', 'Entertainment', 'Governance', 'Trademarks'];
+const SEED = [
+  { id: 1, cat: 'Fashion law', date: '2026-09-18', status: 'Published', title: 'Inspiration versus exploitation: traditional cultural expressions in fashion', excerpt: 'Where borrowing from a community’s heritage becomes taking, and what the law can do about it.', tags: ['Fashion law', 'TCEs'], body: ['Fashion has always borrowed. The question is when borrowing becomes taking, and who gets a say.', '^the whole question, really', '#Why the existing tools fall short', 'Copyright protects original works by identifiable authors for a limited term. Traditional cultural expressions are often collective, intergenerational and living, which makes them a poor fit.', '^See the Swakopmund Protocol (2010) on TCEs', '>A pattern can belong to a people long before it belongs to a label.', '#Where the practical work is happening', 'Sui generis frameworks, community protocols and fair attribution clauses in design contracts are where the practical work is now happening.', '^more on attribution clauses in a follow-up'] },
+  { id: 2, cat: 'Copyright', date: '2026-08-30', status: 'Published', title: 'What the Copyright Tribunal does, and when to bring a dispute', excerpt: 'A plain guide to Kenya’s specialised forum for licensing and rights disputes.', tags: ['Copyright', 'Tribunal'], body: ['The Copyright Tribunal is constituted under Section 48 of the Copyright Act (CAP 130).', '^CAP 130, s.48', '#Matters the Tribunal hears', 'Disputes over licensing schemes, royalty rates and the conduct of collective management organisations are its core work.'] },
+  { id: 3, cat: 'Entertainment', date: '2026-08-02', status: 'Published', title: 'Licensing music for film and digital platforms in Kenya', excerpt: 'Sync, master and performance rights, and the order to clear them in.', tags: ['Music', 'Licensing'], body: ['Every piece of music in a film carries at least two sets of rights: the composition and the recording.', '#Clear early', 'Licences negotiated after the edit is locked are licences negotiated without leverage.', '^ask me how I know'] },
+  { id: 4, cat: 'Trademarks', date: '2026-07-11', status: 'Published', title: 'Counterfeits, supply chains and cross-border enforcement', excerpt: 'Why the fight against fakes now runs through logistics data.', tags: ['Anti-counterfeiting', 'Design'], body: ['Counterfeit goods move through the same ports and platforms as genuine ones.', '#Working with customs', 'Recordal of marks with customs authorities remains one of the most cost-effective tools available to brand owners.', '^Anti-Counterfeit Act, 2008'] },
+  { id: 5, cat: 'Governance', date: '2026-06-20', status: 'Published', title: 'What boards in regulated industries should ask about intangible assets', excerpt: 'Five questions for the audit committee.', tags: ['Governance'], body: ['Intangible assets rarely appear on the agenda until something goes wrong.', '#Start with an inventory', 'A board cannot oversee what it has not listed.'] },
+  { id: 6, cat: 'Fashion law', date: '2025-11-14', status: 'Published', title: 'Protecting a design collection before the runway', excerpt: 'Registration, confidentiality and timing for emerging designers.', tags: ['Design', 'Fashion law'], body: ['Showing a collection publicly can affect whether its designs can later be registered.', '#Timing matters', 'File first, then show.', '^the single most useful line in this post', '---', '!Look book pages marked up before filing'] },
+  { id: 7, cat: 'Copyright', date: '2026-10-21', status: 'Scheduled', title: 'AI training data and copyright: a view from Nairobi', excerpt: 'Draft.', tags: ['AI'], body: ['Draft in progress.'] },
+  { id: 9, cat: 'Fashion law', date: '2026-10-29', status: 'Scheduled', title: 'Fashion week contracts: a checklist for designers', excerpt: 'What to agree before the lights come on.', tags: ['Design'], body: ['Draft in progress.'] },
+  { id: 8, cat: 'Entertainment', date: '', status: 'Draft', title: 'Image rights for athletes and performers', excerpt: '', tags: [], body: [''] }
+];
+const SERIES0 = [{ name: 'Protecting African design', ids: [6, 4, 1] }];
+const COMMENTS = [
+  { id: 1, postId: 1, name: 'Wanjiru M.', when: '2 days ago', text: 'This framing helped me explain the issue to a designer client. Thank you.', ok: true },
+  { id: 2, postId: 1, name: 'Daniel O.', when: '1 day ago', text: 'Would community protocols be enforceable against a foreign brand?', ok: true },
+  { id: 3, postId: 2, name: 'Amina K.', when: '3 hours ago', text: 'Is there a filing fee for bringing a matter to the Tribunal?', ok: false, score: 0.06 },
+  { id: 4, postId: 3, name: 'best-deals-4u', when: '1 hour ago', text: 'Great post!! Check out cheap followers at our site, limited offer', ok: false, score: 0.94 },
+  { id: 5, postId: 1, name: 'Peter N.', when: '20 minutes ago', text: 'Brilliant piece. Would love a follow-up on attribution clauses.', ok: false, score: 0.12 }
+];
+const STATS = { 1: [1840, 71, 23], 2: [1320, 64, 11], 3: [960, 58, 7], 4: [720, 52, 5], 5: [540, 61, 4], 6: [880, 67, 9] };
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const fmt = d => d ? new Date(d + 'T09:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '—';
+const mins = p => Math.max(3, Math.round(p.body.join(' ').split(/\s+/).length / 60) + 3);
+const hhmm = () => new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+const toHtml = body => body.map(b => b.startsWith('#') ? '<h2>' + b.slice(1) + '</h2>' : b.startsWith('>') ? '<blockquote>' + b.slice(1) + '</blockquote>' : b.startsWith('^') ? '<aside>' + b.slice(1) + '</aside>' : b.startsWith('!') ? '<figure contenteditable="false">Image · ' + b.slice(1) + '</figure>' : b === '---' ? '<hr>' : '<p>' + (b || '<br>') + '</p>').join('') || '<p><br></p>';
+const SLASH = [
+  { k: 'h2', label: 'Heading', hint: 'Section title, adds to contents' },
+  { k: 'quote', label: 'Pull quote', hint: 'Large italic quote' },
+  { k: 'note', label: 'Margin note', hint: 'Chalk aside in the margin' },
+  { k: 'cite', label: 'Case citation', hint: 'Margin note starting “See:”' },
+  { k: 'img', label: 'Image', hint: 'Full-width image with caption' },
+  { k: 'hr', label: 'Stitch divider', hint: 'Dashed break with scissors' },
+  { k: 'ul', label: 'List', hint: 'Bulleted list' }
+];
+
+class Component extends DCLogic {
+  state = { mode: 'reader', view: 'index', postId: null, cats: [], sort: 'new', layout: 'grid', q: '', posts: SEED, series: SERIES0, comments: COMMENTS, sent: false, sub: false, copied: false, tab: 'posts', status: 'All', ed: null, saved: 'All changes saved', saving: false, fs: 17, activeH: null, minLeft: null, hl: null, hlCopied: false, pv: 'write', history: {}, slash: null, calY: new Date().getFullYear(), calM: new Date().getMonth(), dropOn: null };
+  readRef = React.createRef();
+  searchRef = React.createRef();
+  bodyEl = null;
+  bodyRef = el => { this.bodyEl = el; this.syncBody(); };
+  syncBody() { const el = this.bodyEl, ed = this.state.ed; if (el && ed && el.dataset.id !== String(ed.id)) { el.innerHTML = ed.html; el.dataset.id = String(ed.id); } }
+  componentDidMount() {
+    try { const v = +localStorage.getItem('ll-notes-fs'); if (v) this.setState({ fs: v }); } catch (e) {}
+    this.onScroll = () => {
+      if (this.raf) return;
+      this.raf = requestAnimationFrame(() => {
+        this.raf = null;
+        const el = this.readRef.current, max = document.documentElement.scrollHeight - innerHeight, art = this.state.view === 'article' && this.state.mode === 'reader';
+        const p = art && max > 0 ? Math.min(1, scrollY / max) : 0;
+        if (el) el.style.transform = 'scaleX(' + p + ')';
+        const upd = {};
+        if (this.state.hl) upd.hl = null;
+        if (art) {
+          let act = null; document.querySelectorAll('[data-h]').forEach(h => { if (h.getBoundingClientRect().top < 170) act = h.id; });
+          const left = Math.max(0, Math.ceil((this.curMins || 0) * (1 - p)));
+          if (act !== this.state.activeH) upd.activeH = act;
+          if (left !== this.state.minLeft) upd.minLeft = left;
+        }
+        if (Object.keys(upd).length) this.setState(upd);
+      });
+    };
+    addEventListener('scroll', this.onScroll, { passive: true });
+    this.onKey = e => {
+      const t = document.activeElement, typing = t && (/INPUT|TEXTAREA|SELECT/.test(t.tagName) || t.isContentEditable);
+      if (e.key === '/' && !typing && this.state.mode === 'reader' && this.state.view === 'index' && this.searchRef.current) { e.preventDefault(); this.searchRef.current.focus(); }
+    };
+    addEventListener('keydown', this.onKey);
+  }
+  componentWillUnmount() { removeEventListener('scroll', this.onScroll); removeEventListener('keydown', this.onKey); clearTimeout(this.saveT); }
+  componentDidUpdate() { if (this.state.tab === 'editor') this.syncBody(); }
+  open(id) { this.setState({ mode: 'reader', view: 'article', postId: id, sent: false, activeH: null, minLeft: null, hl: null }); scrollTo(0, 0); }
+  seriesOf(id) { return this.state.series.find(x => x.ids.includes(id)); }
+  edit(p) {
+    const html = toHtml(p.body), mode = p.status === 'Scheduled' ? 'schedule' : p.status === 'Published' ? 'now' : 'draft';
+    const sr = this.seriesOf(p.id);
+    const h = this.state.history[p.id] || [{ label: p.status === 'Published' ? 'Published version' : 'Last saved', meta: p.date ? fmt(p.date) : 'Earlier', html, title: p.title }];
+    this.setState(s => ({ tab: 'editor', pv: 'write', slash: null, history: { ...s.history, [p.id]: h }, saved: 'All changes saved', ed: { id: p.id, title: p.title, excerpt: p.excerpt, cat: p.cat, tags: p.tags.join(', '), html, mode, when: p.date ? p.date + 'T09:00' : '', series: sr ? sr.name : 'None' } }));
+  }
+  words() { return (this.bodyEl?.textContent || '').trim().split(/\s+/).filter(Boolean).length; }
+  patch(o) {
+    this.setState(s => ({ ed: { ...s.ed, ...o }, saved: 'Saving…', saving: true }));
+    clearTimeout(this.saveT);
+    this.saveT = setTimeout(() => {
+      const ed = this.state.ed; if (!ed) return;
+      const html = this.bodyEl ? this.bodyEl.innerHTML : ed.html, t = hhmm(), w = this.words();
+      this.setState(s => {
+        const list = s.history[ed.id] || [], last = list[0];
+        const next = last && last.auto && last.html === html && last.title === ed.title ? list : [{ label: 'Autosave ' + t, meta: w + ' words', html, title: ed.title, auto: true }, ...list].slice(0, 12);
+        return { history: { ...s.history, [ed.id]: next }, saved: 'Autosaved · ' + t, saving: false };
+      });
+    }, 900);
+  }
+  serialize() {
+    const el = this.bodyEl; if (!el) return [];
+    return [...el.children].map(n => n.tagName === 'H2' ? '#' + n.textContent : n.tagName === 'BLOCKQUOTE' ? '>' + n.textContent : n.tagName === 'ASIDE' ? '^' + n.textContent : n.tagName === 'FIGURE' ? '!' + n.textContent.replace(/^Image · /, '') : n.tagName === 'HR' ? '---' : n.textContent.trim()).filter(x => x && x !== '^' && x !== '#' && x !== '>');
+  }
+  publish() {
+    const ed = this.state.ed; const live = this.bodyEl && this.bodyEl.dataset.id === String(ed.id);
+    const prev = this.state.posts.find(p => p.id === ed.id);
+    const body = live ? this.serialize() : [];
+    const status = ed.mode === 'now' ? 'Published' : ed.mode === 'schedule' ? 'Scheduled' : 'Draft';
+    const date = ed.mode === 'now' ? (prev && prev.status === 'Published' ? prev.date : iso(new Date())) : (ed.when || '').slice(0, 10);
+    const rec = { id: ed.id, title: ed.title || 'Untitled', excerpt: ed.excerpt, cat: ed.cat, tags: ed.tags.split(',').map(t => t.trim()).filter(Boolean), body: body.length ? body : (prev ? prev.body : ['']), status, date };
+    const series = this.state.series.map(x => ({ ...x, ids: x.ids.filter(i => i !== ed.id).concat(x.name === ed.series ? [ed.id] : []) }));
+    this.setState(s => ({ posts: s.posts.some(p => p.id === ed.id) ? s.posts.map(p => p.id === ed.id ? rec : p) : [rec, ...s.posts], series, tab: 'posts', saved: 'All changes saved', slash: null }));
+  }
+  blockAt() { const s = getSelection(); if (!s.rangeCount || !this.bodyEl) return null; let n = s.anchorNode; if (n === this.bodyEl) n = this.bodyEl.childNodes[s.anchorOffset] || this.bodyEl.lastChild; while (n && n.parentNode !== this.bodyEl) n = n.parentNode; return n; }
+  slashList() { const q = this.state.slash ? this.state.slash.q : ''; return SLASH.filter(x => !q || x.label.toLowerCase().includes(q) || x.k.includes(q)); }
+  applySlash(k) {
+    const el = this.bodyEl, blk = this.slashBlk; if (!el || !blk || !blk.parentNode) { this.setState({ slash: null }); return; }
+    const place = n => { const r = document.createRange(); r.selectNodeContents(n); r.collapse(false); const s = getSelection(); s.removeAllRanges(); s.addRange(r); };
+    const mk = (tag, text, attrs) => { const n = document.createElement(tag); if (attrs) for (const a in attrs) n.setAttribute(a, attrs[a]); if (text) n.textContent = text; else n.innerHTML = '<br>'; return n; };
+    if (k === 'h2' || k === 'quote' || k === 'note') { const n = mk(k === 'h2' ? 'h2' : k === 'quote' ? 'blockquote' : 'aside'); blk.replaceWith(n); place(n); }
+    else if (k === 'cite') { const n = mk('aside', 'See: '); blk.replaceWith(n); place(n); }
+    else if (k === 'img') { const f = mk('figure', 'Image · add a caption', { contenteditable: 'false' }), p = mk('p'); blk.replaceWith(f); f.after(p); place(p); }
+    else if (k === 'hr') { const h = document.createElement('hr'), p = mk('p'); blk.replaceWith(h); h.after(p); place(p); }
+    else if (k === 'ul') { const p = mk('p'); blk.replaceWith(p); place(p); document.execCommand('insertUnorderedList'); }
+    this.slashBlk = null; this.setState({ slash: null }); this.patch({ html: el.innerHTML });
+  }
+  renderVals() {
+    const s = this.state;
+    const live = s.posts.filter(p => p.status === 'Published').sort((a, b) => s.sort === 'old' ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date));
+    const q = s.q.trim().toLowerCase();
+    const filtered = live.filter(p => (!s.cats.length || s.cats.includes(p.cat)) && (!q || (p.title + ' ' + p.excerpt + ' ' + p.tags.join(' ') + ' ' + p.body.join(' ')).toLowerCase().includes(q)));
+    const partOf = p => { const sr = this.seriesOf(p.id); if (!sr) return {}; const ids = sr.ids.filter(i => live.some(x => x.id === i)); const k = ids.indexOf(p.id); return k < 0 ? {} : { inSeries: true, partLabel: 'Part ' + (k + 1) + ' of ' + ids.length }; };
+    const card = p => ({ ...p, ...partOf(p), piece: 'PIECE ' + String(p.id).padStart(2, '0'), date: fmt(p.date), read: mins(p) + ' min', open: e => { e && e.preventDefault && e.preventDefault(); this.open(p.id); } });
+    const cur = s.posts.find(p => p.id === s.postId) || live[0];
+    this.curMins = mins(cur);
+    const blocks = [];
+    cur.body.forEach((t, k) => {
+      if (t.startsWith('^')) { const prev = blocks[blocks.length - 1]; if (prev) { prev.note = t.slice(1); prev.hasNote = true; } return; }
+      const isH = t.startsWith('#'), isQ = t.startsWith('>'), isImg = t.startsWith('!'), isHr = t === '---';
+      const txt = isH || isQ || isImg ? t.slice(1) : t, first = blocks.length === 0 && !isH && !isQ && !isImg && !isHr;
+      blocks.push({ t: txt, isH, isQ, isImg, isHr, isFirst: first, isP: !isH && !isQ && !isImg && !isHr && !first, cap: txt.charAt(0), rest: txt.slice(1), hid: 'h-' + cur.id + '-' + k, hasNote: false, note: '' });
+    });
+    const heads = blocks.filter(b => b.isH);
+    const sr = this.seriesOf(cur.id), srIds = sr ? sr.ids.filter(i => live.some(x => x.id === i)) : [], srK = srIds.indexOf(cur.id);
+    const srPost = i => card(s.posts.find(p => p.id === i));
+    const curComments = s.comments.filter(c => c.postId === cur.id && c.ok);
+    const ed = s.ed || {};
+    const counts = { All: s.posts.length, Published: 0, Scheduled: 0, Draft: 0 }; s.posts.forEach(p => counts[p.status]++);
+    const dot = { Published: '#2f7d4f', Scheduled: '#0c6b9d', Draft: '#b9b4ad' };
+    const pending = s.comments.filter(c => !c.ok).sort((a, b) => b.score - a.score);
+    const exec = (cmd, val) => e => { e.preventDefault(); document.execCommand(cmd, false, val); this.patch({ html: this.bodyEl ? this.bodyEl.innerHTML : '' }); };
+    const ink = on => ({ border: on ? '#14213d' : '#c9cdd8', bg: on ? '#14213d' : 'transparent', fg: on ? '#fff' : '#14213d' });
+    const related = live.filter(p => p.id !== cur.id).map(p => { const shared = p.tags.filter(t => cur.tags.includes(t)); const sc = (p.cat === cur.cat ? 2 : 0) + shared.length + (srIds.includes(p.id) ? 3 : 0); return { p, sc, why: srIds.includes(p.id) ? 'Same pattern set' : p.cat === cur.cat ? 'Also in ' + p.cat : shared.length ? 'Also tagged ' + shared[0] : p.cat }; }).sort((a, b) => b.sc - a.sc).slice(0, 3).map(r => ({ ...card(r.p), why: r.why }));
+    // archive
+    const byYear = {};
+    filtered.forEach(p => { const d = new Date(p.date + 'T09:00'), y = d.getFullYear(), m = d.getMonth(); (byYear[y] = byYear[y] || {}); (byYear[y][m] = byYear[y][m] || []).push(p); });
+    const archive = Object.keys(byYear).sort((a, b) => s.sort === 'old' ? a - b : b - a).map(y => { const ms = Object.keys(byYear[y]).sort((a, b) => s.sort === 'old' ? a - b : b - a); const n = ms.reduce((t, m) => t + byYear[y][m].length, 0); return { year: y, count: n + (n === 1 ? ' note' : ' notes'), months: ms.map(m => ({ month: MONTHS[m], posts: byYear[y][m].map(p => ({ ...card(p), day: new Date(p.date + 'T09:00').getDate() + ' ' + MONTHS[m].slice(0, 3) })) })) }; });
+    // calendar
+    const first = new Date(s.calY, s.calM, 1), startOff = (first.getDay() + 6) % 7, days = new Date(s.calY, s.calM + 1, 0).getDate(), today = iso(new Date());
+    const cellsN = Math.ceil((startOff + days) / 7) * 7;
+    const chip = { Published: ['#dcebe1', '#1f5b37'], Scheduled: ['#d6e7f2', '#0b5a84'], Draft: ['#eceae6', '#4a5268'] };
+    const calCells = Array.from({ length: cellsN }, (_, i) => {
+      const d = new Date(s.calY, s.calM, i - startOff + 1), key = iso(d), inM = d.getMonth() === s.calM;
+      return {
+        day: d.getDate(), numFg: key === today ? '#fff' : inM ? '#14213d' : '#b9bfcc', numBg: key === today ? '#0c6b9d' : 'transparent',
+        bg: s.dropOn === key ? '#e6f0f7' : inM ? '#fff' : '#f7f7f9',
+        over: e => { e.preventDefault(); if (s.dropOn !== key) this.setState({ dropOn: key }); },
+        leave: () => {}, drop: e => { e.preventDefault(); const id = this.dragId; this.dragId = null; if (id == null) return; this.setState(st => ({ dropOn: null, posts: st.posts.map(p => p.id === id && p.status !== 'Published' ? { ...p, date: key, status: 'Scheduled' } : p) })); },
+        posts: s.posts.filter(p => p.date === key && p.status !== 'Draft').map(p => ({ title: p.title || 'Untitled', bg: chip[p.status][0], fg: chip[p.status][1], draggable: p.status !== 'Published', cursor: p.status !== 'Published' ? 'grab' : 'pointer', drag: e => { this.dragId = p.id; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', String(p.id)); }, edit: () => this.edit(p) }))
+      };
+    });
+    const drafts = s.posts.filter(p => p.status === 'Draft').map(p => ({ title: p.title || 'Untitled', drag: e => { this.dragId = p.id; e.dataTransfer.setData('text/plain', String(p.id)); } }));
+    // insights
+    const statRows = live.filter(p => STATS[p.id]).map(p => { const [r, d, sb] = STATS[p.id]; return { title: p.title, reads: r.toLocaleString('en-GB'), doneW: d + '%', subs: '+' + sb, spark: Array.from({ length: 14 }, (_, i) => Math.round(25 + 70 * Math.abs(Math.sin(p.id * 1.7 + i * 0.6)) * (i > 10 ? 1 : 0.7)) + '%'), open: () => this.open(p.id) }; });
+    const tot = live.reduce((t, p) => t + (STATS[p.id] ? STATS[p.id][0] : 0), 0), avg = Math.round(live.reduce((t, p) => t + (STATS[p.id] ? STATS[p.id][1] : 0), 0) / Math.max(1, live.filter(p => STATS[p.id]).length)), subs = live.reduce((t, p) => t + (STATS[p.id] ? STATS[p.id][2] : 0), 0);
+    // editor previews
+    const pvBody = s.tab === 'editor' && s.pv !== 'write' ? this.serialize() : [];
+    const pvBlocks = pvBody.map(t => { const isH = t.startsWith('#'), isQ = t.startsWith('>'), isNote = t.startsWith('^'), isImg = t.startsWith('!'), isHr = t === '---'; return { t: isH || isQ || isNote || isImg ? t.slice(1) : t, isH, isQ, isNote, isImg, isHr, isP: !isH && !isQ && !isNote && !isImg && !isHr }; });
+    const wds = this.words();
+    const hist = s.ed ? (s.history[s.ed.id] || []) : [];
+    const slashItems = this.slashList();
+    const shareText = s.hl ? '“' + s.hl.text + '” — Liz Lenjo, Liz Notes' : '';
+    const pageUrl = 'https://lizlenjo.com/notes/' + cur.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+    return {
+      isReader: s.mode === 'reader', isStudio: s.mode === 'studio',
+      isIndex: s.view === 'index', isArticle: s.view === 'article',
+      goIndex: e => { e && e.preventDefault && e.preventDefault(); this.setState({ view: 'index', mode: 'reader', hl: null }); scrollTo(0, 0); },
+      q: s.q, setQ: e => this.setState({ q: e.target.value }), searchRef: this.searchRef,
+      resultCount: filtered.length + (filtered.length === 1 ? ' note' : ' notes'),
+      cats: CATS.map(name => ({ name, ...ink(name === 'All' ? !s.cats.length : s.cats.includes(name)), pick: () => this.setState(st => ({ cats: name === 'All' ? [] : st.cats.includes(name) ? st.cats.filter(c => c !== name) : [...st.cats, name] })) })),
+      sorts: [['new', 'Newest'], ['old', 'Oldest']].map(([k, label]) => ({ label, fg: s.sort === k ? '#14213d' : '#6a7186', line: s.sort === k ? '#14213d' : 'transparent', pick: () => this.setState({ sort: k }) })),
+      layouts: [['grid', 'Grid'], ['archive', 'Archive']].map(([k, label]) => ({ label, bg: s.layout === k ? '#14213d' : 'transparent', fg: s.layout === k ? '#fff' : '#14213d', pick: () => this.setState({ layout: k }) })),
+      filtersOn: !!(s.cats.length || q), clearFilters: () => this.setState({ cats: [], q: '' }),
+      isGrid: s.layout === 'grid', isArchive: s.layout === 'archive' && filtered.length > 0, archive,
+      hasFeatured: filtered.length > 0, featured: filtered[0] ? card(filtered[0]) : {},
+      rest: filtered.slice(1).map(card), noResults: filtered.length === 0,
+      readRef: this.readRef,
+      cur: { ...card(cur), blocks, tags: cur.tags },
+      minLeft: s.minLeft == null ? this.curMins : s.minLeft,
+      hasToc: heads.length > 0,
+      toc: heads.map(h => ({ t: h.t, fg: s.activeH === h.hid ? '#0c6b9d' : '#4a5268', line: s.activeH === h.hid ? '#0c6b9d' : '#d4d7e0', go: () => { const el = document.getElementById(h.hid); if (el) scrollTo({ top: el.getBoundingClientRect().top + scrollY - 110, behavior: 'smooth' }); } })),
+      sizes: [[15, 'Small text', '14px'], [17, 'Medium text', '18px'], [20, 'Large text', '23px']].map(([v, aria, px]) => ({ aria, px, ...ink(s.fs === v), pick: () => { this.setState({ fs: v }); try { localStorage.setItem('ll-notes-fs', String(v)); } catch (e) {} } })),
+      fsPx: s.fs + 'px',
+      inSeries: srK >= 0 && srIds.length > 1, seriesName: sr ? sr.name : '', seriesPart: 'Part ' + (srK + 1) + ' of ' + srIds.length,
+      seriesParts: srIds.map((i, k) => { const p = srPost(i); return { n: String(k + 1).padStart(2, '0'), title: p.title, fg: i === cur.id ? '#0c6b9d' : '#14213d', w: i === cur.id ? 500 : 300, open: () => this.open(i) }; }),
+      hasPrev: srK > 0, hasNext: srK >= 0 && srK < srIds.length - 1,
+      prevPart: srK > 0 ? srPost(srIds[srK - 1]) : {}, nextPart: srK >= 0 && srK < srIds.length - 1 ? srPost(srIds[srK + 1]) : {},
+      liShare: 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(pageUrl),
+      copyLabel: s.copied ? 'Link copied' : 'Copy link',
+      copyLink: () => { navigator.clipboard?.writeText(pageUrl); this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1800); },
+      onSelect: () => { setTimeout(() => { const sel = getSelection(), txt = sel.toString().trim().replace(/\s+/g, ' '); if (txt.length > 8 && sel.rangeCount) { const r = sel.getRangeAt(0).getBoundingClientRect(); this.setState({ hl: { x: r.left + r.width / 2, y: r.top, text: txt.slice(0, 260) }, hlCopied: false }); } else if (this.state.hl) this.setState({ hl: null }); }, 10); },
+      hlOn: !!s.hl, hlX: s.hl ? Math.max(150, Math.min(innerWidth - 150, s.hl.x)) + 'px' : '0px', hlY: s.hl ? Math.max(60, s.hl.y) + 'px' : '0px',
+      hlLinkedIn: e => { e.preventDefault(); navigator.clipboard?.writeText(shareText + ' ' + pageUrl); open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(pageUrl), '_blank'); this.setState({ hl: null }); },
+      hlX2: e => { e.preventDefault(); open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText) + '&url=' + encodeURIComponent(pageUrl), '_blank'); this.setState({ hl: null }); },
+      hlCopy: e => { e.preventDefault(); navigator.clipboard?.writeText(shareText); this.setState({ hlCopied: true }); setTimeout(() => this.setState({ hl: null, hlCopied: false }), 1200); },
+      hlCopyLabel: s.hlCopied ? 'Copied' : 'Copy quote',
+      authorRoles: [{ org: 'Copyright Tribunal, Kenya', role: 'Chairperson' }, { org: 'MyIP Legal Studio', role: 'Founder' }, { org: 'Strathmore University Law School', role: 'Adjunct Faculty' }],
+      curComments, curCommentCount: curComments.length + (curComments.length === 1 ? ' comment' : ' comments'),
+      sentComment: s.sent, canComment: !s.sent,
+      submitComment: e => { e.preventDefault(); const f = new FormData(e.target); this.setState(st => ({ sent: true, comments: [...st.comments, { id: Date.now(), postId: cur.id, name: f.get('name'), when: 'just now', text: f.get('text'), ok: false, score: 0.1 }] })); },
+      related,
+      subscribed: s.sub, notSubscribed: !s.sub, subscribe: e => { e.preventDefault(); this.setState({ sub: true }); },
+      // studio
+      studioNav: [['posts', 'Posts', s.posts.length], ['calendar', 'Calendar', counts.Scheduled], ['comments', 'Comments', pending.length], ['insights', 'Insights', '']].map(([k, label, count]) => { const on = s.tab === k || (k === 'posts' && s.tab === 'editor'); return { label, count, bg: on ? '#22355a' : 'transparent', fg: on ? '#fff' : '#aab1c2', go: () => this.setState({ tab: k, slash: null }) }; }),
+      newPost: () => this.edit({ id: Date.now(), title: '', excerpt: '', cat: 'Copyright', tags: [], body: [''], status: 'Draft', date: '' }),
+      toReader: () => this.setState({ mode: 'reader', view: 'index' }),
+      tabPosts: s.tab === 'posts', tabEditor: s.tab === 'editor' && !!s.ed, tabComments: s.tab === 'comments', tabCal: s.tab === 'calendar', tabInsights: s.tab === 'insights',
+      statusTabs: ['All', 'Published', 'Scheduled', 'Draft'].map(label => ({ label, count: counts[label], bg: s.status === label ? '#fbfaf7' : 'transparent', fg: s.status === label ? '#14213d' : '#fbfaf7', pick: () => this.setState({ status: label }) })),
+      studioPosts: s.posts.filter(p => s.status === 'All' || p.status === s.status).map(p => ({ ...p, title: p.title || 'Untitled', dot: dot[p.status], dateLabel: p.status === 'Scheduled' ? 'Goes live ' + fmt(p.date) : fmt(p.date), edit: () => this.edit(p) })),
+      backToPosts: () => this.setState({ tab: 'posts', slash: null }),
+      saveState: s.saved, saveDot: s.saving ? '#e0a33a' : '#7fd19b', ed,
+      setTitle: e => this.patch({ title: e.target.value }), setExcerpt: e => this.patch({ excerpt: e.target.value }),
+      setCat: e => this.patch({ cat: e.target.value }), setTags: e => this.patch({ tags: e.target.value }), setWhen: e => this.patch({ when: e.target.value }), setSeries: e => this.patch({ series: e.target.value }),
+      onBody: () => this.patch({ html: this.bodyEl ? this.bodyEl.innerHTML : '' }),
+      bodyRef: this.bodyRef,
+      edKeyDown: e => {
+        if (!this.state.slash) return;
+        const list = this.slashList(), i = this.state.slash.i;
+        if (e.key === 'ArrowDown') { e.preventDefault(); this.setState(st => ({ slash: { ...st.slash, i: Math.min(list.length - 1, i + 1) } })); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); this.setState(st => ({ slash: { ...st.slash, i: Math.max(0, i - 1) } })); }
+        else if (e.key === 'Enter') { e.preventDefault(); if (list[i]) this.applySlash(list[i].k); else this.setState({ slash: null }); }
+        else if (e.key === 'Escape') { e.preventDefault(); this.setState({ slash: null }); }
+      },
+      edKeyUp: e => {
+        if (['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(e.key) && this.state.slash) return;
+        const blk = this.blockAt(), txt = blk ? blk.textContent : '';
+        if (/^\/[a-z]*$/i.test(txt)) {
+          const sel = getSelection(); let r = sel.rangeCount ? sel.getRangeAt(0).getBoundingClientRect() : null;
+          if (!r || (!r.width && !r.height && !r.top)) r = (blk.nodeType === 1 ? blk : blk.parentNode).getBoundingClientRect();
+          this.slashBlk = blk;
+          const qq = txt.slice(1).toLowerCase();
+          this.setState(st => ({ slash: { q: qq, i: st.slash && st.slash.q === qq ? st.slash.i : 0, x: Math.min(innerWidth - 280, r.left), y: Math.min(innerHeight - 380, r.bottom + 8) } }));
+        } else if (this.state.slash) this.setState({ slash: null });
+      },
+      edBlur: () => { setTimeout(() => { if (this.state.slash && document.activeElement !== this.bodyEl) this.setState({ slash: null }); }, 150); },
+      slashOn: !!s.slash && s.pv === 'write', slashX: s.slash ? s.slash.x + 'px' : '0px', slashY: s.slash ? s.slash.y + 'px' : '0px',
+      slashItems: slashItems.map((x, k) => ({ ...x, bg: s.slash && s.slash.i === k ? '#eef4f9' : 'transparent', pick: e => { e.preventDefault(); this.applySlash(x.k); } })),
+      slashEmpty: slashItems.length === 0,
+      tools: [
+        { label: 'B', title: 'Bold', run: exec('bold') }, { label: 'I', title: 'Italic', run: exec('italic') },
+        { label: 'H', title: 'Heading', run: exec('formatBlock', 'h2') }, { label: '¶', title: 'Paragraph', run: exec('formatBlock', 'p') },
+        { label: '“', title: 'Quote', run: exec('formatBlock', 'blockquote') }, { label: '✎', title: 'Margin note', run: exec('formatBlock', 'aside') }, { label: '•', title: 'List', run: exec('insertUnorderedList') },
+        { label: '↗', title: 'Link', run: e => { e.preventDefault(); const u = prompt('Link URL'); if (u) document.execCommand('createLink', false, u); } }
+      ],
+      pvModes: [['write', 'Write'], ['desktop', 'Desktop'], ['mobile', 'Mobile'], ['linkedin', 'LinkedIn']].map(([k, label]) => ({ label, bg: s.pv === k ? '#fbfaf7' : 'transparent', fg: s.pv === k ? '#14213d' : '#fbfaf7', pick: () => { if (this.bodyEl && s.pv === 'write') this.patch({ html: this.bodyEl.innerHTML }); this.setState({ pv: k, slash: null }); } })),
+      writeDisp: s.pv === 'write' ? 'flex' : 'none',
+      pvPage: s.pv === 'desktop' || s.pv === 'mobile', pvLinked: s.pv === 'linkedin',
+      pvW: s.pv === 'mobile' ? '390px' : '100%', pvR: s.pv === 'mobile' ? '34px' : '8px', pvPad: s.pv === 'mobile' ? '28px 22px' : '48px clamp(24px,6vw,80px)', pvH: s.pv === 'mobile' ? '32px' : '46px', pvNoteIndent: s.pv === 'mobile' ? '0px' : '40px',
+      pvBlocks, pvRead: Math.max(1, Math.round(wds / 220)) + ' min',
+      pubModes: [['draft', 'Save as draft'], ['now', 'Publish now'], ['schedule', 'Schedule']].map(([k, label]) => ({ label, fill: ed.mode === k ? '#14213d' : '#fff', pick: () => this.patch({ mode: k }) })),
+      isScheduled: ed.mode === 'schedule',
+      publishLabel: ed.mode === 'now' ? 'Publish' : ed.mode === 'schedule' ? 'Schedule' : 'Save draft',
+      publish: () => this.publish(),
+      catNames: CATS.slice(1), seriesNames: ['None', ...s.series.map(x => x.name)],
+      slug: (ed.title || 'untitled').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60),
+      ogTitle: ed.title || 'Untitled',
+      wordCount: wds + ' words',
+      versions: hist.map((v, k) => ({ label: v.label, meta: v.meta, isCurrent: k === 0, canRestore: k > 0, restore: () => { if (this.bodyEl) this.bodyEl.innerHTML = v.html; this.setState(st => ({ ed: { ...st.ed, html: v.html, title: v.title }, saved: 'Restored ' + v.label.toLowerCase() })); this.patch({}); } })),
+      weekdays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      calLabel: MONTHS[s.calM] + ' ' + s.calY,
+      calPrev: () => this.setState(st => st.calM === 0 ? { calM: 11, calY: st.calY - 1 } : { calM: st.calM - 1 }),
+      calNext: () => this.setState(st => st.calM === 11 ? { calM: 0, calY: st.calY + 1 } : { calM: st.calM + 1 }),
+      calCells, drafts, noDrafts: drafts.length === 0,
+      tiles: [{ k: 'Reads', v: tot.toLocaleString('en-GB'), d: '+18% on previous 30 days' }, { k: 'Read to the end', v: avg + '%', d: '+4 points' }, { k: 'New subscribers', v: '+' + subs, d: 'from post sign-ups' }],
+      stats: statRows,
+      modQueue: pending.map(c => ({ ...c, post: (s.posts.find(p => p.id === c.postId) || {}).title, scoreW: Math.round(c.score * 100) + '%', scoreColor: c.score > 0.6 ? '#b3261e' : '#2f7d4f', verdict: c.score > 0.6 ? 'Likely spam · ' + Math.round(c.score * 100) + '%' : 'Looks genuine · ' + Math.round(c.score * 100) + '% spam', approve: () => this.setState(st => ({ comments: st.comments.map(x => x.id === c.id ? { ...x, ok: true } : x) })), remove: () => this.setState(st => ({ comments: st.comments.filter(x => x.id !== c.id) })) })),
+      queueEmpty: pending.length === 0,
+      modeSwitch: [['reader', 'Site'], ['studio', 'Workroom']].map(([k, label]) => ({ label, bg: s.mode === k ? '#fbfaf7' : 'transparent', fg: s.mode === k ? '#14213d' : '#aab1c2', go: () => this.setState({ mode: k, hl: null }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

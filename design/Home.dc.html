@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#ffffff;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+a:hover{color:#0c6b9d}
+</style>
+</helmet>
+<div style="font-family:Figtree,sans-serif;color:#18161a;background:#fff">
+
+<header style="background:#18161a;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:14px clamp(20px,4vw,56px);flex-wrap:wrap">
+<a href="#"><img src="assets/logo-white-crop.png" alt="Liz Lenjo" style="height:56px;display:block"></a>
+<nav style="display:flex;gap:clamp(16px,2.4vw,32px);align-items:center;font-size:15px;font-weight:500;flex-wrap:wrap">
+<a href="#">Home</a><a href="#">About</a><a href="#">Law</a><a href="#">Lecturer</a><a href="#">Fashion</a><a href="#">Press</a><a href="#">Contact</a>
+<a href="#" style="background:#0c6b9d;color:#fff;padding:10px 18px;border-radius:999px;font-weight:600">Book Liz to speak</a>
+</nav>
+</header>
+
+<section data-screen-label="Slider" style="position:relative;width:100%;aspect-ratio:16/9;max-height:calc(100vh - 84px);overflow:hidden;background:#18161a">
+<sc-for list="{{ slides }}" as="s" hint-placeholder-count="1">
+<img src="{{ s.src }}" alt="{{ s.alt }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:{{ s.opacity }};transition:opacity 900ms ease">
+</sc-for>
+<div style="position:absolute;left:0;right:0;bottom:clamp(14px,3vw,32px);display:flex;justify-content:center;gap:12px">
+<sc-for list="{{ slides }}" as="s" hint-placeholder-count="4">
+<button onClick="{{ s.go }}" aria-label="{{ s.alt }}" style="width:{{ s.dotW }};height:10px;border-radius:999px;border:1.5px solid #fff;background:{{ s.dotBg }};padding:0;cursor:pointer;transition:all 300ms ease;box-shadow:0 0 0 1px rgba(0,0,0,.15)"></button>
+</sc-for>
+</div>
+</section>
+
+<section data-screen-label="Bio" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(32px,5vw,80px);padding:clamp(56px,8vw,120px) clamp(20px,4vw,56px);max-width:1280px;margin:0 auto;align-items:center">
+<div style="aspect-ratio:4/5;overflow:hidden;border-radius:4px">
+<img src="assets/piano.jpg" alt="Liz Lenjo" style="width:100%;height:100%;object-fit:cover;object-position:60% 40%;display:block">
+</div>
+<div style="display:flex;flex-direction:column;gap:22px">
+<div style="font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#0c6b9d">About Liz</div>
+<h1 style="margin:0;font-size:clamp(34px,4vw,52px);line-height:1.08;font-weight:800;letter-spacing:-.01em;text-wrap:pretty">Advocate of the High Court of Kenya</h1>
+<p style="margin:0;font-size:18px;line-height:1.65;text-wrap:pretty">Liz Lenjo is an accomplished legal practitioner and governance leader with a distinguished record across intellectual property, regulated industries, and complex commercial environments. She is the Founder and Managing Consultant of MyIP Legal Studio, a boutique advisory firm serving clients across Africa’s creative, digital, technology, and energy sectors.</p>
+<p style="margin:0;font-size:18px;line-height:1.65;text-wrap:pretty">An adjunct faculty member at Strathmore University Law School, Liz teaches Media and Entertainment Law and also tutors with CopyrightX (HarvardX – Kenya).</p>
+<div style="display:flex;gap:12px;flex-wrap:wrap;padding-top:6px">
+<a href="#" style="background:#18161a;color:#fff;padding:14px 24px;border-radius:999px;font-weight:600;font-size:15px">Read full profile</a>
+<a href="#" style="border:1.5px solid #18161a;padding:13px 24px;border-radius:999px;font-weight:600;font-size:15px">Book Liz to speak</a>
+</div>
+</div>
+</section>
+
+<section data-screen-label="Recognition" style="background:#f4f3f1;padding:clamp(56px,7vw,96px) clamp(20px,4vw,56px)">
+<div style="max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap">
+<h2 style="margin:0;font-size:clamp(28px,3vw,40px);font-weight:800">Recognition</h2>
+<div style="font-size:16px;color:#55525a;max-width:460px;line-height:1.5">Chambers and Partners 2026 Band 3 mention in Intellectual Property Law Practice.</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px">
+<sc-for list="{{ awards }}" as="a" hint-placeholder-count="8">
+<div style="background:#fff;border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:14px">
+<div style="aspect-ratio:3/2;background:repeating-linear-gradient(135deg,#efede9 0 8px,#f7f6f3 8px 16px);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:#8a8690">logo</div>
+<div style="font-size:14px;font-weight:600;line-height:1.35">{{ a.name }}</div>
+<div style="font-size:13px;color:#55525a">{{ a.year }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section data-screen-label="Social" style="background:#0c6b9d;color:#fff;padding:clamp(56px,7vw,96px) clamp(20px,4vw,56px)">
+<div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:48px;align-items:center">
+<img src="assets/logo-white-crop.png" alt="Liz Lenjo" style="width:min(100%,320px);display:block">
+<div style="display:flex;flex-direction:column;gap:0">
+<div style="font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding-bottom:16px">Follow Liz</div>
+<a href="https://www.linkedin.com/in/lizlenjo/" style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.4);padding:22px 0;font-size:clamp(22px,2.4vw,30px);font-weight:700" style-hover="color:#fff;padding-left:8px">LinkedIn<span>↗</span></a>
+<a href="https://myip.lawyer/" style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.4);border-bottom:1px solid rgba(255,255,255,.4);padding:22px 0;font-size:clamp(22px,2.4vw,30px);font-weight:700" style-hover="color:#fff;padding-left:8px">MyIP Legal Studio<span>↗</span></a>
+</div>
+</div>
+</section>
+
+<footer style="background:#18161a;color:#c9c6cc;padding:28px clamp(20px,4vw,56px);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:14px">
+<span>© 2026 Liz Lenjo, Esq. · Nairobi</span>
+<span>Advocate of the High Court of Kenya</span>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;interval&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:5,&quot;min&quot;:2,&quot;max&quot;:12,&quot;step&quot;:1,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;},&quot;autoplay&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { i: 0 };
+  slidesData = [
+    { src: 'assets/advocate.png', alt: 'Advocate of the High Court' },
+    { src: 'assets/lecturer.png', alt: 'Lecturer' },
+    { src: 'assets/fashion.png', alt: 'Fashion' },
+    { src: 'assets/model.png', alt: 'Model' }
+  ];
+  componentDidMount() { this.start(); }
+  componentDidUpdate(p) { if (p.interval !== this.props.interval || p.autoplay !== this.props.autoplay) this.start(); }
+  componentWillUnmount() { clearInterval(this.t); }
+  start() {
+    clearInterval(this.t);
+    if (this.props.autoplay === false) return;
+    this.t = setInterval(() => this.setState(s => ({ i: (s.i + 1) % this.slidesData.length })), (this.props.interval ?? 5) * 1000);
+  }
+  go(i) { this.setState({ i }); this.start(); }
+  renderVals() {
+    const i = this.state.i;
+    return {
+      slides: this.slidesData.map((s, k) => ({ ...s, opacity: k === i ? 1 : 0, dotW: k === i ? '32px' : '10px', dotBg: k === i ? '#fff' : 'transparent', go: () => this.go(k) })),
+      awards: [
+        { name: 'Chambers and Partners, Band 3, Intellectual Property', year: '2026' },
+        { name: 'WTR Bronze Award', year: '2024, 2025, 2026' },
+        { name: 'Africa Legal Innovation Awards, IP Lawyer of the Year', year: '2022' },
+        { name: 'WIPR Diversity, Beacon of Light', year: '2022' },
+        { name: 'WIPR Diversity Shining Lights', year: '2021' },
+        { name: 'Business Daily Top 40 Under 40 Women', year: '2018' },
+        { name: 'Top 25 Women in Digital – Kenya', year: '' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

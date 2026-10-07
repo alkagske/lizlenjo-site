@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#e6e3de;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+a:hover{opacity:.7}
+</style>
+</helmet>
+
+<section style="padding:64px;display:flex;flex-direction:column;gap:36px">
+<div style="font-family:Manrope,sans-serif;display:flex;flex-direction:column;gap:8px;max-width:1100px">
+<div style="font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#6b665f">Character directions · pick one to build out</div>
+<div style="font-size:26px;color:#141210;line-height:1.35">Each concept comes from what makes Liz unusual: an advocate who works in fashion. The aim is a site no other fashion or law site could be mistaken for.</div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start">
+
+<!-- 4a EXHIBIT -->
+<div id="4a" style="display:flex;flex-direction:column;gap:14px;width:1280px;flex:none">
+<div style="display:flex;gap:12px;align-items:baseline;font-family:Manrope,sans-serif">
+<div style="background:#141210;color:#fff;padding:6px 12px;font-size:14px;font-weight:500">4a</div>
+<div style="font-size:18px;color:#141210;font-weight:500;white-space:nowrap">The Exhibit</div>
+<div style="font-size:15px;color:#6b665f">The site is set out like a court filing. Photos are entered as exhibits, the bio reads as numbered particulars, and the logo becomes her signature.</div>
+</div>
+<div data-screen-label="4a Exhibit" style="background:#f3efe6;color:#141210;font-family:'Libre Caslon Text',serif;display:grid;grid-template-columns:56px 1fr">
+<div style="border-right:1px solid #d9b9b2;background:repeating-linear-gradient(180deg,transparent 0 31px,transparent 31px 32px);font-family:'IBM Plex Mono',monospace;font-size:10px;color:#b08d86;display:flex;flex-direction:column;align-items:center;padding-top:118px;gap:0">
+<sc-for list="{{ lines }}" as="n" hint-placeholder-count="40"><div style="height:32px;line-height:32px">{{ n }}</div></sc-for>
+</div>
+<div>
+<div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:22px 48px;border-bottom:2px solid #141210;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase">
+<div style="display:flex;gap:24px"><a href="#">§1 About</a><a href="#">§2 Liz Notes</a></div>
+<img src="assets/logo-9-crop.png" alt="Liz Lenjo" style="height:44px">
+<div style="display:flex;justify-content:flex-end"><a href="#" style="border:1px solid #141210;padding:8px 14px">File an enquiry</a></div>
+</div>
+<div style="padding:40px 48px 0;display:grid;grid-template-columns:1fr 1fr;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;line-height:1.8">
+<div>In the matter of<br><span style="font-family:'Libre Caslon Text',serif;font-size:30px;letter-spacing:0;text-transform:none;line-height:1.2">Liz Lenjo, <span style="font-style:italic">Esq.</span></span><br>Advocate of the High Court of Kenya</div>
+<div style="text-align:right">Ref. LL/2026/IP<br>Nairobi<br><span style="color:oklch(0.5 0.18 27)">Chair, Copyright Tribunal</span></div>
+</div>
+<div style="padding:28px 48px 0">
+<div style="position:relative;aspect-ratio:16/9;overflow:hidden;border:1px solid #141210"><img src="assets/advocate.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+<div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;padding:10px 0;border-bottom:1px solid #141210"><span>EXHIBIT “A” · 1 of 7 · Advocate of the High Court</span><span>← →</span></div>
+</div>
+<div style="padding:64px 48px;display:grid;grid-template-columns:200px 1fr;gap:40px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase">Particulars</div>
+<div style="display:flex;flex-direction:column;gap:22px;font-size:19px;line-height:1.65;max-width:720px">
+<div style="display:grid;grid-template-columns:40px 1fr"><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;padding-top:4px">1.</span><span>Liz Lenjo is an accomplished legal practitioner and governance leader with a distinguished record across intellectual property, regulated industries, and complex commercial environments.</span></div>
+<div style="display:grid;grid-template-columns:40px 1fr"><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;padding-top:4px">2.</span><span>She is the Founder and Managing Consultant of MyIP Legal Studio, <span style="background:linear-gradient(transparent 62%,oklch(0.88 0.06 27) 62%)">a boutique advisory firm serving clients across Africa’s creative, digital, technology, and energy sectors.</span></span></div>
+<div style="display:grid;grid-template-columns:40px 1fr"><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;padding-top:4px">3.</span><span>She chairs the Copyright Tribunal, <span style="text-decoration:line-through;text-decoration-color:oklch(0.5 0.18 27);color:#8a817a">lectures</span> <span style="color:oklch(0.5 0.18 27);font-style:italic">teaches Media and Entertainment Law</span> at Strathmore University Law School, and leads the Kenya Fashion Council’s legal portfolio.</span></div>
+</div>
+</div>
+<div style="padding:0 48px 64px;display:grid;grid-template-columns:200px 1fr;gap:40px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase">Schedule I<br><span style="color:#8a817a">Current offices</span></div>
+<div style="border-top:2px solid #141210">
+<sc-for list="{{ schedule }}" as="r" hint-placeholder-count="4"><div style="display:grid;grid-template-columns:60px 1fr 1fr;padding:14px 0;border-bottom:1px solid #cfc7bb;font-size:17px"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding-top:3px">{{ r.n }}</span><span>{{ r.org }}</span><span style="font-style:italic;color:#5d564f">{{ r.role }}</span></div></sc-for>
+</div>
+</div>
+<div style="background:#141210;color:#f3efe6;padding:56px 48px;display:flex;justify-content:space-between;align-items:flex-end">
+<div style="display:flex;flex-direction:column;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase"><span style="color:#b08d86">Signed</span><img src="assets/logo-white-crop.png" alt="" style="height:96px;align-self:flex-start;margin:6px 0 -14px"><span style="border-top:1px solid #f3efe6;padding-top:8px;width:260px">Liz Lenjo, Advocate</span></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-align:right;line-height:1.9">LINKEDIN ↗<br>MYIP.LAWYER ↗<br>© 2026</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 4b ATELIER -->
+<div id="4b" style="display:flex;flex-direction:column;gap:14px;width:1280px;flex:none">
+<div style="display:flex;gap:12px;align-items:baseline;font-family:Manrope,sans-serif">
+<div style="background:#141210;color:#fff;padding:6px 12px;font-size:14px;font-weight:500">4b</div>
+<div style="font-size:18px;color:#141210;font-weight:500;white-space:nowrap">The Atelier</div>
+<div style="font-size:15px;color:#6b665f">The look of a tailor’s workroom: pattern paper, measuring rulers, stitch lines and garment labels. It nods to design protection, the heart of fashion law.</div>
+</div>
+<div data-screen-label="4b Atelier" style="background:#fbfaf7;background-image:linear-gradient(#e9e6f0 1px,transparent 1px),linear-gradient(90deg,#e9e6f0 1px,transparent 1px);background-size:32px 32px;color:#14213d;font-family:Manrope,sans-serif">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:22px 48px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase">
+<div style="display:flex;gap:28px"><a href="#">About</a><a href="#">Liz Notes</a></div>
+<img src="assets/logo-9-crop.png" alt="Liz Lenjo" style="height:46px">
+<a href="#" style="border:1px dashed #0c6b9d;color:#0c6b9d;padding:9px 16px">Book a fitting · speaking</a>
+</div>
+<div style="padding:8px 48px 0">
+<div style="height:22px;background:repeating-linear-gradient(90deg,#14213d 0 1px,transparent 1px 16px),repeating-linear-gradient(90deg,#14213d 0 1px,transparent 1px 80px);background-size:100% 8px,100% 18px;background-repeat:no-repeat;background-position:0 100%,0 100%;border-bottom:1px solid #14213d"></div>
+<div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 0 10px"><span>0</span><span>40</span><span>80</span><span>120</span><span>160 cm</span></div>
+<div style="position:relative;aspect-ratio:16/9;overflow:hidden;outline:1px dashed #0c6b9d;outline-offset:8px"><img src="assets/fashion.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+<div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;padding:20px 0 0;color:#0c6b9d"><span>✂ – – – – cut here · look 05 of 07 · fashion</span><span>● ○ ○ ○ ○ ○ ○</span></div>
+</div>
+<div style="padding:80px 48px;display:grid;grid-template-columns:1.2fr 1fr;gap:64px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:22px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:#0c6b9d">PATTERN NO. 01 — THE ADVOCATE</div>
+<div style="font-family:'Instrument Serif',serif;font-size:58px;line-height:1.02">Law, cut to measure for Africa’s <span style="font-style:italic;color:#0c6b9d">creative industries.</span></div>
+<div style="font-size:16px;line-height:1.75;color:#3a4256;max-width:560px">Liz Lenjo is the Founder and Managing Consultant of MyIP Legal Studio, a boutique advisory firm serving clients across Africa’s creative, digital, technology, and energy sectors.</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+<sc-for list="{{ labels }}" as="l" hint-placeholder-count="4">
+<div style="background:#fff;border:1px solid #14213d;outline:1px dashed #14213d;outline-offset:-7px;padding:22px 18px;display:flex;flex-direction:column;gap:8px;text-align:center;box-shadow:3px 3px 0 #14213d">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em">{{ l.k }}</div>
+<div style="font-family:'Instrument Serif',serif;font-size:21px;line-height:1.15">{{ l.v }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;color:#0c6b9d">{{ l.s }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="padding:0 48px 80px">
+<div style="border-top:1px dashed #14213d;padding-top:28px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px">
+<sc-for list="{{ swatches }}" as="w" hint-placeholder-count="3">
+<div style="display:flex;flex-direction:column;gap:12px"><div style="height:130px;background:{{ w.c }};clip-path:polygon(0 4%,4% 0,8% 4%,12% 0,16% 4%,20% 0,24% 4%,28% 0,32% 4%,36% 0,40% 4%,44% 0,48% 4%,52% 0,56% 4%,60% 0,64% 4%,68% 0,72% 4%,76% 0,80% 4%,84% 0,88% 4%,92% 0,96% 4%,100% 0,100% 100%,0 100%)"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em">{{ w.k }}</div><div style="font-family:'Instrument Serif',serif;font-size:24px">{{ w.v }}</div></div>
+</sc-for>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 4c COLOUR ROOMS -->
+<div id="4c" style="display:flex;flex-direction:column;gap:14px;width:1280px;flex:none">
+<div style="display:flex;gap:12px;align-items:baseline;font-family:Manrope,sans-serif">
+<div style="background:#141210;color:#fff;padding:6px 12px;font-size:14px;font-weight:500">4c</div>
+<div style="font-size:18px;color:#141210;font-weight:500;white-space:nowrap">The Rooms</div>
+<div style="font-size:15px;color:#6b665f">Built from her own slides. Each identity is a full-colour room (gold, cobalt, dove grey, charcoal) with the script logo as the hero voice. Loud and joyful where other fashion sites stay beige.</div>
+</div>
+<div data-screen-label="4c Rooms" style="font-family:'Bricolage Grotesque',sans-serif;color:#fff">
+<div style="background:#0c6b9d;padding:22px 48px;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:500">
+<div style="display:flex;gap:28px"><a href="#">About</a><a href="#">Liz Notes</a></div>
+<img src="assets/logo-white-crop.png" alt="Liz Lenjo" style="height:48px">
+<a href="#" style="background:#fff;color:#0c6b9d;padding:10px 18px;border-radius:999px">Book Liz</a>
+</div>
+<div style="position:relative;aspect-ratio:16/9;overflow:hidden"><img src="assets/model.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block">
+<div style="position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr)">
+<sc-for list="{{ rooms }}" as="r" hint-placeholder-count="4"><div style="background:{{ r.c }};color:{{ r.fg }};padding:16px 20px;font-size:13px;font-weight:600;letter-spacing:.04em;display:flex;justify-content:space-between"><span>{{ r.n }}</span><span>{{ r.label }}</span></div></sc-for>
+</div>
+</div>
+<div style="background:#d9d6d1;color:#5b3424;display:grid;grid-template-columns:1fr 1fr;align-items:center">
+<div style="padding:72px 48px;display:flex;flex-direction:column;gap:18px">
+<div style="font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase">Room 01 · The Advocate</div>
+<div style="font-size:64px;font-weight:300;line-height:.98;letter-spacing:-.02em">Chair of the <span style="font-weight:800">Copyright Tribunal.</span></div>
+<div style="font-size:17px;line-height:1.65;color:#3b2a22;max-width:440px;font-family:Manrope,sans-serif">Kenya’s specialised court constituted under Section 48 of the Copyright Act (CAP 130).</div>
+</div>
+<div style="height:440px;overflow:hidden"><img src="assets/advocate.png" alt="" style="width:100%;height:100%;object-fit:cover;object-position:28% 50%;display:block"></div>
+</div>
+<div style="background:#18161a;display:grid;grid-template-columns:1fr 1fr;align-items:center">
+<div style="height:440px;overflow:hidden"><img src="assets/lecturer.png" alt="" style="width:100%;height:100%;object-fit:cover;object-position:30% 50%;display:block"></div>
+<div style="padding:72px 48px;display:flex;flex-direction:column;gap:18px">
+<div style="font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#c3b8a6">Room 02 · The Lecturer</div>
+<div style="font-size:64px;font-weight:300;line-height:.98;letter-spacing:-.02em">Media &amp; <span style="font-weight:800">Entertainment Law</span> at Strathmore.</div>
+</div>
+</div>
+<div style="background:linear-gradient(90deg,#1a1206,#c08a1a);padding:64px 48px;display:flex;justify-content:space-between;align-items:center">
+<img src="assets/logo-white-crop.png" alt="" style="height:120px">
+<div style="font-size:40px;font-weight:300;max-width:520px;text-align:right;line-height:1.1">Invite Liz to <span style="font-weight:800">speak.</span></div>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      lines: Array.from({ length: 40 }, (_, i) => (i + 1) % 5 === 0 ? String(i + 1) : '·'),
+      schedule: [
+        { n: 'I.1', org: 'Copyright Tribunal, Kenya', role: 'Chairperson' },
+        { n: 'I.2', org: 'MyIP Legal Studio', role: 'Founder & Managing Consultant' },
+        { n: 'I.3', org: 'Kenya Fashion Council', role: 'Interim Chairperson' },
+        { n: 'I.4', org: 'Strathmore University Law School', role: 'Adjunct Faculty' }
+      ],
+      labels: [
+        { k: 'CHAIRPERSON', v: 'Copyright Tribunal', s: 'CAP 130 · S.48' },
+        { k: 'INTERIM CHAIR', v: 'Kenya Fashion Council', s: 'LEGAL · POLICY · IP' },
+        { k: 'ADJUNCT FACULTY', v: 'Strathmore Law School', s: 'MEDIA & ENT. LAW' },
+        { k: 'RANKED', v: 'Chambers & Partners', s: 'BAND 3 · 2026' }
+      ],
+      swatches: [
+        { c: '#0c6b9d', k: 'SWATCH 01', v: 'Intellectual property' },
+        { c: '#14213d', k: 'SWATCH 02', v: 'Media & entertainment' },
+        { c: '#c4372c', k: 'SWATCH 03', v: 'Fashion law' }
+      ],
+      rooms: [
+        { n: '01', label: 'Advocate', c: '#d9d6d1', fg: '#5b3424' },
+        { n: '02', label: 'Lecturer', c: '#18161a', fg: '#fff' },
+        { n: '03', label: 'Fashion', c: '#0c8ccc', fg: '#fff' },
+        { n: '04', label: 'Model', c: '#c08a1a', fg: '#1a1206' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

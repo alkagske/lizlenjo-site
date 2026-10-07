@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Caveat:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#fbfaf7;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none;transition:color .3s ease}
+a:hover{color:#0c6b9d}
+::selection{background:#0c6b9d;color:#fff}
+:focus-visible{outline:1px dashed #0c6b9d;outline-offset:4px}
+html{scroll-behavior:smooth}
+input::placeholder{color:#8a90a0}
+@keyframes ll-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes ll-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</helmet>
+<div style="font-family:Manrope,sans-serif;font-weight:300;color:#14213d;font-size:15px;line-height:1.7;background-color:#fbfaf7;background-image:linear-gradient(#ebe8f0 1px,transparent 1px),linear-gradient(90deg,#ebe8f0 1px,transparent 1px);background-size:32px 32px">
+
+<header style="position:sticky;top:0;z-index:20;background:rgba(251,250,247,.92);backdrop-filter:blur(10px);box-shadow:{{ headShadow }};transition:box-shadow .4s ease">
+<div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;padding:0 clamp(20px,4vw,56px);height:{{ headH }};transition:height .4s cubic-bezier(.4,0,.2,1);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase">
+<nav style="display:flex;gap:clamp(16px,2.4vw,32px);flex-wrap:wrap"><a href="#">About</a><a href="Liz Notes Atelier.dc.html">Liz Notes</a></nav>
+<a href="#" aria-label="Liz Lenjo home"><img src="assets/logo-9-crop.png" alt="Liz Lenjo" style="height:{{ logoH }};display:block;transition:height .4s cubic-bezier(.4,0,.2,1)"></a>
+<nav style="display:flex;justify-content:flex-end"><a href="#enquire" style="border:1px dashed #0c6b9d;color:#0c6b9d;padding:10px 16px;white-space:nowrap;border-radius:6px" style-hover="background:#0c6b9d;color:#fff;border-style:solid">Book Liz to speak</a></nav>
+</div>
+<div style="position:relative;height:10px;border-top:1px solid #14213d;background:repeating-linear-gradient(90deg,#14213d 0 1px,transparent 1px 8px) 0 0/100% 4px no-repeat,repeating-linear-gradient(90deg,#14213d 0 1px,transparent 1px 40px) 0 0/100% 9px no-repeat">
+<div ref="{{ tapeRef }}" style="position:absolute;left:0;top:0;bottom:0;width:100%;background:#0c6b9d;opacity:.9;transform-origin:0 50%;transform:scaleX(0);mix-blend-mode:multiply"></div>
+</div>
+</header>
+
+<section data-screen-label="Slider" onMouseEnter="{{ pause }}" onMouseLeave="{{ resume }}" onTouchStart="{{ touchStart }}" onTouchEnd="{{ touchEnd }}" style="padding:clamp(20px,3vw,36px) clamp(20px,4vw,56px) 0">
+<div style="position:relative">
+<div style="position:relative;width:100%;aspect-ratio:16/9;max-height:calc(100vh - 170px);overflow:hidden;background:#14213d">
+<sc-for list="{{ slides }}" as="s" hint-placeholder-count="1">
+<img src="{{ s.src }}" alt="{{ s.alt }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ s.pos }};opacity:{{ s.opacity }};transition:opacity 1200ms cubic-bezier(.4,0,.2,1)">
+</sc-for>
+{{ progressBar }}
+</div>
+<div style="position:absolute;top:-10px;left:-10px;width:28px;height:28px;border-top:1px solid #14213d;border-left:1px solid #14213d"></div>
+<div style="position:absolute;top:-10px;right:-10px;width:28px;height:28px;border-top:1px solid #14213d;border-right:1px solid #14213d"></div>
+<div style="position:absolute;bottom:-10px;left:-10px;width:28px;height:28px;border-bottom:1px solid #14213d;border-left:1px solid #14213d"></div>
+<div style="position:absolute;bottom:-10px;right:-10px;width:28px;height:28px;border-bottom:1px solid #14213d;border-right:1px solid #14213d"></div>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:24px 0 0;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase">
+<div style="display:flex;gap:14px;align-items:center;color:#0c6b9d"><span>✂</span><span style="letter-spacing:.3em">– – – –</span><span>Look {{ counter }}</span><span style="color:#14213d">{{ slideLabel }}</span></div>
+<div style="display:flex;gap:10px;align-items:center">
+<sc-for list="{{ slides }}" as="s" hint-placeholder-count="7"><button onClick="{{ s.go }}" aria-label="{{ s.alt }}" style="all:unset;cursor:pointer;width:9px;height:9px;border-radius:50%;border:1px solid #14213d;background:{{ s.dotBg }};transition:background .4s ease"></button></sc-for>
+</div>
+<div style="display:flex;gap:6px">
+<button onClick="{{ prev }}" aria-label="Previous" style="all:unset;cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px dashed #14213d;border-radius:6px" style-hover="border-style:solid;background:#14213d;color:#fff">←</button>
+<button onClick="{{ next }}" aria-label="Next" style="all:unset;cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px dashed #14213d;border-radius:6px" style-hover="border-style:solid;background:#14213d;color:#fff">→</button>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));margin-top:28px;border:1px solid #14213d;background:#fff">
+<sc-for list="{{ spec }}" as="x" hint-placeholder-count="4"><div style="padding:14px 18px;border-right:1px dashed #9aa1b3;display:flex;flex-direction:column;gap:2px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;color:#6a7186">{{ x.k }}</span><span style="font-family:'Instrument Serif',serif;font-size:20px;line-height:1.2">{{ x.v }}</span></div></sc-for>
+</div>
+</section>
+
+<section data-screen-label="About" style="position:relative;max-width:1240px;margin:0 auto;padding:clamp(80px,11vw,150px) clamp(20px,4vw,56px) clamp(60px,8vw,100px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(40px,6vw,90px);align-items:end">
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;align-items:center;gap:14px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Scissors3%20(PSF).svg?width=500" alt="" aria-hidden="true" loading="lazy" style="flex:none;width:auto;mix-blend-mode:multiply;opacity:.9;margin:6px 4px;height:52px;transform:rotate(-12deg)"><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:#0c6b9d">PATTERN NO. 01 — THE ADVOCATE</div></div>
+<div style="position:relative">
+<span style="position:absolute;right:0;top:-34px;font-family:Caveat,cursive;font-size:26px;color:#c4372c;transform:rotate(-4deg);white-space:nowrap">bespoke, never off the rack ↘</span>
+<h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(40px,5.2vw,68px);line-height:1;letter-spacing:-.01em;text-wrap:balance">Law, cut to measure for Africa’s <span style="font-style:italic;color:#0c6b9d;background:linear-gradient(transparent 82%,rgba(196,55,44,.35) 82%,rgba(196,55,44,.35) 90%,transparent 90%)">creative industries.</span></h1>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:18px;border-left:1px dashed #14213d;padding-left:clamp(20px,3vw,36px)">
+<p style="margin:0;color:#3a4256;text-wrap:pretty">Liz Lenjo is an Advocate of the High Court of Kenya and the Founder and Managing Consultant of MyIP Legal Studio, a boutique advisory firm serving clients across Africa’s creative, digital, technology and energy sectors.</p>
+<p style="margin:0;color:#3a4256;text-wrap:pretty">She chairs the Copyright Tribunal, teaches Media and Entertainment Law at Strathmore University Law School, and leads the Legal, Policy and Intellectual Property portfolio of the Kenya Fashion Council.</p>
+<a href="#" style="align-self:flex-start;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;display:flex;gap:10px;align-items:center;padding-top:4px" style-hover="color:#0c6b9d;gap:16px"><span style="color:#0c6b9d">✂</span>Read the full profile</a>
+</div>
+</section>
+
+<section data-screen-label="Partners" style="padding:0 0 clamp(70px,9vw,120px)">
+<div style="max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,56px) 14px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#6a7186">Selvedge · worked with</div>
+<div style="overflow:hidden;background:#fff;border-top:1px solid #14213d;border-bottom:1px solid #14213d;position:relative">
+<div style="position:absolute;left:0;right:0;top:6px;border-top:1px dashed #9aa1b3"></div>
+<div style="position:absolute;left:0;right:0;bottom:6px;border-top:1px dashed #9aa1b3"></div>
+<div style="display:flex;width:max-content;animation:ll-marquee 42s linear infinite;will-change:transform" style-hover="animation-play-state:paused">
+<sc-for list="{{ partnerLoop }}" as="g" hint-placeholder-count="12">
+<div style="width:220px;height:116px;flex:none;box-sizing:border-box;padding:0 30px;display:flex;align-items:center;justify-content:center;border-right:1px dashed #d4d7e0">
+<sc-if value="{{ g.logo }}" hint-placeholder-val="{{ false }}"><img src="{{ g.logo }}" alt="{{ g.name }}" style="max-width:140px;max-height:56px;object-fit:contain;filter:grayscale(1);opacity:.75;transition:all .4s ease" style-hover="filter:grayscale(0);opacity:1"></sc-if>
+<sc-if value="{{ g.noLogo }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Instrument Serif',serif;font-size:24px">{{ g.name }}</span></sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section data-screen-label="Roles" style="position:relative;max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,56px) clamp(80px,10vw,140px);display:flex;flex-direction:column;gap:44px">
+<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;border-bottom:1px dashed #14213d;padding-bottom:22px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;gap:14px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Spool%20(PSF).png?width=500" alt="" aria-hidden="true" loading="lazy" style="flex:none;width:auto;mix-blend-mode:multiply;opacity:.9;margin:6px 4px;height:56px;transform:rotate(6deg)"><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:#0c6b9d">PATTERN NO. 02 — THE OFFICES</div></div>
+<h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(34px,4vw,52px);line-height:1.02">Current roles, <span style="font-style:italic">label by label.</span></h2>
+</div>
+<div style="font-size:14px;color:#3a4256;max-width:380px">The tribunal, the boardroom, the classroom and the industry bodies shaping Kenya’s creative economy.</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:22px">
+<sc-for list="{{ roles }}" as="r" hint-placeholder-count="7">
+<div style="background:#fff;border:1px solid #14213d;outline:1px dashed #14213d;outline-offset:-8px;padding:28px 24px;display:flex;flex-direction:column;gap:10px;text-align:center;box-shadow:4px 4px 0 #14213d;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s ease" style-hover="transform:translate(-3px,-3px);box-shadow:7px 7px 0 #0c6b9d">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase">{{ r.title }}</div>
+<div style="font-family:'Instrument Serif',serif;font-size:25px;line-height:1.12">{{ r.org }}</div>
+<div style="width:28px;border-top:1px solid #14213d;margin:4px auto"></div>
+<div style="font-size:13px;color:#4a5268;line-height:1.6">{{ r.note }}</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section data-screen-label="Practice" style="position:relative;background:#fff;border-top:1px solid #14213d;border-bottom:1px solid #14213d">
+<div style="max-width:1240px;margin:0 auto;padding:clamp(80px,10vw,140px) clamp(20px,4vw,56px);display:flex;flex-direction:column;gap:52px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px;align-items:end">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;gap:14px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Thimble%20(PSF).png?width=500" alt="" aria-hidden="true" loading="lazy" style="flex:none;width:auto;mix-blend-mode:multiply;opacity:.9;margin:6px 4px;height:48px;transform:rotate(10deg)"><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:#0c6b9d">PATTERN NO. 03 — THE PRACTICE</div></div>
+<h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(34px,4vw,52px);line-height:1.02">Six swatches of <span style="font-style:italic">practice.</span></h2>
+<span style="font-family:Caveat,cursive;font-size:24px;color:#c4372c;transform:rotate(-2deg);transform-origin:0 50%">pinned for the season’s fittings</span>
+</div>
+<a href="https://myip.lawyer/" style="justify-self:end;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;border:1px dashed #14213d;padding:12px 18px;border-radius:6px" style-hover="border-style:solid;background:#14213d;color:#fff">Work with MyIP Legal Studio ↗</a>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:44px 28px">
+<sc-for list="{{ practice }}" as="p" hint-placeholder-count="6">
+<div style="display:flex;flex-direction:column;gap:14px;position:relative" style-hover="transform:translateY(-4px)">
+<div style="position:absolute;top:-7px;left:22px;z-index:2;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#f1a39b,#c4372c 60%,#7d1f18);box-shadow:2px 3px 4px rgba(20,33,61,.35)"></div>
+<div style="height:150px;background:{{ p.c }};background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 6px);clip-path:polygon(0 5%,3% 0,6% 5%,9% 0,12% 5%,15% 0,18% 5%,21% 0,24% 5%,27% 0,30% 5%,33% 0,36% 5%,39% 0,42% 5%,45% 0,48% 5%,51% 0,54% 5%,57% 0,60% 5%,63% 0,66% 5%,69% 0,72% 5%,75% 0,78% 5%,81% 0,84% 5%,87% 0,90% 5%,93% 0,96% 5%,100% 0,100% 100%,0 100%);display:flex;align-items:flex-end;justify-content:space-between;padding:16px 18px;box-sizing:border-box;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em"><span>SWATCH {{ p.n }}</span><span>{{ p.hex }}</span></div>
+<div style="font-family:'Instrument Serif',serif;font-size:27px;line-height:1.1">{{ p.title }}</div>
+<div style="font-size:14px;color:#3a4256;line-height:1.65;text-wrap:pretty">{{ p.body }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section data-screen-label="Scholarship" style="position:relative;background-color:#26406b;background-image:repeating-linear-gradient(-62deg,rgba(255,255,255,.09) 0 1px,transparent 1px 3px),repeating-linear-gradient(-62deg,rgba(10,20,45,.22) 0 2px,transparent 2px 7px),repeating-linear-gradient(28deg,rgba(255,255,255,.035) 0 1px,transparent 1px 4px),radial-gradient(ellipse at 20% 30%,rgba(120,150,200,.28),transparent 55%),radial-gradient(ellipse at 85% 75%,rgba(10,20,45,.45),transparent 60%);color:#f2f0ea">
+<div style="position:absolute;left:0;right:0;top:14px;border-top:2px dashed #d9902f;opacity:.9"></div>
+<div style="position:absolute;left:0;right:0;top:22px;border-top:2px dashed #d9902f;opacity:.9"></div>
+<div style="position:absolute;left:0;right:0;bottom:14px;border-top:2px dashed #d9902f;opacity:.9"></div>
+<div style="position:absolute;left:0;right:0;bottom:22px;border-top:2px dashed #d9902f;opacity:.9"></div>
+<div style="position:relative;max-width:1240px;margin:0 auto;padding:clamp(80px,10vw,140px) clamp(20px,4vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(48px,7vw,100px)">
+<div style="display:flex;flex-direction:column;gap:26px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:#8fc3e0">PATTERN NO. 04 — THE DENIM · PUBLISHED SCHOLARSHIP</div>
+<div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:clamp(32px,3.6vw,48px);line-height:1.1;text-wrap:pretty">“Inspiration versus Exploitation: Traditional Cultural Expressions at the Hem of the Fashion Industry”</div>
+<div style="font-size:14px;color:#c4c9d6;max-width:460px">Her LL.M. thesis, published in the Marquette Intellectual Property Law Review and available on Westlaw and Nexis.</div>
+</div>
+<div style="align-self:center;position:relative;background:#fbfaf7;color:#14213d;padding:30px 28px;outline:1px dashed #14213d;outline-offset:-9px;display:flex;flex-direction:column;gap:4px;box-shadow:6px 6px 0 #0c6b9d">
+<img src="https://commons.wikimedia.org/wiki/Special:FilePath/Safety%20Pins(PSF).png?width=500" alt="" aria-hidden="true" loading="lazy" style="position:absolute;pointer-events:none;opacity:.95;width:64px;right:18px;top:-58px;transform:rotate(18deg);filter:invert(1) brightness(1.8)">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-align:center;padding-bottom:12px;border-bottom:1px solid #14213d">COMPOSITION</div>
+<sc-for list="{{ education }}" as="e" hint-placeholder-count="4">
+<div style="display:grid;grid-template-columns:1fr auto;gap:18px;padding:14px 0;border-bottom:1px dashed #9aa1b3;align-items:baseline"><div style="display:flex;flex-direction:column"><span style="font-family:'Instrument Serif',serif;font-size:21px;line-height:1.2">{{ e.title }}</span><span style="font-size:12px;color:#4a5268">{{ e.inst }}</span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em">{{ e.code }}</span></div>
+</sc-for>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-align:center;padding-top:12px">MADE IN NAIROBI · TURIN · GENEVA</div>
+</div>
+</div>
+</section>
+
+<section data-screen-label="Global" style="max-width:1240px;margin:0 auto;padding:clamp(80px,10vw,140px) clamp(20px,4vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(36px,6vw,90px);align-items:end">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:#0c6b9d">PATTERN NO. 05 — THE RUNWAY · SPEAKING</div>
+<h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(34px,4vw,52px);line-height:1.02">Consulting through WIPO, and on stages <span style="font-style:italic">across Africa and beyond.</span></h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;border-left:1px dashed #14213d;padding-left:clamp(20px,3vw,36px)">
+<p style="margin:0;color:#3a4256;text-wrap:pretty">Liz has consulted for international development institutions and pan-African economic forums including CANEX by Afreximbank, GiZ and the Intra-African Trade Fair, and presents and moderates on IP, trade, creative economy governance and cross-border commerce.</p>
+<a href="#enquire" style="align-self:flex-start;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:#0c6b9d;color:#fff;padding:14px 20px;border-radius:6px" style-hover="background:#14213d;color:#fff">Invite Liz to speak →</a>
+</div>
+</section>
+
+<section data-screen-label="Recognition" style="position:relative;max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,56px) clamp(80px,10vw,140px);display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;border-bottom:1px dashed #14213d;padding-bottom:22px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;gap:14px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Needle%20(PSF).png?width=500" alt="" aria-hidden="true" loading="lazy" style="flex:none;width:auto;mix-blend-mode:multiply;opacity:.9;margin:6px 4px;height:26px;transform:rotate(-6deg)"><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:#0c6b9d">PATTERN NO. 06 — THE TAGS</div></div>
+<h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(34px,4vw,52px);line-height:1.02">Recognition <span style="font-family:Caveat,cursive;font-size:26px;color:#c4372c;display:inline-block;transform:rotate(-5deg) translateY(-14px)">hover to straighten</span></h2>
+</div>
+<div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:21px;color:#3a4256">Ranked in Chambers and Partners 2026, Intellectual Property</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:40px 24px;padding-top:24px">
+<sc-for list="{{ awards }}" as="a" hint-placeholder-count="8">
+<div style="position:relative;padding-top:34px;transform:rotate({{ a.rot }});transform-origin:50% 0;transition:transform .5s cubic-bezier(.2,.7,.2,1)" style-hover="transform:rotate(0deg)">
+<div style="position:absolute;top:0;left:50%;width:1px;height:42px;background:#14213d"></div>
+<div style="background:#fff;border:1px solid #14213d;padding:30px 20px 22px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;clip-path:polygon(18% 0,82% 0,100% 12%,100% 100%,0 100%,0 12%)">
+<div style="width:12px;height:12px;border-radius:50%;border:1px solid #14213d;background:#fbfaf7"></div>
+<div style="height:62px;display:flex;align-items:center;justify-content:center">
+<sc-if value="{{ a.logo }}" hint-placeholder-val="{{ false }}"><img src="{{ a.logo }}" alt="{{ a.name }}" style="max-width:150px;max-height:60px;object-fit:contain"></sc-if>
+<sc-if value="{{ a.noLogo }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Instrument Serif',serif;font-size:30px">{{ a.name }}</span></sc-if>
+</div>
+<div style="width:100%;border-top:1px dashed #9aa1b3"></div>
+<div style="font-size:13px;font-weight:400;line-height:1.35">{{ a.name }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#0c6b9d">{{ a.detail }}</div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section data-screen-label="Media" style="padding:0 0 clamp(80px,10vw,140px)">
+<div style="max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,56px) 18px;display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:#0c6b9d">PATTERN NO. 07 — IN THE MEDIA</div>
+<div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:20px;color:#3a4256">On IP, governance, digital innovation and the creative industries.</div>
+</div>
+<div style="overflow:hidden;background:#fff;border-top:1px solid #14213d;border-bottom:1px solid #14213d;position:relative">
+<div style="position:absolute;left:0;right:0;top:6px;border-top:1px dashed #9aa1b3"></div>
+<div style="position:absolute;left:0;right:0;bottom:6px;border-top:1px dashed #9aa1b3"></div>
+<div style="display:flex;width:max-content;animation:ll-marquee 38s linear infinite reverse;will-change:transform" style-hover="animation-play-state:paused">
+<sc-for list="{{ mediaLoop }}" as="m" hint-placeholder-count="14">
+<div style="width:200px;height:112px;flex:none;box-sizing:border-box;padding:0 30px;display:flex;align-items:center;justify-content:center;border-right:1px dashed #d4d7e0">
+<img src="{{ m.src }}" alt="{{ m.name }}" style="max-width:100%;max-height:{{ m.h }};object-fit:contain;filter:grayscale(1);opacity:.75;transition:all .4s ease" style-hover="filter:grayscale(0);opacity:1">
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<footer id="enquire" data-screen-label="Footer" style="background:#14213d;color:#d4d8e2">
+<div style="max-width:1240px;margin:0 auto;padding:clamp(80px,10vw,130px) clamp(20px,4vw,56px) 36px;display:flex;flex-direction:column;gap:clamp(60px,8vw,100px)">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:48px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:#8fc3e0">THE ORDER BOOK</div>
+<div style="font-family:'Instrument Serif',serif;font-size:clamp(36px,4.4vw,58px);line-height:1;color:#fbfaf7">Invite Liz to speak, moderate <span style="font-style:italic">or advise.</span></div>
+<div style="font-size:14px;color:#aab1c2;max-width:420px">Keynotes, panels and moderation on IP, trade and the creative economy.</div>
+</div>
+<div style="background:#fbfaf7;color:#14213d;padding:30px;outline:1px dashed #14213d;outline-offset:-9px;box-shadow:6px 6px 0 #0c6b9d">
+<sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px;padding:20px 4px;text-align:center"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em">ORDER RECEIVED</div><div style="font-family:'Instrument Serif',serif;font-size:28px;line-height:1.15">Thank you. Liz’s office will be in touch.</div></div>
+</sc-if>
+<sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+<form onSubmit="{{ submit }}" style="display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;border-bottom:1px solid #14213d;padding-bottom:12px"><span>ENQUIRY</span><span>NO. {{ orderNo }}</span></div>
+<div style="display:flex;gap:6px;flex-wrap:wrap">
+<sc-for list="{{ kinds }}" as="k" hint-placeholder-count="3"><button type="button" onClick="{{ k.pick }}" style="all:unset;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;border:1px {{ k.bs }} #14213d;background:{{ k.bg }};color:{{ k.fg }};border-radius:6px">{{ k.label }}</button></sc-for>
+</div>
+<input required placeholder="Your name" style="all:unset;border-bottom:1px dashed #9aa1b3;padding:10px 0;font-size:14px">
+<input required type="email" placeholder="Email" style="all:unset;border-bottom:1px dashed #9aa1b3;padding:10px 0;font-size:14px">
+<input placeholder="Event, date and city" style="all:unset;border-bottom:1px dashed #9aa1b3;padding:10px 0;font-size:14px">
+<button type="submit" style="all:unset;cursor:pointer;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:#14213d;color:#fff;padding:14px;margin-top:6px;border-radius:6px" style-hover="background:#0c6b9d">Send enquiry →</button>
+</form>
+</sc-if>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:36px;border-top:1px dashed #3d4a68;padding-top:44px;font-size:13px">
+<div style="display:flex;flex-direction:column;gap:10px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#7f88a0;padding-bottom:4px">SITE</div><a href="#">About</a><a href="Liz Notes Atelier.dc.html">Liz Notes</a><a href="#enquire">Speaking</a></div>
+<div style="display:flex;flex-direction:column;gap:10px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#7f88a0;padding-bottom:4px">FOLLOW</div><a href="https://www.linkedin.com/in/lizlenjo/">LinkedIn ↗</a><a href="https://myip.lawyer/">MyIP Legal Studio ↗</a></div>
+<div style="display:flex;flex-direction:column;gap:10px"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#7f88a0;padding-bottom:4px">LIZ NOTES BY EMAIL</div>
+<sc-if value="{{ subbed }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:18px;color:#8fc3e0">Subscribed. Thank you.</span></sc-if>
+<sc-if value="{{ notSubbed }}" hint-placeholder-val="{{ true }}"><form onSubmit="{{ subscribe }}" style="display:flex;border-bottom:1px dashed #7f88a0"><input required type="email" placeholder="Email address" style="all:unset;flex:1;padding:8px 0;font-size:13px;color:#fff;min-width:0"><button type="submit" style="all:unset;cursor:pointer;padding:8px 0 8px 10px">→</button></form></sc-if>
+</div>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:28px;flex-wrap:wrap">
+<div style="border:1px solid #d4d8e2;outline:1px dashed #d4d8e2;outline-offset:-6px;padding:18px 26px;display:flex;flex-direction:column;align-items:center;gap:6px">
+<img src="assets/logo-white-crop.png" alt="Liz Lenjo" style="height:64px">
+<span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.24em">MADE IN KENYA</span>
+</div>
+<div style="display:flex;gap:24px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7f88a0">
+<span>© 2026 Liz Lenjo</span><span>Nairobi · {{ nbo }} EAT</span><a href="#">Privacy</a><button onClick="{{ toTop }}" style="all:unset;cursor:pointer">Back to top ↑</button>
+</div>
+</div>
+</div>
+</footer>
+
+<button onClick="{{ toTop }}" aria-label="Back to top" style="position:fixed;right:clamp(16px,3vw,32px);bottom:clamp(16px,3vw,32px);z-index:30;width:48px;height:48px;border-radius:50%;border:1px dashed #14213d;background:#fbfaf7;cursor:pointer;font-size:15px;color:#14213d;opacity:{{ topO }};transform:translateY({{ topY }});pointer-events:{{ topPE }};transition:all .5s cubic-bezier(.4,0,.2,1)" style-hover="background:#14213d;color:#fff;border-style:solid">↑</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;interval&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:6,&quot;min&quot;:3,&quot;max&quot;:12,&quot;step&quot;:1,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;},&quot;autoplay&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { i: 0, paused: false, scrolled: false, showTop: false, nbo: '', sent: false, sub: false, kind: 'Keynote' };
+  tapeRef = React.createRef();
+  slidesData = [
+    { label: 'Advocate', src: 'assets/slides/advocate.png', alt: 'Advocate of the High Court', pos: '50% 12%' },
+    { label: 'Portrait', src: 'assets/reflection-1920.jpg', alt: 'Liz Lenjo', pos: '50% 30%' },
+    { label: 'Lecturer', src: 'assets/slides/lecturer.png', alt: 'Lecturer', pos: '50% 12%' },
+    { label: 'At the piano', src: 'assets/piano-1920.jpg', alt: 'Liz Lenjo at the piano', pos: '62% 40%' },
+    { label: 'Fashion', src: 'assets/slides/fashion.png', alt: 'Fashion', pos: '50% 12%' },
+    { label: 'In red', src: 'assets/red-twirl-1920.jpg', alt: 'Liz Lenjo in a red gown', pos: '50% 45%' },
+    { label: 'Model', src: 'assets/slides/model.png', alt: 'Model', pos: '50% 12%' }
+  ];
+  componentDidMount() {
+    this.start();
+    this.reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.onScroll = () => {
+      if (this.raf) return;
+      this.raf = requestAnimationFrame(() => {
+        this.raf = null;
+        const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
+        if (this.tapeRef.current) this.tapeRef.current.style.transform = 'scaleX(' + (max > 0 ? y / max : 0) + ')';
+        const scrolled = y > 40, showTop = y > innerHeight * 1.2;
+        if (scrolled !== this.state.scrolled || showTop !== this.state.showTop) this.setState({ scrolled, showTop });
+      });
+    };
+    addEventListener('scroll', this.onScroll, { passive: true });
+    this.onKey = e => { if (/INPUT|TEXTAREA/.test(document.activeElement?.tagName)) return; if (e.key === 'ArrowRight') { this.step(1); this.start(); } if (e.key === 'ArrowLeft') { this.step(-1); this.start(); } };
+    addEventListener('keydown', this.onKey);
+    this.tick = () => this.setState({ nbo: new Intl.DateTimeFormat('en-GB', { timeZone: 'Africa/Nairobi', hour: '2-digit', minute: '2-digit' }).format(new Date()) });
+    this.tick(); this.clock = setInterval(this.tick, 30000);
+    this.setupReveal(0);
+  }
+  setupReveal(tries) {
+    if (this.reduce || !('IntersectionObserver' in window)) return;
+    if (!document.querySelector('[data-screen-label="Footer"]') && tries < 40) { this.rt = setTimeout(() => this.setupReveal(tries + 1), 100); return; }
+    const els = [...document.querySelectorAll('[data-screen-label]')].filter(el => !/Slider|Footer/.test(el.dataset.screenLabel));
+    this.io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.style.opacity = 1; en.target.style.transform = 'none'; this.io.unobserve(en.target); } }), { threshold: 0.06, rootMargin: '0px 0px -6% 0px' });
+    els.forEach(el => { if (el.getBoundingClientRect().top > innerHeight) { el.style.opacity = 0; el.style.transform = 'translateY(28px)'; el.style.transition = 'opacity 1s cubic-bezier(.2,.6,.2,1), transform 1s cubic-bezier(.2,.6,.2,1)'; this.io.observe(el); } });
+  }
+  componentDidUpdate(p) { if (p.interval !== this.props.interval || p.autoplay !== this.props.autoplay) this.start(); }
+  componentWillUnmount() { clearInterval(this.t); clearInterval(this.clock); clearTimeout(this.rt); removeEventListener('scroll', this.onScroll); removeEventListener('keydown', this.onKey); this.io && this.io.disconnect(); }
+  start() { clearInterval(this.t); if (this.props.autoplay === false || this.paused) return; this.t = setInterval(() => this.step(1), (this.props.interval ?? 6) * 1000); }
+  step(d) { const n = this.slidesData.length; this.setState(s => ({ i: (s.i + d + n) % n })); }
+  renderVals() {
+    const s = this.state, i = s.i, n = this.slidesData.length, pad = x => String(x).padStart(2, '0');
+    const loop = a => [...a, ...a];
+    return {
+      slides: this.slidesData.map((x, k) => ({ ...x, opacity: k === i ? 1 : 0, dotBg: k === i ? '#14213d' : 'transparent', go: () => { this.setState({ i: k }); this.start(); } })),
+      counter: pad(i + 1) + ' / ' + pad(n), slideLabel: this.slidesData[i].label,
+      prev: () => { this.step(-1); this.start(); }, next: () => { this.step(1); this.start(); },
+      pause: () => { this.paused = true; clearInterval(this.t); this.setState({ paused: true }); },
+      resume: () => { this.paused = false; this.start(); this.setState({ paused: false }); },
+      touchStart: e => { this.tx = e.touches[0].clientX; },
+      touchEnd: e => { const dx = e.changedTouches[0].clientX - (this.tx ?? 0); if (Math.abs(dx) > 40) { this.step(dx < 0 ? 1 : -1); this.start(); } },
+      progressBar: React.createElement('div', { key: i + '-' + s.paused, style: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 3, background: 'repeating-linear-gradient(90deg,#fff 0 10px,transparent 10px 16px)', transformOrigin: '0 50%', transform: 'scaleX(0)', animation: (s.paused || this.props.autoplay === false) ? 'none' : 'll-progress ' + (this.props.interval ?? 6) + 's linear forwards' } }),
+      tapeRef: this.tapeRef,
+      headH: s.scrolled ? '60px' : '78px', logoH: s.scrolled ? '36px' : '46px',
+      headShadow: s.scrolled ? '0 12px 30px -22px rgba(20,33,61,.45)' : 'none',
+      topO: s.showTop ? 1 : 0, topY: s.showTop ? '0' : '12px', topPE: s.showTop ? 'auto' : 'none',
+      toTop: () => scrollTo({ top: 0, behavior: 'smooth' }), nbo: s.nbo,
+      sent: s.sent, notSent: !s.sent, submit: e => { e.preventDefault(); this.setState({ sent: true }); },
+      subbed: s.sub, notSubbed: !s.sub, subscribe: e => { e.preventDefault(); this.setState({ sub: true }); },
+      orderNo: 'LL-' + (new Date().getFullYear()) + '-0' + (100 + (new Date().getDate() * 7) % 900),
+      kinds: ['Keynote', 'Panel', 'Moderation', 'Advisory'].map(label => ({ label, bs: s.kind === label ? 'solid' : 'dashed', bg: s.kind === label ? '#14213d' : 'transparent', fg: s.kind === label ? '#fff' : '#14213d', pick: () => this.setState({ kind: label }) })),
+      partnerLoop: loop([['WIPO', 'wipo.png'], ['CANEX by Afreximbank', 'canex.png'], ['GiZ', 'giz.png'], ['Intra-African Trade Fair', 'iatf.png'], ['Kenya Bureau of Standards', 'kebs.jpeg'], ['INTA', 'inta.jpeg']].map(([name, f]) => ({ name, logo: f ? 'assets/logos/' + f : null, noLogo: !f }))),
+      mediaLoop: loop([
+        { name: 'BBC', src: 'assets/media/bbc.png', h: '34px' }, { name: 'CNN', src: 'assets/media/cnn.svg', h: '36px' },
+        { name: 'Financial Times', src: 'assets/media/ft.png', h: '64px' }, { name: 'CGTN', src: 'assets/media/cgtn.png', h: '28px' },
+        { name: 'CCTV', src: 'assets/media/cctv.png', h: '30px' }, { name: 'NTV Kenya', src: 'assets/media/ntv.jpeg', h: '50px' },
+        { name: 'Sunday Nation', src: 'assets/media/sunday-nation.jpeg', h: '64px' }
+      ]),
+      spec: [{ k: 'CLIENT', v: 'Liz Lenjo, Esq.' }, { k: 'CLOTH', v: 'Intellectual property' }, { k: 'CUT', v: 'Entertainment & fashion law' }, { k: 'ORIGIN', v: 'Nairobi, Kenya' }],
+      roles: [
+        { title: 'Chairperson', org: 'Copyright Tribunal, Kenya', note: 'Kenya’s specialised court under Section 48 of the Copyright Act (CAP 130).' },
+        { title: 'Founder & Managing Consultant', org: 'MyIP Legal Studio', note: 'Boutique advisory for Africa’s creative, digital, technology and energy sectors.' },
+        { title: 'Interim Chairperson', org: 'Kenya Fashion Council', note: 'Also Head of its Legal, Policy and Intellectual Property portfolio.' },
+        { title: 'Adjunct Faculty', org: 'Strathmore University Law School', note: 'Teaches Media and Entertainment Law. Tutor with CopyrightX (HarvardX – Kenya).' },
+        { title: 'Chair', org: 'IP Technical Committee, KEBS', note: 'Standards, compliance and certification across sectors.' },
+        { title: 'Head of Legal', org: 'Partners Against Piracy', note: 'Volunteer role in anti-piracy and enforcement.' },
+        { title: 'Former Board Member', org: 'NuPEA', note: 'Chaired the HR & General Purpose, Finance & Strategic Planning, and Audit Committees.' },
+        { title: 'Member', org: 'International Trademark Association', note: 'Served on the Anti-Counterfeiting Committee and Programming Council.' }
+      ],
+      practice: [
+        { n: '01', c: '#0c6b9d', hex: '#0C6B9D', title: 'Intellectual property', body: 'Copyright, trademarks and brand strategy, licensing and technology transfer for creative and technology businesses.' },
+        { n: '02', c: '#14213d', hex: '#14213D', title: 'Media & entertainment', body: 'Rights, licensing and compliance across music, film, broadcasting and digital platforms.' },
+        { n: '03', c: '#c4372c', hex: '#C4372C', title: 'Fashion law', body: 'Design and brand protection, traditional cultural expressions and industry policy.' },
+        { n: '04', c: '#b07d1a', hex: '#B07D1A', title: 'Anti-counterfeiting', body: 'Supply-chain IP risk, cross-border enforcement and digital trade.' },
+        { n: '05', c: '#5b3424', hex: '#5B3424', title: 'Governance & regulation', body: 'Board leadership, policy alignment and risk management in high-compliance environments.' },
+        { n: '06', c: '#2b2a30', hex: '#2B2A30', title: 'Dispute resolution', body: 'Mediation and arbitration, with judicial experience on licensing and commercial rights.' }
+      ],
+      education: [
+        { title: 'LL.M. Intellectual Property Law', inst: 'University of Turin & WIPO', code: 'LLM' },
+        { title: 'LL.B.', inst: 'Catholic University of Eastern Africa', code: 'LLB' },
+        { title: 'Postgraduate Diploma', inst: 'Kenya School of Law', code: 'PGD' },
+        { title: 'IP management, mediation, arbitration, fashion law', inst: 'WIPO Academy · Fordham University School of Law', code: 'CERT' }
+      ],
+      awards: [
+        { name: 'Chambers and Partners', detail: 'Band 3 · IP · 2026', logo: 'assets/logos/chambers.png' },
+        { name: 'World Trademark Review', detail: 'Bronze · 2024–2026', logo: 'assets/logos/wtr.png' },
+        { name: 'Africa Legal Innovation Awards', detail: 'IP Lawyer of the Year · 2022', logo: 'assets/logos/africa-legal.webp' },
+        { name: 'WIPR Diversity', detail: 'Beacon of Light · 2022', logo: 'assets/logos/wipr.png' },
+        { name: 'WIPR Diversity', detail: 'Shining Lights · 2021', logo: 'assets/logos/wipr.png' },
+        { name: 'Business Daily', detail: 'Top 40 Under 40 · 2018', logo: 'assets/logos/business-daily.png' },
+        { name: 'Top 25 Women in Digital', detail: 'Kenya', logo: 'assets/logos/top25digital.png' },
+        { name: 'INTA', detail: 'Committee member', logo: 'assets/logos/inta.jpeg' }
+      ].map((a, k) => ({ ...a, noLogo: !a.logo, rot: [-1.6, 1.2, -0.8, 1.8, -1.2, 0.9, -1.8, 1.4][k] + 'deg' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

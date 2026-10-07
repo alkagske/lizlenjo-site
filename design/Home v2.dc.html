@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#fff;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none;transition:color .3s ease,opacity .3s ease}
+a:hover{color:#0c6b9d}
+input::placeholder{color:#8d8a86}
+@keyframes ll-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+</style>
+</helmet>
+<div style="font-family:Manrope,sans-serif;font-weight:300;color:#1a1a1c;background:#fff;font-size:15px;line-height:1.7">
+
+<header style="position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid #ebe8e3">
+<div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;padding:0 clamp(20px,4vw,56px);height:76px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:400">
+<nav style="display:flex;gap:clamp(18px,2.4vw,36px);align-items:center;flex-wrap:wrap">
+<a href="#">About</a><a href="#">Blog</a>
+</nav>
+<a href="#" aria-label="Liz Lenjo home"><img src="assets/logo-9-crop.png" alt="Liz Lenjo" style="height:46px;display:block"></a>
+<nav style="display:flex;gap:clamp(18px,2.4vw,36px);align-items:center;justify-content:flex-end;flex-wrap:wrap">
+<a href="#" style="border:1px solid #1a1a1c;padding:11px 18px" style-hover="background:#1a1a1c;color:#fff">Speaking</a>
+</nav>
+</div>
+</header>
+
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;inset:0;z-index:40;background:#121214;color:#f4f1ec;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));overflow:auto">
+<div style="padding:clamp(28px,5vw,64px);display:flex;flex-direction:column;justify-content:space-between;gap:48px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<img src="assets/logo-white-crop.png" alt="Liz Lenjo" style="height:54px;display:block">
+<button onClick="{{ closeMenu }}" style="all:unset;cursor:pointer;font-size:11px;letter-spacing:.2em;text-transform:uppercase">Close ✕</button>
+</div>
+<nav style="display:flex;flex-direction:column;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(34px,4.4vw,52px);line-height:1.25">
+<sc-for list="{{ menu }}" as="m" hint-placeholder-count="9">
+<a href="#" onClick="{{ closeMenu }}" style="display:flex;align-items:baseline;gap:20px" style-hover="color:#8fc3e0"><span style="font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.2em;color:#8d8a86;width:24px">{{ m.n }}</span>{{ m.label }}</a>
+</sc-for>
+</nav>
+<div style="display:flex;gap:28px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#bdb8b1"><a href="https://www.linkedin.com/in/lizlenjo/">LinkedIn</a><a href="https://myip.lawyer/">MyIP Legal Studio</a></div>
+</div>
+<div style="min-height:420px;overflow:hidden"><img src="assets/reflection-1920.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;opacity:.85"></div>
+</div>
+</sc-if>
+
+<section data-screen-label="Slider" onMouseEnter="{{ pause }}" onMouseLeave="{{ resume }}" style="position:relative;width:100%;aspect-ratio:16/9;max-height:calc(100vh - 77px);overflow:hidden;background:#121214">
+<sc-for list="{{ slides }}" as="s" hint-placeholder-count="1">
+<div style="position:absolute;inset:0;opacity:{{ s.opacity }};transition:opacity 1200ms cubic-bezier(.4,0,.2,1)">
+<img src="{{ s.src }}" alt="{{ s.alt }}" style="width:100%;height:100%;object-fit:cover;object-position:{{ s.pos }};display:block">
+<sc-if value="{{ s.caption }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(18,18,20,.62) 0%,rgba(18,18,20,.18) 45%,rgba(18,18,20,0) 70%)"></div>
+<div style="position:absolute;left:clamp(24px,6vw,96px);top:50%;transform:translateY(-50%);color:#fff;display:flex;flex-direction:column;gap:18px;max-width:440px">
+<div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;font-weight:400">Advocate · Scholar · Fashion</div>
+<div style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(34px,4vw,56px);line-height:1.05">Liz Lenjo, <span style="font-style:italic">Esq.</span></div>
+<div style="font-size:14px;line-height:1.7;max-width:340px;color:#ecebe8">Entertainment and intellectual property law across Africa’s creative economy.</div>
+</div>
+</sc-if>
+</div>
+</sc-for>
+<div style="position:absolute;left:clamp(20px,4vw,56px);right:clamp(20px,4vw,56px);bottom:clamp(16px,2.6vw,32px);display:flex;justify-content:space-between;align-items:center;gap:20px;color:#fff;font-size:11px;letter-spacing:.2em;mix-blend-mode:difference">
+<div>{{ counter }}</div>
+<div style="display:flex;gap:10px;align-items:center">
+<sc-for list="{{ slides }}" as="s" hint-placeholder-count="5">
+<button onClick="{{ s.go }}" aria-label="{{ s.alt }}" style="all:unset;cursor:pointer;width:{{ s.dotW }};height:6px;border-radius:6px;background:#fff;opacity:{{ s.dotO }};transition:all 500ms ease"></button>
+</sc-for>
+</div>
+<div style="display:flex;gap:18px">
+<button onClick="{{ prev }}" aria-label="Previous" style="all:unset;cursor:pointer;font-size:16px">←</button>
+<button onClick="{{ next }}" aria-label="Next" style="all:unset;cursor:pointer;font-size:16px">→</button>
+</div>
+</div>
+</section>
+
+<section data-screen-label="About" style="max-width:1200px;margin:0 auto;padding:clamp(72px,10vw,140px) clamp(20px,4vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(40px,7vw,110px);align-items:center">
+<div style="display:flex;flex-direction:column;gap:28px;max-width:760px;margin:0 auto;text-align:center;align-items:center">
+<div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#0c6b9d;font-weight:400">About</div>
+<h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(30px,3.2vw,42px);line-height:1.15;text-wrap:pretty">A legal practitioner and governance leader in intellectual property, regulated industries and <span style="font-style:italic">complex commercial environments.</span></h1>
+<p style="margin:0;color:#4a4846;text-wrap:pretty">Liz Lenjo is an Advocate of the High Court of Kenya and the Founder and Managing Consultant of MyIP Legal Studio, a boutique advisory firm serving clients across Africa’s creative, digital, technology and energy sectors.</p>
+<p style="margin:0;color:#4a4846;text-wrap:pretty">She chairs the Copyright Tribunal, teaches Media and Entertainment Law at Strathmore University Law School, and leads the Legal, Policy and Intellectual Property portfolio of the Kenya Fashion Council.</p>
+<a href="#" style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:400;display:flex;align-items:center;gap:14px;padding-top:8px" style-hover="color:#0c6b9d;gap:20px"><span style="width:40px;height:1px;background:currentColor"></span>Read the full profile</a>
+</div>
+</section>
+
+<section data-screen-label="Partners" style="padding:0 0 clamp(56px,7vw,96px)">
+<div style="position:relative;overflow:hidden;border-top:1px solid #ebe8e3;border-bottom:1px solid #ebe8e3">
+<div style="display:flex;width:max-content;animation:ll-marquee 40s linear infinite;will-change:transform">
+<sc-for list="{{ partnerLoop }}" as="g" hint-placeholder-count="12">
+<div style="width:220px;height:120px;flex:none;display:flex;align-items:center;justify-content:center;border-right:1px solid #ebe8e3;padding:0 28px;box-sizing:border-box">
+<sc-if value="{{ g.logo }}" hint-placeholder-val="{{ false }}"><img src="{{ g.logo }}" alt="{{ g.name }}" style="max-width:140px;max-height:60px;object-fit:contain;filter:grayscale(1);opacity:.75;transition:all .4s ease" style-hover="filter:grayscale(0);opacity:1"></sc-if>
+<sc-if value="{{ g.noLogo }}" hint-placeholder-val="{{ true }}"><div style="font-family:'Cormorant Garamond',serif;font-size:20px;line-height:1.15;text-align:center;color:#4a4846">{{ g.name }}</div></sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section data-screen-label="Roles" style="background:#f7f5f2">
+<div style="max-width:1200px;margin:0 auto;padding:clamp(72px,10vw,140px) clamp(20px,4vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:clamp(40px,7vw,100px);align-items:start">
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#0c6b9d;font-weight:400">Current roles</div>
+<h2 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(28px,3vw,40px);line-height:1.12;text-wrap:pretty">Judicial leadership, private practice, standards and the creative industries.</h2>
+<p style="margin:0;color:#4a4846;text-wrap:pretty">Her work spans the tribunal, the boardroom, the classroom and the industry bodies shaping Kenya’s creative economy.</p>
+</div>
+<div style="display:flex;flex-direction:column">
+<sc-for list="{{ roles }}" as="r" hint-placeholder-count="7">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:24px;border-top:1px solid #dcd8d1;padding:24px 0">
+<div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8d8a86;padding-top:6px">{{ r.title }}</div>
+<div style="display:flex;flex-direction:column;gap:6px"><div style="font-family:'Cormorant Garamond',serif;font-size:23px;line-height:1.2">{{ r.org }}</div><div style="font-size:13px;color:#6a6764;line-height:1.6">{{ r.note }}</div></div>
+</div>
+</sc-for>
+<div style="border-top:1px solid #dcd8d1"></div>
+</div>
+</div>
+</section>
+
+<section data-screen-label="Practice" style="max-width:1200px;margin:0 auto;padding:clamp(72px,10vw,140px) clamp(20px,4vw,56px);display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:16px;max-width:640px">
+<div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#0c6b9d;font-weight:400">Practice</div>
+<h2 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(28px,3vw,40px);line-height:1.12;text-wrap:pretty">Advice on rights, risk and growth for Africa’s creative, digital, technology and energy sectors.</h2>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:48px 40px">
+<sc-for list="{{ practice }}" as="p" hint-placeholder-count="6">
+<div style="display:flex;flex-direction:column;gap:12px;border-top:1px solid #1a1a1c;padding-top:20px">
+<div style="font-size:11px;letter-spacing:.18em;color:#8d8a86">{{ p.n }}</div>
+<div style="font-family:'Cormorant Garamond',serif;font-size:24px;line-height:1.2">{{ p.title }}</div>
+<div style="font-size:14px;color:#4a4846;line-height:1.65;text-wrap:pretty">{{ p.body }}</div>
+</div>
+</sc-for>
+</div>
+<a href="https://myip.lawyer/" style="align-self:flex-start;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:400;display:flex;align-items:center;gap:14px" style-hover="color:#0c6b9d;gap:20px"><span style="width:40px;height:1px;background:currentColor"></span>Work with MyIP Legal Studio ↗</a>
+</section>
+
+<section data-screen-label="Scholarship" style="background:#121214;color:#f4f1ec">
+<div style="max-width:1200px;margin:0 auto;padding:clamp(72px,10vw,140px) clamp(20px,4vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(48px,7vw,110px)">
+<div style="display:flex;flex-direction:column;gap:28px">
+<div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#8fc3e0;font-weight:400">Published scholarship</div>
+<div style="font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;font-size:clamp(28px,3vw,40px);line-height:1.18;text-wrap:pretty">“Inspiration versus Exploitation: Traditional Cultural Expressions at the Hem of the Fashion Industry”</div>
+<div style="font-size:14px;color:#bdb8b1;line-height:1.7;max-width:460px">Her LL.M. thesis, published in the Marquette Intellectual Property Law Review and available on Westlaw and Nexis.</div>
+</div>
+<div style="display:flex;flex-direction:column">
+<div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#8d8a86;padding-bottom:18px">Education</div>
+<sc-for list="{{ education }}" as="e" hint-placeholder-count="4">
+<div style="border-top:1px solid #2c2b2e;padding:20px 0;display:flex;flex-direction:column;gap:4px">
+<div style="font-family:'Cormorant Garamond',serif;font-size:22px;line-height:1.25">{{ e.title }}</div>
+<div style="font-size:13px;color:#bdb8b1">{{ e.inst }}</div>
+</div>
+</sc-for>
+<div style="border-top:1px solid #2c2b2e"></div>
+</div>
+</div>
+</section>
+
+<section data-screen-label="Global" style="padding:clamp(72px,10vw,140px) 0">
+<div style="max-width:1200px;width:100%;box-sizing:border-box;margin:0 auto;padding:0 clamp(20px,4vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(32px,6vw,90px);align-items:end">
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#0c6b9d;font-weight:400">Global work &amp; speaking</div>
+<h2 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(28px,3vw,40px);line-height:1.12;text-wrap:pretty">Consulting for governments through WIPO, and on stages across Africa and beyond.</h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:24px">
+<p style="margin:0;color:#4a4846;text-wrap:pretty">Liz has consulted for international development institutions and pan-African economic forums, and presents and moderates at industry and policy events on IP, trade, creative economy governance and cross-border commerce.</p>
+<a href="#" style="align-self:flex-start;font-size:11px;letter-spacing:.2em;text-transform:uppercase;border:1px solid #1a1a1c;padding:15px 24px" style-hover="background:#1a1a1c;color:#fff">Invite Liz to speak</a>
+</div>
+</div>
+</section>
+
+<section data-screen-label="Recognition" style="border-top:1px solid #ebe8e3;border-bottom:1px solid #ebe8e3">
+<div style="max-width:1200px;margin:0 auto;padding:clamp(56px,7vw,96px) clamp(20px,4vw,56px);display:flex;flex-direction:column;gap:44px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:24px;flex-wrap:wrap">
+<div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#0c6b9d;font-weight:400">Recognition</div>
+<div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:#4a4846">Ranked in Chambers and Partners 2026, Intellectual Property</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));border-left:1px solid #ebe8e3;border-top:1px solid #ebe8e3">
+<sc-for list="{{ awards }}" as="a" hint-placeholder-count="8">
+<div style="border-right:1px solid #ebe8e3;border-bottom:1px solid #ebe8e3;padding:28px 24px;min-height:120px;display:flex;flex-direction:column;justify-content:space-between;gap:20px" style-hover="background:#f7f5f2">
+<div style="height:72px;display:flex;align-items:center">
+<sc-if value="{{ a.logo }}" hint-placeholder-val="{{ false }}"><img src="{{ a.logo }}" alt="{{ a.name }}" style="max-width:150px;max-height:64px;object-fit:contain;display:block"></sc-if>
+<sc-if value="{{ a.noLogo }}" hint-placeholder-val="{{ true }}"><div style="font-family:'Cormorant Garamond',serif;font-size:26px;line-height:1.1">{{ a.name }}</div></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:13px;font-weight:400;color:#1a1a1c">{{ a.name }}</div><div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8d8a86">{{ a.detail }}</div></div>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section data-screen-label="Media" style="max-width:1200px;margin:0 auto;padding:clamp(64px,8vw,110px) clamp(20px,4vw,56px);display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:24px;flex-wrap:wrap">
+<div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#0c6b9d;font-weight:400">In the media</div>
+<div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:#4a4846;max-width:560px;text-align:right">On IP, governance, digital innovation and the creative industries.</div>
+</div>
+<div style="overflow:hidden;border-top:1px solid #ebe8e3;border-bottom:1px solid #ebe8e3">
+<div style="display:flex;width:max-content;animation:ll-marquee 36s linear infinite reverse;will-change:transform">
+<sc-for list="{{ mediaLoop }}" as="m" hint-placeholder-count="14">
+<div style="width:200px;height:110px;flex:none;box-sizing:border-box;padding:0 30px;border-right:1px solid #ebe8e3;display:flex;align-items:center;justify-content:center">
+<img src="{{ m.src }}" alt="{{ m.name }}" style="max-width:100%;max-height:{{ m.h }};object-fit:contain;filter:grayscale(1);opacity:.7;transition:all .4s ease" style-hover="filter:grayscale(0);opacity:1">
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+
+
+
+
+<footer data-screen-label="Footer" style="background:#121214;color:#d9d5ce">
+<div style="max-width:1200px;margin:0 auto;padding:clamp(72px,9vw,120px) clamp(20px,4vw,56px) 40px;display:flex;flex-direction:column;gap:clamp(64px,8vw,110px)">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:56px;align-items:end">
+<div style="display:flex;flex-direction:column;gap:22px">
+<div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#8fc3e0;font-weight:400">Speaking &amp; enquiries</div>
+<div style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(30px,3.4vw,46px);line-height:1.1;color:#f4f1ec">Invite Liz to speak, moderate or advise.</div>
+<a href="#" style="align-self:flex-start;font-size:11px;letter-spacing:.2em;text-transform:uppercase;border:1px solid #f4f1ec;color:#f4f1ec;padding:15px 24px;margin-top:6px" style-hover="background:#f4f1ec;color:#121214">Make an enquiry</a>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#8d8a86">The newsletter</div>
+<div style="font-size:14px;color:#bdb8b1">New writing and appearances, occasionally.</div>
+<sc-if value="{{ newsDone }}" hint-placeholder-val="{{ false }}">
+<div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:#8fc3e0">Thank you for subscribing.</div>
+</sc-if>
+<sc-if value="{{ newsOpen }}" hint-placeholder-val="{{ true }}">
+<form onSubmit="{{ submitNews }}" style="display:flex;border-bottom:1px solid #5a5753">
+<input type="email" required placeholder="Email address" style="all:unset;flex:1;padding:14px 0;font-size:14px;color:#f4f1ec;font-family:Manrope,sans-serif">
+<button type="submit" style="all:unset;cursor:pointer;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#f4f1ec;padding:14px 0 14px 16px">Subscribe →</button>
+</form>
+</sc-if>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:40px;border-top:1px solid #2c2b2e;padding-top:48px;font-size:13px">
+<div style="display:flex;flex-direction:column;gap:12px"><div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8d8a86;padding-bottom:6px">Practice</div><a href="#">Law</a><a href="#">Lecturer</a><a href="#">Fashion</a><a href="#">Portfolio</a></div>
+<div style="display:flex;flex-direction:column;gap:12px"><div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8d8a86;padding-bottom:6px">Read</div><a href="#">Blog</a><a href="#">In the media</a></div>
+<div style="display:flex;flex-direction:column;gap:12px"><div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8d8a86;padding-bottom:6px">Studio</div><a href="#">About</a><a href="#">Press</a><a href="#">Contact</a></div>
+<div style="display:flex;flex-direction:column;gap:12px"><div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8d8a86;padding-bottom:6px">Follow</div><a href="https://www.linkedin.com/in/lizlenjo/">LinkedIn ↗</a><a href="https://myip.lawyer/">MyIP Legal Studio ↗</a></div>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap">
+<img src="assets/logo-white-crop.png" alt="Liz Lenjo" style="width:clamp(140px,16vw,200px);display:block;opacity:.95">
+<div style="display:flex;gap:28px;flex-wrap:wrap;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8d8a86">
+<span>© 2026 Liz Lenjo</span><span>Advocate of the High Court of Kenya</span><a href="#">Privacy</a><button onClick="{{ toTop }}" style="all:unset;cursor:pointer">Back to top ↑</button>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;interval&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:6,&quot;min&quot;:3,&quot;max&quot;:12,&quot;step&quot;:1,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;},&quot;autoplay&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { i: 0, menu: false, course: false, news: false };
+  slidesData = [
+    { src: 'assets/advocate.png', alt: 'Advocate of the High Court', pos: '50% 50%' },
+    { src: 'assets/reflection-1920.jpg', alt: 'Liz Lenjo', pos: '50% 30%' },
+    { src: 'assets/lecturer.png', alt: 'Lecturer', pos: '50% 50%' },
+    { src: 'assets/piano-1920.jpg', alt: 'Liz Lenjo', pos: '62% 40%' },
+    { src: 'assets/fashion.png', alt: 'Fashion', pos: '50% 50%' },
+    { src: 'assets/red-twirl-1920.jpg', alt: 'Liz Lenjo in a red gown', pos: '50% 45%' },
+    { src: 'assets/model.png', alt: 'Model', pos: '50% 50%' }
+  ];
+  componentDidMount() { this.start(); }
+  componentDidUpdate(p) { if (p.interval !== this.props.interval || p.autoplay !== this.props.autoplay) this.start(); }
+  componentWillUnmount() { clearInterval(this.t); }
+  start() {
+    clearInterval(this.t);
+    if (this.props.autoplay === false || this.paused) return;
+    this.t = setInterval(() => this.step(1), (this.props.interval ?? 6) * 1000);
+  }
+  step(d) { const n = this.slidesData.length; this.setState(s => ({ i: (s.i + d + n) % n })); }
+  go(i) { this.setState({ i }); this.start(); }
+  renderVals() {
+    const i = this.state.i, n = this.slidesData.length, pad = x => String(x).padStart(2, '0');
+    return {
+      slides: this.slidesData.map((s, k) => ({ ...s, caption: !!s.caption, opacity: k === i ? 1 : 0, dotW: k === i ? '26px' : '6px', dotO: k === i ? 1 : 0.55, go: () => this.go(k) })),
+      counter: pad(i + 1) + ' / ' + pad(n),
+      prev: () => { this.step(-1); this.start(); },
+      next: () => { this.step(1); this.start(); },
+      pause: () => { this.paused = true; clearInterval(this.t); },
+      resume: () => { this.paused = false; this.start(); },
+      menuOpen: this.state.menu,
+      openMenu: () => this.setState({ menu: true }),
+      closeMenu: () => this.setState({ menu: false }),
+      menu: ['About', 'Law', 'Lecturer', 'Fashion', 'Portfolio', 'Blog', 'Press', 'Contact'].map((label, k) => ({ label, n: pad(k + 1) })),
+      courseDone: this.state.course, courseOpen: !this.state.course,
+      submitCourse: e => { e.preventDefault(); this.setState({ course: true }); },
+      newsDone: this.state.news, newsOpen: !this.state.news,
+      submitNews: e => { e.preventDefault(); this.setState({ news: true }); },
+      toTop: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+      mediaLoop: [
+        { name: 'BBC', src: 'assets/media/bbc.png', h: '34px' },
+        { name: 'CNN', src: 'assets/media/cnn.svg', h: '36px' },
+        { name: 'Financial Times', src: 'assets/media/ft.png', h: '64px' },
+        { name: 'CGTN', src: 'assets/media/cgtn.png', h: '28px' },
+        { name: 'CCTV', src: 'assets/media/cctv.png', h: '30px' },
+        { name: 'NTV Kenya', src: 'assets/media/ntv.jpeg', h: '50px' },
+        { name: 'Sunday Nation', src: 'assets/media/sunday-nation.jpeg', h: '64px' }
+      ].flatMap(m => [m]).reduce((a, m, i, arr) => (i ? a : [...arr, ...arr]), []),
+      roles: [
+        { title: 'Chairperson', org: 'Copyright Tribunal, Kenya', note: 'Kenya’s specialised court under Section 48 of the Copyright Act (CAP 130), ruling on commercial rights, licensing, compliance and cross-border exploitation of intangible assets.' },
+        { title: 'Founder & Managing Consultant', org: 'MyIP Legal Studio', note: 'Boutique advisory serving clients across Africa’s creative, digital, technology and energy sectors.' },
+        { title: 'Interim Chairperson', org: 'Kenya Fashion Council', note: 'Also Head of its Legal, Policy and Intellectual Property portfolio.' },
+        { title: 'Adjunct Faculty', org: 'Strathmore University Law School', note: 'Teaches Media and Entertainment Law. Tutor with CopyrightX (HarvardX – Kenya).' },
+        { title: 'Chair', org: 'IP Technical Committee, Kenya Bureau of Standards', note: 'Standards, compliance and certification across sectors.' },
+        { title: 'Head of Legal', org: 'Partners Against Piracy', note: 'Volunteer role in anti-piracy and enforcement.' },
+        { title: 'Former Board Member', org: 'Nuclear Power and Energy Agency (NuPEA)', note: 'Chaired the Human Resource and General Purpose, Finance and Strategic Planning, and Audit Committees.' }
+      ],
+      practice: [
+        { n: '01', title: 'Intellectual property', body: 'Copyright, trademarks and brand strategy, licensing and technology transfer for creative and technology businesses.' },
+        { n: '02', title: 'Media & entertainment', body: 'Rights, licensing and compliance across music, film, broadcasting and digital platforms.' },
+        { n: '03', title: 'Fashion law', body: 'Design and brand protection, traditional cultural expressions and industry policy.' },
+        { n: '04', title: 'Anti-counterfeiting & enforcement', body: 'Supply-chain IP risk, cross-border enforcement and digital trade.' },
+        { n: '05', title: 'Governance & regulation', body: 'Board leadership, policy alignment and risk management in high-compliance, regulated environments.' },
+        { n: '06', title: 'Dispute resolution', body: 'Mediation and arbitration, with judicial experience on licensing and commercial rights disputes.' }
+      ],
+      education: [
+        { title: 'LL.M. in Intellectual Property Law', inst: 'University of Turin & WIPO' },
+        { title: 'LL.B.', inst: 'Catholic University of Eastern Africa' },
+        { title: 'Postgraduate Diploma', inst: 'Kenya School of Law' },
+        { title: 'Certifications in IP management, mediation, arbitration and fashion law', inst: 'WIPO Academy, Fordham University School of Law and others' }
+      ],
+      partnerLoop: (() => { const p = [['WIPO','wipo.png'],['CANEX by Afreximbank','canex.png'],['GiZ','giz.png'],['Intra-African Trade Fair','iatf.png'],['Kenya Bureau of Standards','kebs.jpeg'],['INTA',null]].map(([name, f]) => ({ name, logo: f ? 'assets/logos/' + f : null, noLogo: !f })); return [...p, ...p]; })(),
+      awards: [
+        { name: 'Chambers and Partners', detail: 'Band 3 · IP · 2026', logo: 'assets/logos/chambers.png' },
+        { name: 'World Trademark Review', detail: 'Bronze · 2024–2026', logo: 'assets/logos/wtr.png' },
+        { name: 'Africa Legal Innovation Awards', detail: 'IP Lawyer of the Year · 2022', logo: 'assets/logos/africa-legal.webp' },
+        { name: 'WIPR Diversity', detail: 'Beacon of Light · 2022', logo: 'assets/logos/wipr.png' },
+        { name: 'WIPR Diversity', detail: 'Shining Lights · 2021', logo: 'assets/logos/wipr.png' },
+        { name: 'Business Daily', detail: 'Top 40 Under 40 Women · 2018', logo: 'assets/logos/business-daily.png' },
+        { name: 'Top 25 Women in Digital', detail: 'Kenya', logo: 'assets/logos/top25digital.png' },
+        { name: 'INTA', detail: 'Committee member', logo: null }
+      ].map(a => ({ ...a, noLogo: !a.logo })),
+      posts: [
+        { tag: 'Fashion law', read: '6 min', title: 'Inspiration versus exploitation: traditional cultural expressions in fashion' },
+        { tag: 'Copyright', read: '5 min', title: 'What the Copyright Tribunal does, and when to bring a dispute' },
+        { tag: 'Entertainment', read: '7 min', title: 'Licensing music for film and digital platforms in Kenya' }
+      ],
+      modules: [
+        { n: '01', title: 'Foundations of intellectual property', sub: 'Copyright, trademarks, patents and designs', meta: 'Module' },
+        { n: '02', title: 'Media and entertainment law', sub: 'Music, film, broadcasting and digital platforms', meta: 'Module' },
+        { n: '03', title: 'Fashion law', sub: 'Design protection, brands and counterfeiting', meta: 'Module' },
+        { n: '04', title: 'Licensing and deal-making', sub: 'Contracts, royalties and cross-border rights', meta: 'Module' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

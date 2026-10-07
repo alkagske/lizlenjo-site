@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#fff;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none;transition:color .3s ease}
+a:hover{color:#0c6b9d}
+::selection{background:#0c6b9d;color:#fff}
+:focus-visible{outline:1px solid #0c6b9d;outline-offset:3px}
+input::placeholder,textarea::placeholder{color:#a19d97}
+[contenteditable]:empty:before{content:attr(data-ph);color:#a19d97}
+[contenteditable] h2{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:30px;line-height:1.2;margin:36px 0 12px}
+[contenteditable] blockquote{margin:28px 0;padding-left:24px;border-left:1px solid #0c6b9d;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:26px;line-height:1.35}
+[contenteditable] p{margin:0 0 18px}
+</style>
+</helmet>
+<div style="font-family:Manrope,sans-serif;font-weight:300;color:#1a1a1c;background:#fff;font-size:15px;line-height:1.7;min-height:100vh">
+
+<sc-if value="{{ isReader }}" hint-placeholder-val="{{ true }}">
+<header style="position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-bottom:1px solid #ebe8e3">
+<div ref="{{ readRef }}" style="position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:#0c6b9d;transform-origin:0 50%;transform:scaleX(0)"></div>
+<div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;padding:0 clamp(20px,4vw,56px);height:68px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:400">
+<nav style="display:flex;gap:clamp(18px,2.4vw,36px)"><a href="Home v3.dc.html">About</a><a href="#" onClick="{{ goIndex }}" style="color:#0c6b9d">Liz Notes</a></nav>
+<a href="Home v3.dc.html" aria-label="Liz Lenjo home"><img src="assets/logo-9-crop.png" alt="Liz Lenjo" style="height:40px;display:block"></a>
+<nav style="display:flex;justify-content:flex-end"><a href="#" style="border:1px solid #1a1a1c;padding:10px 18px" style-hover="background:#1a1a1c;color:#fff">Speaking</a></nav>
+</div>
+</header>
+
+<sc-if value="{{ isIndex }}" hint-placeholder-val="{{ true }}">
+<section data-screen-label="Blog index" style="max-width:1200px;margin:0 auto;padding:clamp(56px,8vw,110px) clamp(20px,4vw,56px) 0;display:flex;flex-direction:column;gap:56px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:40px;align-items:end">
+<div style="display:flex;flex-direction:column;gap:18px">
+<div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#0c6b9d;font-weight:400">Liz Notes</div>
+<h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(40px,5vw,64px);line-height:1.02">Notes on entertainment, fashion and <span style="font-style:italic">intellectual property law.</span></h1>
+</div>
+<div style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;border-bottom:1px solid #1a1a1c;max-width:420px">
+<input value="{{ q }}" onChange="{{ setQ }}" placeholder="Search Liz Notes" style="all:unset;flex:1;padding:12px 0;font-size:14px">
+<span style="padding:12px 0;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8d8a86">{{ resultCount }}</span>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<sc-for list="{{ cats }}" as="c" hint-placeholder-count="6">
+<button onClick="{{ c.pick }}" style="all:unset;cursor:pointer;font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:8px 14px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.fg }};transition:all .3s ease">{{ c.name }}</button>
+</sc-for>
+</div>
+</div>
+</div>
+
+<sc-if value="{{ hasFeatured }}" hint-placeholder-val="{{ true }}">
+<a href="#" onClick="{{ featured.open }}" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(28px,5vw,64px);align-items:center;border-top:1px solid #ebe8e3;padding-top:48px" style-hover="color:#1a1a1c">
+<div style="aspect-ratio:3/2;background:repeating-linear-gradient(135deg,#f1eee9 0 10px,#f7f5f2 10px 20px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#8d8a86">cover image</div>
+<div style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;gap:14px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8d8a86"><span style="color:#0c6b9d">Latest</span><span>{{ featured.cat }}</span><span>{{ featured.date }}</span></div>
+<div style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(30px,3.4vw,46px);line-height:1.08;text-wrap:pretty">{{ featured.title }}</div>
+<p style="margin:0;color:#4a4846;max-width:520px">{{ featured.excerpt }}</p>
+<div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;display:flex;align-items:center;gap:14px;padding-top:6px"><span style="width:40px;height:1px;background:currentColor"></span>Read · {{ featured.read }}</div>
+</div>
+</a>
+</sc-if>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:56px clamp(24px,3vw,40px);border-top:1px solid #ebe8e3;padding-top:48px">
+<sc-for list="{{ rest }}" as="p" hint-placeholder-count="5">
+<a href="#" onClick="{{ p.open }}" style="display:flex;flex-direction:column;gap:16px" style-hover="color:#1a1a1c;opacity:.72">
+<div style="aspect-ratio:4/3;background:repeating-linear-gradient(135deg,#f1eee9 0 10px,#f7f5f2 10px 20px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#8d8a86">cover image</div>
+<div style="display:flex;justify-content:space-between;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8d8a86"><span>{{ p.cat }}</span><span>{{ p.date }}</span></div>
+<div style="font-family:'Cormorant Garamond',serif;font-size:25px;line-height:1.18;text-wrap:pretty">{{ p.title }}</div>
+<div style="font-size:14px;color:#6a6764;line-height:1.6">{{ p.excerpt }}</div>
+</a>
+</sc-for>
+</div>
+<sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24px;color:#6a6764;padding:20px 0 60px">Nothing matches that search yet.</div>
+</sc-if>
+</section>
+</sc-if>
+
+<sc-if value="{{ isArticle }}" hint-placeholder-val="{{ false }}">
+<article data-screen-label="Article">
+<div style="max-width:760px;margin:0 auto;padding:clamp(48px,7vw,96px) clamp(20px,4vw,40px) 40px;display:flex;flex-direction:column;gap:24px;text-align:center;align-items:center">
+<button onClick="{{ goIndex }}" style="all:unset;cursor:pointer;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8d8a86" style-hover="color:#0c6b9d">← All posts</button>
+<div style="display:flex;gap:14px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8d8a86;flex-wrap:wrap;justify-content:center"><span style="color:#0c6b9d">{{ cur.cat }}</span><span>{{ cur.date }}</span><span>{{ cur.read }} read</span></div>
+<h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(36px,5vw,60px);line-height:1.05;text-wrap:balance">{{ cur.title }}</h1>
+<p style="margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;line-height:1.45;color:#4a4846;max-width:600px">{{ cur.excerpt }}</p>
+<div style="display:flex;gap:12px;align-items:center;font-size:13px;padding-top:8px"><img src="assets/reflection-1920.jpg" alt="" style="width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:50% 25%"><span>Liz Lenjo, Esq.</span></div>
+</div>
+<div style="max-width:1100px;margin:0 auto;padding:0 clamp(20px,4vw,40px)">
+<div style="aspect-ratio:16/8;background:repeating-linear-gradient(135deg,#f1eee9 0 10px,#f7f5f2 10px 20px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#8d8a86">cover image</div>
+</div>
+<div style="max-width:1100px;margin:0 auto;padding:clamp(48px,6vw,80px) clamp(20px,4vw,40px);display:grid;grid-template-columns:120px minmax(0,640px);justify-content:center;gap:clamp(24px,5vw,72px)">
+<aside style="display:flex;flex-direction:column;gap:14px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8d8a86;position:sticky;top:100px;align-self:start">
+<span>Share</span>
+<a href="https://www.linkedin.com/" style="color:#1a1a1c">LinkedIn</a>
+<button onClick="{{ copyLink }}" style="all:unset;cursor:pointer;color:#1a1a1c">{{ copyLabel }}</button>
+</aside>
+<div style="font-size:17px;line-height:1.85;color:#2a2a2c">
+<sc-for list="{{ cur.blocks }}" as="b" hint-placeholder-count="6">
+<sc-if value="{{ b.isFirst }}" hint-placeholder-val="{{ false }}"><p style="margin:0 0 22px;text-wrap:pretty"><span style="float:left;font-family:'Cormorant Garamond',serif;font-size:76px;line-height:.82;padding:6px 10px 0 0;color:#0c6b9d">{{ b.cap }}</span>{{ b.rest }}</p></sc-if>
+<sc-if value="{{ b.isP }}" hint-placeholder-val="{{ true }}"><p style="margin:0 0 22px;text-wrap:pretty">{{ b.t }}</p></sc-if>
+<sc-if value="{{ b.isH }}" hint-placeholder-val="{{ false }}"><h2 style="margin:44px 0 14px;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:30px;line-height:1.2">{{ b.t }}</h2></sc-if>
+<sc-if value="{{ b.isQ }}" hint-placeholder-val="{{ false }}"><blockquote style="margin:40px 0;padding:0 0 0 28px;border-left:1px solid #0c6b9d;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:30px;line-height:1.3;color:#1a1a1c">{{ b.t }}</blockquote></sc-if>
+</sc-for>
+<div style="display:flex;gap:8px;flex-wrap:wrap;padding-top:20px">
+<sc-for list="{{ cur.tags }}" as="t" hint-placeholder-count="3"><span style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:6px 12px;border:1px solid #dcd8d1;color:#6a6764">{{ t }}</span></sc-for>
+</div>
+<div style="margin-top:56px;padding:32px;background:#f7f5f2;display:grid;grid-template-columns:72px 1fr;gap:24px;align-items:center">
+<img src="assets/piano-1920.jpg" alt="Liz Lenjo" style="width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:62% 30%">
+<div style="display:flex;flex-direction:column;gap:6px"><div style="font-family:'Cormorant Garamond',serif;font-size:22px">Liz Lenjo, Esq.</div><div style="font-size:14px;color:#4a4846;line-height:1.6">Advocate of the High Court of Kenya, Chairperson of the Copyright Tribunal and Founder of MyIP Legal Studio.</div></div>
+</div>
+
+<div style="margin-top:72px;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid #1a1a1c;padding-bottom:14px"><div style="font-family:'Cormorant Garamond',serif;font-size:28px">Conversation</div><span style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8d8a86">{{ curCommentCount }}</span></div>
+<sc-for list="{{ curComments }}" as="c" hint-placeholder-count="2">
+<div style="display:flex;flex-direction:column;gap:6px;border-bottom:1px solid #ebe8e3;padding-bottom:22px">
+<div style="display:flex;justify-content:space-between;font-size:13px"><span style="font-weight:500">{{ c.name }}</span><span style="color:#8d8a86">{{ c.when }}</span></div>
+<div style="font-size:15px;color:#3a3836;line-height:1.7">{{ c.text }}</div>
+</div>
+</sc-for>
+<sc-if value="{{ sentComment }}" hint-placeholder-val="{{ false }}">
+<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:21px;color:#0c6b9d">Thank you. Your comment will appear once it has been reviewed.</div>
+</sc-if>
+<sc-if value="{{ canComment }}" hint-placeholder-val="{{ true }}">
+<form onSubmit="{{ submitComment }}" style="display:flex;flex-direction:column;gap:14px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+<input required name="name" placeholder="Name" style="all:unset;border-bottom:1px solid #dcd8d1;padding:12px 0;font-size:14px">
+<input required type="email" name="email" placeholder="Email (not published)" style="all:unset;border-bottom:1px solid #dcd8d1;padding:12px 0;font-size:14px">
+</div>
+<textarea required name="text" rows="4" placeholder="Add to the conversation" style="all:unset;border-bottom:1px solid #dcd8d1;padding:12px 0;font-size:14px;line-height:1.7;resize:vertical"></textarea>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+<span style="font-size:12px;color:#8d8a86">Protected by Cloudflare Turnstile. Comments are reviewed before publishing.</span>
+<button type="submit" style="all:unset;cursor:pointer;font-size:11px;letter-spacing:.2em;text-transform:uppercase;background:#1a1a1c;color:#fff;padding:14px 22px" style-hover="background:#0c6b9d">Post comment</button>
+</div>
+</form>
+</sc-if>
+</div>
+</div>
+</div>
+<div style="background:#f7f5f2">
+<div style="max-width:1200px;margin:0 auto;padding:clamp(56px,7vw,96px) clamp(20px,4vw,56px);display:flex;flex-direction:column;gap:36px">
+<div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#0c6b9d;font-weight:400">Keep reading</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:clamp(24px,3vw,40px)">
+<sc-for list="{{ related }}" as="p" hint-placeholder-count="3">
+<a href="#" onClick="{{ p.open }}" style="display:flex;flex-direction:column;gap:10px;border-top:1px solid #1a1a1c;padding-top:18px" style-hover="color:#0c6b9d">
+<div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8d8a86">{{ p.cat }}</div>
+<div style="font-family:'Cormorant Garamond',serif;font-size:24px;line-height:1.2">{{ p.title }}</div>
+</a>
+</sc-for>
+</div>
+</div>
+</div>
+</article>
+</sc-if>
+
+<footer style="background:#121214;color:#bdb8b1;margin-top:clamp(72px,9vw,120px)">
+<div style="max-width:1200px;margin:0 auto;padding:56px clamp(20px,4vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:40px;align-items:end">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:30px;color:#f4f1ec">New posts, by email.</div>
+<sc-if value="{{ subscribed }}" hint-placeholder-val="{{ false }}"><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:#8fc3e0">Thank you for subscribing.</div></sc-if>
+<sc-if value="{{ notSubscribed }}" hint-placeholder-val="{{ true }}">
+<form onSubmit="{{ subscribe }}" style="display:flex;border-bottom:1px solid #5a5753;max-width:420px"><input required type="email" placeholder="Email address" style="all:unset;flex:1;padding:12px 0;font-size:14px;color:#f4f1ec"><button type="submit" style="all:unset;cursor:pointer;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#f4f1ec;padding:12px 0 12px 16px">Subscribe →</button></form>
+</sc-if>
+</div>
+<div style="display:flex;justify-content:flex-end;align-items:center;gap:28px;flex-wrap:wrap;font-size:11px;letter-spacing:.16em;text-transform:uppercase">
+<img src="assets/logo-white-crop.png" alt="Liz Lenjo" style="height:48px">
+<a href="https://www.linkedin.com/in/lizlenjo/">LinkedIn</a><a href="https://myip.lawyer/">MyIP Legal Studio</a><span style="color:#8d8a86">© 2026</span>
+</div>
+</div>
+</footer>
+</sc-if>
+
+<sc-if value="{{ isStudio }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Studio" style="display:grid;grid-template-columns:clamp(180px,18vw,232px) minmax(0,1fr);min-height:100vh;background:#faf9f7">
+<aside style="background:#121214;color:#d9d5ce;padding:28px 20px;display:flex;flex-direction:column;gap:36px;position:sticky;top:0;height:100vh;box-sizing:border-box">
+<div style="display:flex;flex-direction:column;gap:6px"><img src="assets/logo-white-crop.png" alt="Liz Lenjo" style="height:44px;align-self:flex-start"><span style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#8d8a86;padding-top:8px">Studio</span></div>
+<nav style="display:flex;flex-direction:column;gap:2px;font-size:13px">
+<sc-for list="{{ studioNav }}" as="n" hint-placeholder-count="2">
+<button onClick="{{ n.go }}" style="all:unset;cursor:pointer;display:flex;justify-content:space-between;padding:10px 12px;background:{{ n.bg }};color:{{ n.fg }}" style-hover="color:#fff">{{ n.label }}<span style="color:#8d8a86;font-size:12px">{{ n.count }}</span></button>
+</sc-for>
+</nav>
+<button onClick="{{ newPost }}" style="all:unset;cursor:pointer;text-align:center;font-size:11px;letter-spacing:.2em;text-transform:uppercase;border:1px solid #f4f1ec;color:#f4f1ec;padding:12px" style-hover="background:#f4f1ec;color:#121214">New post</button>
+<div style="margin-top:auto;display:flex;flex-direction:column;gap:6px;font-size:12px;color:#8d8a86;border-top:1px solid #2c2b2e;padding-top:18px">
+<span style="color:#d9d5ce">Liz Lenjo</span><span>Signed in with Cloudflare Access</span><button onClick="{{ toReader }}" style="all:unset;cursor:pointer;color:#8fc3e0;padding-top:6px">View site ↗</button>
+</div>
+</aside>
+
+<main style="padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;gap:28px;min-width:0">
+<sc-if value="{{ tabPosts }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap">
+<div><div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#8d8a86">Studio</div><h1 style="margin:6px 0 0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:40px;line-height:1.1">Posts</h1></div>
+<div style="display:flex;gap:6px">
+<sc-for list="{{ statusTabs }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.pick }}" style="all:unset;cursor:pointer;font-size:12px;padding:8px 14px;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.fg }}">{{ t.label }} <span style="opacity:.6">{{ t.count }}</span></button></sc-for>
+</div>
+</div>
+<div style="background:#fff;border:1px solid #ebe8e3">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 140px 120px 150px;gap:20px;padding:14px 24px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8d8a86;border-bottom:1px solid #ebe8e3"><span>Title</span><span>Category</span><span>Status</span><span>Date</span></div>
+<sc-for list="{{ studioPosts }}" as="p" hint-placeholder-count="6">
+<button onClick="{{ p.edit }}" style="all:unset;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) 140px 120px 150px;gap:20px;padding:18px 24px;border-bottom:1px solid #f1eee9;align-items:center;font-size:14px" style-hover="background:#faf9f7">
+<span style="font-family:'Cormorant Garamond',serif;font-size:20px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ p.title }}</span>
+<span style="color:#6a6764">{{ p.cat }}</span>
+<span style="display:flex;align-items:center;gap:8px"><span style="width:7px;height:7px;border-radius:50%;background:{{ p.dot }}"></span>{{ p.status }}</span>
+<span style="color:#6a6764">{{ p.dateLabel }}</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ tabEditor }}" hint-placeholder-val="{{ false }}">
+
+<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+<button onClick="{{ backToPosts }}" style="all:unset;cursor:pointer;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8d8a86" style-hover="color:#0c6b9d">← Posts</button>
+<div style="display:flex;gap:16px;align-items:center;font-size:12px;color:#8d8a86"><span>{{ saveState }}</span>
+<button onClick="{{ preview }}" style="all:unset;cursor:pointer;font-size:11px;letter-spacing:.2em;text-transform:uppercase;border:1px solid #1a1a1c;color:#1a1a1c;padding:11px 18px;white-space:nowrap">Preview</button>
+<button onClick="{{ publish }}" style="all:unset;cursor:pointer;font-size:11px;letter-spacing:.2em;text-transform:uppercase;background:#0c6b9d;color:#fff;padding:12px 20px;white-space:nowrap" style-hover="background:#1a1a1c">{{ publishLabel }}</button>
+</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<div style="flex:999 1 560px;background:#fff;border:1px solid #ebe8e3;padding:clamp(28px,4vw,56px);display:flex;flex-direction:column;gap:20px;min-width:0">
+<div style="aspect-ratio:16/7;background:repeating-linear-gradient(135deg,#f1eee9 0 10px,#f7f5f2 10px 20px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#8d8a86;border:1px dashed #dcd8d1">drop cover image · served via Cloudflare Images</div>
+<input value="{{ ed.title }}" onChange="{{ setTitle }}" placeholder="Title" style="all:unset;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(32px,3.6vw,48px);line-height:1.1">
+<input value="{{ ed.excerpt }}" onChange="{{ setExcerpt }}" placeholder="A one-line standfirst" style="all:unset;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:21px;color:#4a4846">
+<div style="position:sticky;top:0;z-index:2;display:flex;gap:2px;flex-wrap:wrap;background:#fff;border-top:1px solid #ebe8e3;border-bottom:1px solid #ebe8e3;padding:6px 0">
+<sc-for list="{{ tools }}" as="t" hint-placeholder-count="7"><button onMouseDown="{{ t.run }}" title="{{ t.title }}" style="all:unset;cursor:pointer;min-width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#3a3836;padding:0 8px" style-hover="background:#f4f1ec">{{ t.label }}</button></sc-for>
+</div>
+<div ref="{{ bodyRef }}" contenteditable="true" onInput="{{ onBody }}" data-ph="Start writing…" style="outline:none;min-height:360px;font-size:17px;line-height:1.85;color:#2a2a2c"></div>
+</div>
+<div style="flex:1 1 280px;display:flex;flex-direction:column;gap:20px;position:sticky;top:24px">
+<div style="background:#fff;border:1px solid #ebe8e3;padding:22px;display:flex;flex-direction:column;gap:16px;font-size:13px">
+<div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8d8a86">Publishing</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{ pubModes }}" as="m" hint-placeholder-count="3">
+<button onClick="{{ m.pick }}" style="all:unset;cursor:pointer;display:flex;gap:10px;align-items:center"><span style="width:12px;height:12px;border-radius:50%;border:1px solid #1a1a1c;box-shadow:inset 0 0 0 2px #fff;background:{{ m.fill }}"></span>{{ m.label }}</button>
+</sc-for>
+</div>
+<sc-if value="{{ isScheduled }}" hint-placeholder-val="{{ false }}">
+<input type="datetime-local" value="{{ ed.when }}" onChange="{{ setWhen }}" style="font:inherit;border:1px solid #dcd8d1;padding:8px 10px;background:#faf9f7">
+</sc-if>
+</div>
+<div style="background:#fff;border:1px solid #ebe8e3;padding:22px;display:flex;flex-direction:column;gap:14px;font-size:13px">
+<div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8d8a86">Category</div>
+<select value="{{ ed.cat }}" onChange="{{ setCat }}" style="font:inherit;border:1px solid #dcd8d1;padding:8px 10px;background:#faf9f7"><sc-for list="{{ catNames }}" as="c" hint-placeholder-count="5"><option value="{{ c }}">{{ c }}</option></sc-for></select>
+<div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8d8a86;padding-top:6px">Tags</div>
+<input value="{{ ed.tags }}" onChange="{{ setTags }}" placeholder="copyright, licensing" style="font:inherit;border:1px solid #dcd8d1;padding:8px 10px;background:#faf9f7">
+<div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8d8a86;padding-top:6px">Address</div>
+<div style="font-size:12px;color:#6a6764;word-break:break-all">lizlenjo.com/notes/<span style="color:#1a1a1c">{{ slug }}</span></div>
+</div>
+<div style="background:#fff;border:1px solid #ebe8e3;padding:22px;display:flex;flex-direction:column;gap:10px;font-size:13px">
+<div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8d8a86">Share preview</div>
+<div style="border:1px solid #ebe8e3"><div style="aspect-ratio:1.91/1;background:#f1eee9"></div><div style="padding:10px 12px;display:flex;flex-direction:column;gap:2px"><span style="font-size:10px;color:#8d8a86">LIZLENJO.COM</span><span style="font-weight:500;font-size:13px;line-height:1.35">{{ ogTitle }}</span></div></div>
+<div style="font-size:12px;color:#8d8a86">{{ wordCount }}</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ tabComments }}" hint-placeholder-val="{{ false }}">
+<div><div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#8d8a86">Studio</div><h1 style="margin:6px 0 0;font-family:'Cormorant Garamond',serif;font-weight:300;font-size:40px;line-height:1.1">Comments</h1></div>
+<div style="font-size:13px;color:#6a6764;max-width:620px">Turnstile screens every submission. Workers AI then scores the text; anything likely to be spam waits here instead of publishing.</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<sc-for list="{{ modQueue }}" as="c" hint-placeholder-count="3">
+<div style="background:#fff;border:1px solid #ebe8e3;padding:22px 24px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+<div style="display:flex;gap:14px;font-size:12px;color:#8d8a86;flex-wrap:wrap"><span style="color:#1a1a1c;font-weight:500">{{ c.name }}</span><span>on “{{ c.post }}”</span><span>{{ c.when }}</span></div>
+<div style="font-size:15px;line-height:1.65;color:#2a2a2c">{{ c.text }}</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:{{ c.scoreColor }}"><span style="width:60px;height:3px;background:#f1eee9;position:relative;overflow:hidden"><span style="position:absolute;left:0;top:0;bottom:0;width:{{ c.scoreW }};background:currentColor"></span></span>{{ c.verdict }}</div>
+</div>
+<div style="display:flex;gap:8px">
+<button onClick="{{ c.approve }}" style="all:unset;cursor:pointer;font-size:11px;letter-spacing:.16em;text-transform:uppercase;border:1px solid #1a1a1c;padding:9px 14px" style-hover="background:#1a1a1c;color:#fff">Approve</button>
+<button onClick="{{ c.remove }}" style="all:unset;cursor:pointer;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8d8a86;padding:9px 10px" style-hover="color:#b3261e">Delete</button>
+</div>
+</div>
+</sc-for>
+<sc-if value="{{ queueEmpty }}" hint-placeholder-val="{{ false }}"><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24px;color:#6a6764;padding:24px 0">All caught up.</div></sc-if>
+</div>
+</sc-if>
+</main>
+</div>
+</sc-if>
+
+<div style="position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:50;display:flex;background:#121214;padding:4px;border-radius:999px;box-shadow:0 12px 30px -12px rgba(0,0,0,.45);font-size:11px;letter-spacing:.16em;text-transform:uppercase">
+<sc-for list="{{ modeSwitch }}" as="m" hint-placeholder-count="2"><button onClick="{{ m.go }}" style="all:unset;cursor:pointer;padding:9px 16px;border-radius:999px;background:{{ m.bg }};color:{{ m.fg }}">{{ m.label }}</button></sc-for>
+</div>
+</div></x-dc>
+<script type="text/x-dc" data-dc-script>
+const CATS = ['All', 'Copyright', 'Fashion law', 'Entertainment', 'Governance', 'Trademarks'];
+const SEED = [
+  { id: 1, cat: 'Fashion law', date: '2026-09-18', status: 'Published', title: 'Inspiration versus exploitation: traditional cultural expressions in fashion', excerpt: 'Where borrowing from a community’s heritage becomes taking, and what the law can do about it.', tags: ['Fashion law', 'TCEs'], body: ['Fashion has always borrowed. The question is when borrowing becomes taking, and who gets a say.', '#Why the existing tools fall short', 'Copyright protects original works by identifiable authors for a limited term. Traditional cultural expressions are often collective, intergenerational and living, which makes them a poor fit.', '>A pattern can belong to a people long before it belongs to a label.', 'Sui generis frameworks, community protocols and fair attribution clauses in design contracts are where the practical work is now happening.'] },
+  { id: 2, cat: 'Copyright', date: '2026-08-30', status: 'Published', title: 'What the Copyright Tribunal does, and when to bring a dispute', excerpt: 'A plain guide to Kenya’s specialised forum for licensing and rights disputes.', tags: ['Copyright', 'Tribunal'], body: ['The Copyright Tribunal is constituted under Section 48 of the Copyright Act (CAP 130).', '#Matters the Tribunal hears', 'Disputes over licensing schemes, royalty rates and the conduct of collective management organisations are its core work.'] },
+  { id: 3, cat: 'Entertainment', date: '2026-08-02', status: 'Published', title: 'Licensing music for film and digital platforms in Kenya', excerpt: 'Sync, master and performance rights, and the order to clear them in.', tags: ['Music', 'Licensing'], body: ['Every piece of music in a film carries at least two sets of rights: the composition and the recording.', '#Clear early', 'Licences negotiated after the edit is locked are licences negotiated without leverage.'] },
+  { id: 4, cat: 'Trademarks', date: '2026-07-11', status: 'Published', title: 'Counterfeits, supply chains and cross-border enforcement', excerpt: 'Why the fight against fakes now runs through logistics data.', tags: ['Anti-counterfeiting'], body: ['Counterfeit goods move through the same ports and platforms as genuine ones.', '#Working with customs', 'Recordal of marks with customs authorities remains one of the most cost-effective tools available to brand owners.'] },
+  { id: 5, cat: 'Governance', date: '2026-06-20', status: 'Published', title: 'What boards in regulated industries should ask about intangible assets', excerpt: 'Five questions for the audit committee.', tags: ['Governance'], body: ['Intangible assets rarely appear on the agenda until something goes wrong.', '#Start with an inventory', 'A board cannot oversee what it has not listed.'] },
+  { id: 6, cat: 'Fashion law', date: '2026-05-28', status: 'Published', title: 'Protecting a design collection before the runway', excerpt: 'Registration, confidentiality and timing for emerging designers.', tags: ['Design'], body: ['Showing a collection publicly can affect whether its designs can later be registered.', '#Timing matters', 'File first, then show.'] },
+  { id: 7, cat: 'Copyright', date: '2026-10-21', status: 'Scheduled', title: 'AI training data and copyright: a view from Nairobi', excerpt: 'Draft.', tags: ['AI'], body: ['Draft in progress.'] },
+  { id: 8, cat: 'Entertainment', date: '', status: 'Draft', title: 'Image rights for athletes and performers', excerpt: '', tags: [], body: [''] }
+];
+const COMMENTS = [
+  { id: 1, postId: 1, name: 'Wanjiru M.', when: '2 days ago', text: 'This framing helped me explain the issue to a designer client. Thank you.', ok: true },
+  { id: 2, postId: 1, name: 'Daniel O.', when: '1 day ago', text: 'Would community protocols be enforceable against a foreign brand?', ok: true },
+  { id: 3, postId: 2, name: 'Amina K.', when: '3 hours ago', text: 'Is there a filing fee for bringing a matter to the Tribunal?', ok: false, score: 0.06 },
+  { id: 4, postId: 3, name: 'best-deals-4u', when: '1 hour ago', text: 'Great post!! Check out cheap followers at our site, limited offer', ok: false, score: 0.94 },
+  { id: 5, postId: 1, name: 'Peter N.', when: '20 minutes ago', text: 'Brilliant piece. Would love a follow-up on attribution clauses.', ok: false, score: 0.12 }
+];
+const fmt = d => d ? new Date(d + 'T09:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '—';
+const readTime = p => Math.max(3, Math.round(p.body.join(' ').split(/\s+/).length / 60) + 3) + ' min';
+
+class Component extends DCLogic {
+  state = { mode: 'reader', view: 'index', postId: null, cat: 'All', q: '', posts: SEED, comments: COMMENTS, sent: false, sub: false, copied: false, tab: 'posts', status: 'All', ed: null, saved: 'Saved' };
+  readRef = React.createRef();
+  bodyEl = null;
+  bodyRef = el => { this.bodyEl = el; if (el && this.state.ed && el.dataset.id !== String(this.state.ed.id)) { el.innerHTML = this.state.ed.html; el.dataset.id = String(this.state.ed.id); } };
+  componentDidMount() {
+    this.onScroll = () => { const el = this.readRef.current; if (!el) return; const max = document.documentElement.scrollHeight - innerHeight; el.style.transform = 'scaleX(' + (this.state.view === 'article' && max > 0 ? scrollY / max : 0) + ')'; };
+    addEventListener('scroll', this.onScroll, { passive: true });
+  }
+  componentWillUnmount() { removeEventListener('scroll', this.onScroll); clearTimeout(this.saveT); }
+  componentDidUpdate(_, ps) {
+    if (this.state.tab === 'editor' && this.bodyEl && this.state.ed && this.bodyEl.dataset.id !== String(this.state.ed.id)) {
+      this.bodyEl.innerHTML = this.state.ed.html; this.bodyEl.dataset.id = String(this.state.ed.id);
+    }
+  }
+  open(id) { this.setState({ mode: 'reader', view: 'article', postId: id, sent: false }); scrollTo(0, 0); }
+  edit(p) {
+    const html = p.body.map(b => b.startsWith('#') ? '<h2>' + b.slice(1) + '</h2>' : b.startsWith('>') ? '<blockquote>' + b.slice(1) + '</blockquote>' : '<p>' + b + '</p>').join('');
+    const mode = p.status === 'Scheduled' ? 'schedule' : p.status === 'Published' ? 'now' : 'draft';
+    this.setState({ tab: 'editor', ed: { id: p.id, title: p.title, excerpt: p.excerpt, cat: p.cat, tags: p.tags.join(', '), html, mode, when: p.date ? p.date + 'T09:00' : '' } });
+  }
+  patch(o) { this.setState(s => ({ ed: { ...s.ed, ...o }, saved: 'Saving…' })); clearTimeout(this.saveT); this.saveT = setTimeout(() => this.setState({ saved: 'Saved to D1 · just now' }), 700); }
+  publish() {
+    const ed = this.state.ed; const el = this.bodyEl && this.bodyEl.dataset.id === String(ed.id) ? this.bodyEl : null;
+    const prev = this.state.posts.find(p => p.id === ed.id);
+    const body = el ? [...el.children].map(n => n.tagName === 'H2' ? '#' + n.textContent : n.tagName === 'BLOCKQUOTE' ? '>' + n.textContent : n.textContent).filter(Boolean) : [];
+    const status = ed.mode === 'now' ? 'Published' : ed.mode === 'schedule' ? 'Scheduled' : 'Draft';
+    const date = ed.mode === 'now' ? new Date().toISOString().slice(0, 10) : (ed.when || '').slice(0, 10);
+    const rec = { id: ed.id, title: ed.title || 'Untitled', excerpt: ed.excerpt, cat: ed.cat, tags: ed.tags.split(',').map(t => t.trim()).filter(Boolean), body: body.length ? body : (prev ? prev.body : ['']), status, date };
+    this.setState(s => ({ posts: s.posts.some(p => p.id === ed.id) ? s.posts.map(p => p.id === ed.id ? rec : p) : [rec, ...s.posts], tab: 'posts', saved: 'Saved' }));
+  }
+  renderVals() {
+    const s = this.state, pad = x => x;
+    const live = s.posts.filter(p => p.status === 'Published').sort((a, b) => b.date.localeCompare(a.date));
+    const q = s.q.trim().toLowerCase();
+    const filtered = live.filter(p => (s.cat === 'All' || p.cat === s.cat) && (!q || (p.title + ' ' + p.excerpt + ' ' + p.tags.join(' ')).toLowerCase().includes(q)));
+    const card = p => ({ ...p, date: fmt(p.date), read: readTime(p), open: e => { e && e.preventDefault(); this.open(p.id); } });
+    const cur = s.posts.find(p => p.id === s.postId) || live[0];
+    const blocks = cur.body.map((t, k) => {
+      const isH = t.startsWith('#'), isQ = t.startsWith('>'), txt = isH || isQ ? t.slice(1) : t, first = k === 0 && !isH && !isQ;
+      return { t: txt, isH, isQ, isFirst: first, isP: !isH && !isQ && !first, cap: txt.charAt(0), rest: txt.slice(1) };
+    });
+    const curComments = s.comments.filter(c => c.postId === cur.id && c.ok);
+    const ed = s.ed || {};
+    const words = (this.bodyEl?.innerText || '').trim().split(/\s+/).filter(Boolean).length;
+    const counts = { All: s.posts.length, Published: 0, Scheduled: 0, Draft: 0 }; s.posts.forEach(p => counts[p.status]++);
+    const dot = { Published: '#2f7d4f', Scheduled: '#0c6b9d', Draft: '#b9b4ad' };
+    const pending = s.comments.filter(c => !c.ok).sort((a, b) => b.score - a.score);
+    const exec = (cmd, val) => e => { e.preventDefault(); document.execCommand(cmd, false, val); this.patch({}); };
+    const ink = (on) => ({ border: on ? '#1a1a1c' : '#dcd8d1', bg: on ? '#1a1a1c' : 'transparent', fg: on ? '#fff' : '#1a1a1c' });
+    return {
+      isReader: s.mode === 'reader', isStudio: s.mode === 'studio',
+      isIndex: s.view === 'index', isArticle: s.view === 'article',
+      goIndex: e => { e && e.preventDefault(); this.setState({ view: 'index', mode: 'reader' }); scrollTo(0, 0); },
+      q: s.q, setQ: e => this.setState({ q: e.target.value }),
+      resultCount: filtered.length + (filtered.length === 1 ? ' note' : ' notes'),
+      cats: CATS.map(name => ({ name, ...ink(s.cat === name), pick: () => this.setState({ cat: name }) })),
+      hasFeatured: filtered.length > 0, featured: filtered[0] ? card(filtered[0]) : {},
+      rest: filtered.slice(1).map(card), noResults: filtered.length === 0,
+      readRef: this.readRef,
+      cur: { ...card(cur), blocks, tags: cur.tags },
+      copyLabel: s.copied ? 'Link copied' : 'Copy link',
+      copyLink: () => { navigator.clipboard?.writeText(location.href); this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1800); },
+      curComments, curCommentCount: curComments.length + (curComments.length === 1 ? ' comment' : ' comments'),
+      sentComment: s.sent, canComment: !s.sent,
+      submitComment: e => { e.preventDefault(); const f = new FormData(e.target); this.setState(st => ({ sent: true, comments: [...st.comments, { id: Date.now(), postId: cur.id, name: f.get('name'), when: 'just now', text: f.get('text'), ok: false, score: 0.1 }] })); },
+      related: live.filter(p => p.id !== cur.id).slice(0, 3).map(card),
+      subscribed: s.sub, notSubscribed: !s.sub, subscribe: e => { e.preventDefault(); this.setState({ sub: true }); },
+      studioNav: [['posts', 'Posts', s.posts.length], ['comments', 'Comments', pending.length]].map(([k, label, count]) => ({ label, count, bg: s.tab === k || (k === 'posts' && s.tab === 'editor') ? '#26252a' : 'transparent', fg: s.tab === k || (k === 'posts' && s.tab === 'editor') ? '#fff' : '#bdb8b1', go: () => this.setState({ tab: k }) })),
+      newPost: () => this.edit({ id: Date.now(), title: '', excerpt: '', cat: 'Copyright', tags: [], body: [''], status: 'Draft', date: '' }),
+      toReader: () => this.setState({ mode: 'reader', view: 'index' }),
+      tabPosts: s.tab === 'posts', tabEditor: s.tab === 'editor' && !!s.ed, tabComments: s.tab === 'comments',
+      statusTabs: ['All', 'Published', 'Scheduled', 'Draft'].map(label => ({ label, count: counts[label], ...ink(s.status === label), pick: () => this.setState({ status: label }) })),
+      studioPosts: s.posts.filter(p => s.status === 'All' || p.status === s.status).map(p => ({ ...p, title: p.title || 'Untitled', dot: dot[p.status], dateLabel: p.status === 'Scheduled' ? 'Goes live ' + fmt(p.date) : fmt(p.date), edit: () => this.edit(p) })),
+      backToPosts: () => this.setState({ tab: 'posts' }),
+      saveState: s.saved, ed,
+      setTitle: e => this.patch({ title: e.target.value }), setExcerpt: e => this.patch({ excerpt: e.target.value }),
+      setCat: e => this.patch({ cat: e.target.value }), setTags: e => this.patch({ tags: e.target.value }), setWhen: e => this.patch({ when: e.target.value }),
+      onBody: () => this.patch({ html: this.bodyEl ? this.bodyEl.innerHTML : '' }),
+      bodyRef: this.bodyRef,
+      tools: [
+        { label: 'B', title: 'Bold', run: exec('bold') }, { label: 'I', title: 'Italic', run: exec('italic') },
+        { label: 'H', title: 'Heading', run: exec('formatBlock', 'h2') }, { label: '¶', title: 'Paragraph', run: exec('formatBlock', 'p') },
+        { label: '“', title: 'Quote', run: exec('formatBlock', 'blockquote') }, { label: '•', title: 'List', run: exec('insertUnorderedList') },
+        { label: '↗', title: 'Link', run: e => { e.preventDefault(); const u = prompt('Link URL'); if (u) document.execCommand('createLink', false, u); } }
+      ],
+      pubModes: [['draft', 'Save as draft'], ['now', 'Publish now'], ['schedule', 'Schedule']].map(([k, label]) => ({ label, fill: ed.mode === k ? '#1a1a1c' : '#fff', pick: () => this.patch({ mode: k }) })),
+      isScheduled: ed.mode === 'schedule',
+      publishLabel: ed.mode === 'now' ? 'Publish' : ed.mode === 'schedule' ? 'Schedule' : 'Save draft',
+      publish: () => this.publish(),
+      preview: () => { this.publish(); this.open(ed.id); },
+      catNames: CATS.slice(1),
+      slug: (ed.title || 'untitled').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60),
+      ogTitle: ed.title || 'Untitled',
+      wordCount: words + ' words · ' + Math.max(1, Math.round(words / 220)) + ' min read',
+      modQueue: pending.map(c => ({ ...c, post: (s.posts.find(p => p.id === c.postId) || {}).title, scoreW: Math.round(c.score * 100) + '%', scoreColor: c.score > 0.6 ? '#b3261e' : '#2f7d4f', verdict: c.score > 0.6 ? 'Likely spam · ' + Math.round(c.score * 100) + '%' : 'Looks genuine · ' + Math.round(c.score * 100) + '% spam', approve: () => this.setState(st => ({ comments: st.comments.map(x => x.id === c.id ? { ...x, ok: true } : x) })), remove: () => this.setState(st => ({ comments: st.comments.filter(x => x.id !== c.id) })) })),
+      queueEmpty: pending.length === 0,
+      modeSwitch: [['reader', 'Site'], ['studio', 'Studio']].map(([k, label]) => ({ label, bg: s.mode === k ? '#f4f1ec' : 'transparent', fg: s.mode === k ? '#121214' : '#bdb8b1', go: () => this.setState({ mode: k }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>
