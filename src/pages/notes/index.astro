@@ -1,0 +1,28 @@
+---
+import Notes from '../../layouts/Notes.astro';
+import NotesIndex from '../../islands/NotesIndex';
+import { listPublished, type Post } from '../../lib/db';
+import { seriesParts, toIndexPost } from '../../lib/notes';
+import { transformsOn } from '../../lib/media';
+import { CATEGORIES, SITE } from '../../content/site';
+import { breadcrumbLd } from '../../lib/seo';
+export const prerender = false;
+
+const env = Astro.locals.runtime.env;
+let posts: Post[] = [];
+try {
+  posts = await listPublished(env.DB);
+} catch (e) {
+  console.error('notes: D1 unavailable', e);
+}
+const parts = seriesParts(posts);
+const items = posts.map((p) => toIndexPost(p, parts, transformsOn(env)));
+const subscribed = Astro.url.searchParams.get('subscribed') === '1';
+Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=120');
+---
+<Notes title="Liz Notes" description="Notes on entertainment, fashion and intellectual property law by Liz Lenjo, Chairperson of Kenya’s Copyright Tribunal." tape="none" jsonLd={[breadcrumbLd([{ name: 'Home', url: SITE.url }, { name: 'Liz Notes', url: `${SITE.url}/notes` }]), { '@context': 'https://schema.org', '@type': 'Blog', name: 'Liz Notes', url: `${SITE.url}/notes`, author: { '@id': `${SITE.url}/#person` }, inLanguage: 'en-GB' }]}>
+  <section class="notes-wrap" aria-label="Liz Notes">
+    {subscribed && <p class="care" role="status" style="margin:0;padding:16px 22px;font-family:var(--serif);font-style:italic;font-size:20px;color:var(--cobalt)">Subscription confirmed. Thank you.</p>}
+    <NotesIndex client:load posts={items} categories={[...CATEGORIES]} />
+  </section>
+</Notes>

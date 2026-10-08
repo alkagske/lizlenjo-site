@@ -42,3 +42,13 @@ export function randomToken(bytes = 24): string {
   const a = crypto.getRandomValues(new Uint8Array(bytes));
   return btoa(String.fromCharCode(...a)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
+
+/** The prerendered 404 page, served with a 404 status from an on-demand route. */
+export async function notFound(env: { ASSETS: { fetch: (r: Request | string) => Promise<Response> } }, url: URL): Promise<Response> {
+  try {
+    const page = await env.ASSETS.fetch(new Request(new URL('/404.html', url)));
+    return new Response(page.body, { status: 404, headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' } });
+  } catch {
+    return new Response('Not found', { status: 404 });
+  }
+}

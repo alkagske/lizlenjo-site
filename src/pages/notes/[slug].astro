@@ -1,0 +1,208 @@
+---
+import Notes from '../../layouts/Notes.astro';
+import { approvedComments, getPublishedBySlug, listPublished, type CommentRow, type Post } from '../../lib/db';
+import { parseDoc, renderDoc } from '../../lib/tiptap';
+import { longDate } from '../../lib/format';
+import { readMinutes } from '../../lib/readtime';
+import { scoreRelated } from '../../lib/related';
+import { coverUrl, partLabel, seriesParts } from '../../lib/notes';
+import { mediaUrl, transformsOn } from '../../lib/media';
+import { articleLd, breadcrumbLd } from '../../lib/seo';
+import { AUTHOR_ROLES, SITE } from '../../content/site';
+import { notFound } from '../../lib/http';
+export const prerender = false;
+
+const env = Astro.locals.runtime.env;
+const slug = Astro.params.slug ?? '';
+let post: Post | null = null;
+let all: Post[] = [];
+let comments: CommentRow[] = [];
+try {
+  post = await getPublishedBySlug(env.DB, slug);
+  if (post) [all, comments] = await Promise.all([listPublished(env.DB), approvedComments(env.DB, post.id)]);
+} catch (e) {
+  console.error('article: D1 unavailable', e);
+}
+if (!post) return notFound(env, Astro.url);
+
+const tf = transformsOn(env);
+const doc = renderDoc(parseDoc(post.body_json), { mediaUrl: (k, w) => mediaUrl(k, w, tf) });
+const minutes = readMinutes(post.word_count || doc.words);
+const parts = seriesParts(all);
+const series = post.series_id != null ? parts.get(post.series_id) ?? [] : [];
+const inSeries = series.length > 1;
+const at = series.findIndex((p) => p.id === post!.id);
+const prev = at > 0 ? series[at - 1] : null;
+const next = at >= 0 && at < series.length - 1 ? series[at + 1] : null;
+const related = scoreRelated(
+  { id: post.id, category: post.category, tags: post.tags, seriesId: post.series_id, publishedAt: post.published_at },
+  all.map((p) => ({ ...p, seriesId: p.series_id, publishedAt: p.published_at })),
+);
+const url = `${SITE.url}/notes/${post.slug}`;
+const cover = coverUrl(post, 1600, tf);
+const ogImage = post.cover_key ? (tf ? `/cdn-cgi/image/width=1200,height=627,fit=cover,format=jpeg${mediaUrl(post.cover_key)}` : mediaUrl(post.cover_key)) : '/og-default.png';
+const share = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=300');
+---
+<Notes
+  title={post.title}
+  description={post.excerpt || post.body_text.slice(0, 155)}
+  image={ogImage}
+  imageAlt={post.cover_alt || post.title}
+  type="article"
+  tape="article"
+  postId={post.id}
+  jsonLd={[
+    articleLd({ title: post.title, excerpt: post.excerpt, url, image: new URL(ogImage, SITE.url).href, published: post.published_at, modified: post.updated_at, category: post.category, tags: post.tags, words: doc.words }),
+    breadcrumbLd([{ name: 'Home', url: SITE.url }, { name: 'Liz Notes', url: `${SITE.url}/notes` }, { name: post.title, url }]),
+  ]}
+>
+  <Fragment slot="head">
+    <meta property="article:published_time" content={post.published_at ?? ''}>
+    <meta property="article:modified_time" content={post.updated_at}>
+    <meta property="article:section" content={post.category}>
+    {post.tags.map((t) => <meta property="article:tag" content={t}>)}
+  </Fragment>
+  <article data-article data-post-id={post.id} data-slug={post.slug} data-minutes={minutes} data-url={url}>
+    <header class="art-head">
+      <a href="/notes" class="meta" style="letter-spacing:.12em">← All posts</a>
+      <div class="meta" style="justify-content:center"><span style="color:var(--cobalt)">{post.category}</span><span>{longDate(post.published_at)}</span><span>{minutes} min read</span></div>
+      <h1>{post.title}</h1>
+      {post.excerpt && <p class="stand">{post.excerpt}</p>}
+      <div class="byline"><img src="/lookbook/reflection-480.webp" alt="" width="36" height="36"><span>Liz Lenjo, Esq.</span></div>
+    </header>
+    <div class="art-cover">
+      <div class:list={['frame', !cover && 'cover-blank']} aria-hidden={cover ? undefined : 'true'}>
+        {cover ? <img src={cover} alt={post.cover_alt} fetchpriority="high"> : 'cover image'}
+      </div>
+    </div>
+
+    <div class="art-grid">
+      <aside class="rail" aria-label="Reading tools">
+        <div style="display:flex;flex-direction:column;gap:6px"><span class="min" data-min-left>{minutes}</span><span>min left</span></div>
+        {doc.toc.length > 0 && (
+          <nav class="blk blk-toc" aria-label="Contents">
+            <span>Contents</span>
+            {doc.toc.map((t) => <button type="button" class="toc-btn" data-toc={t.id} aria-current="false">{t.text}</button>)}
+          </nav>
+        )}
+        <div class="blk">
+          <span id="ts-label">Text size</span>
+          <div style="display:flex;gap:4px" role="group" aria-labelledby="ts-label">
+            {[[15, 'Small text', 14], [17, 'Medium text', 18], [20, 'Large text', 23]].map(([v, aria, px]) => (
+              <button type="button" class="size-btn" data-size={v} aria-label={String(aria)} aria-pressed={v === 17 ? 'true' : 'false'} style={`font-size:${px}px`}>A</button>
+            ))}
+          </div>
+        </div>
+        <div class="blk">
+          <span>Share</span>
+          <a href={share} target="_blank" rel="noopener">LinkedIn ↗</a>
+          <button type="button" class="plain" data-copy-link>Copy link</button>
+          <span class="chalk" style="font-size:19px;letter-spacing:0;text-transform:none;line-height:1.15">select any line to quote it</span>
+        </div>
+      </aside>
+
+      <div class="art-main">
+        {inSeries && (
+          <nav class="care series-box" aria-label="Pattern set">
+            <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase"><span style="color:var(--cobalt)">Pattern set</span><span>{partLabel(post, parts)}</span></div>
+            <div style="font-family:var(--serif);font-size:24px;line-height:1.15">{post.series_name}</div>
+            <div style="display:flex;flex-direction:column">
+              {series.map((p, k) => (
+                <a class="row" href={`/notes/${p.slug}`} aria-current={p.id === post!.id ? 'page' : undefined}><span class="n">{String(k + 1).padStart(2, '0')}</span><span>{p.title}</span></a>
+              ))}
+            </div>
+          </nav>
+        )}
+
+        <div class="body" data-article-body>
+          {doc.rows.map((r) => (
+            <div class="blk-row">
+              <div class="blk-main" set:html={r.html} />
+              <div class="blk-note">{r.note && <aside class:list={['margin-note', r.noteKind]} set:html={r.note} />}</div>
+            </div>
+          ))}
+          <span data-article-end aria-hidden="true"></span>
+        </div>
+
+        <div style="max-width:640px">
+          {post.tags.length > 0 && <ul class="tags" role="list" style="list-style:none;margin:0">{post.tags.map((t) => <li class="tag-chip">{t}</li>)}</ul>}
+
+          {inSeries && (prev || next) && (
+            <div class="parts">
+              {prev && <a class="part" href={`/notes/${prev.slug}`}><span class="k">← Previous part</span><span class="v">{prev.title}</span></a>}
+              {next && <a class="part next" href={`/notes/${next.slug}`}><span class="k">Next part →</span><span class="v">{next.title}</span></a>}
+            </div>
+          )}
+
+          <section class="care care-cobalt author" aria-label="About the author">
+            <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+              <img src="/lookbook/piano-480.webp" alt="Liz Lenjo" width="76" height="76" loading="lazy">
+              <div style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:200px"><span class="label" style="font-size:10px;letter-spacing:.16em">Written by</span><span style="font-family:var(--serif);font-size:26px;line-height:1.1">Liz Lenjo, Esq.</span></div>
+            </div>
+            <div class="rows">{AUTHOR_ROLES.map((r) => <div><span>{r.org}</span><span style="color:var(--text-3)">{r.role}</span></div>)}</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <a href="/#enquire" class="btn btn-ink" style="white-space:normal">Book Liz to speak on {post.category} →</a>
+              <a href={SITE.linkedin} class="btn btn-solid-outline" rel="noopener">Follow on LinkedIn ↗</a>
+            </div>
+          </section>
+
+          <section class="convo" aria-labelledby="convo-h">
+            <div class="convo-head"><h2 id="convo-h" style="margin:0;font-family:var(--serif);font-weight:400;font-size:28px">Conversation</h2><span class="count" style="padding:0">{comments.length} {comments.length === 1 ? 'comment' : 'comments'}</span></div>
+            {comments.map((c) => (
+              <div class="comment"><div class="who"><span style="font-weight:500">{c.name}</span><span style="color:var(--muted)">{longDate(c.created_at)}</span></div><div class="txt">{c.text}</div></div>
+            ))}
+            <p data-comment-done hidden role="status" style="margin:0;font-family:var(--serif);font-style:italic;font-size:21px;color:var(--cobalt)">Thank you. Your comment will appear once it has been reviewed.</p>
+            <form data-comment data-turnstile style="display:flex;flex-direction:column;gap:14px" novalidate>
+              <input type="hidden" name="postId" value={post.id}>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px">
+                <label class="sr-only" for="c-name">Name</label>
+                <input class="field" style="border-bottom-color:var(--faint-3);padding:12px 0" id="c-name" required name="name" maxlength="80" autocomplete="name" placeholder="Name">
+                <label class="sr-only" for="c-email">Email (not published)</label>
+                <input class="field" style="border-bottom-color:var(--faint-3);padding:12px 0" id="c-email" required type="email" name="email" maxlength="254" autocomplete="email" placeholder="Email (not published)">
+              </div>
+              <label class="sr-only" for="c-text">Comment</label>
+              <textarea class="field" style="border-bottom-color:var(--faint-3);padding:12px 0" id="c-text" required name="text" rows="4" maxlength="4000" placeholder="Add to the conversation"></textarea>
+              <input type="text" name="website" tabindex="-1" autocomplete="off" class="sr-only" aria-hidden="true">
+              <div class="ts-slot"></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+                <span style="font-size:12px;color:var(--muted)">Protected by Cloudflare Turnstile. Comments are reviewed before publishing.</span>
+                <button type="submit" class="btn btn-ink" style="padding:14px 22px">Post comment</button>
+              </div>
+              <p class="form-msg" data-msg role="alert"></p>
+            </form>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    {related.length > 0 && (
+      <section class="keep" aria-labelledby="keep-h">
+        <div class="keep-inner">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap"><h2 id="keep-h" class="label" style="margin:0;font-weight:400;letter-spacing:.12em">Keep reading</h2><span class="chalk" style="font-size:22px">cut from the same cloth</span></div>
+          <div class="keep-grid">
+            {related.map((r) => {
+              const c = coverUrl(r.post, 800, tf);
+              return (
+                <a href={`/notes/${r.post.slug}`} class="keep-card">
+                  {c ? <div class="cover"><img src={c} alt={r.post.cover_alt} loading="lazy"></div> : <div class="cover cover-blank" aria-hidden="true"></div>}
+                  <div class="meta" style="font-size:10px;letter-spacing:.14em;justify-content:space-between;gap:10px"><span>{r.why}</span><span>{readMinutes(r.post.word_count)} min</span></div>
+                  <h3 class="t" style="margin:0;font-weight:400">{r.post.title}</h3>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    )}
+  </article>
+  <div class="hl-bar" data-hl hidden role="toolbar" aria-label="Share selection">
+    <button type="button" data-hl-li>Quote on LinkedIn</button>
+    <button type="button" data-hl-x>Post on X</button>
+    <button type="button" class="copy" data-hl-copy>Copy quote</button>
+  </div>
+</Notes>
+
+<script>
+  import '../../scripts/article';
+</script>

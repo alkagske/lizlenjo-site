@@ -1,0 +1,18 @@
+---
+import Base from './Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import NotesFooter from '../components/NotesFooter.astro';
+import '../styles/notes.css';
+type BaseProps = import('./Base.astro').Props;
+interface Props extends BaseProps { postId?: number }
+const { postId, ...rest } = Astro.props;
+---
+<Base {...rest}>
+  <slot name="head" slot="head" />
+  <SiteHeader variant="notes" current="notes" />
+  <main id="main" tabindex="-1"><slot /></main>
+  <NotesFooter postId={postId} />
+</Base>
+<script>
+  import '../scripts/site';
+</script>

@@ -11,7 +11,7 @@ import '@fontsource/caveat/600.css';
 import '../styles/atelier.css';
 import { SITE } from '../content/site';
 
-interface Props {
+export interface Props {
   title?: string;
   description?: string;
   image?: string;
@@ -20,9 +20,11 @@ interface Props {
   noindex?: boolean;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   bodyClass?: string;
+  /** What the tape-measure rule tracks: page scroll, article reading progress, or nothing. */
+  tape?: 'page' | 'article' | 'none';
 }
 
-const { title, description = SITE.description, image = '/og-default.png', imageAlt = 'Liz Lenjo, Esq.', type = 'website', noindex = false, jsonLd, bodyClass } = Astro.props;
+const { title, description = SITE.description, image = '/og-default.png', imageAlt = 'Liz Lenjo, Esq.', type = 'website', noindex = false, jsonLd, bodyClass, tape = 'page' } = Astro.props;
 const fullTitle = title ? `${title} · Liz Lenjo` : 'Liz Lenjo, Esq. · Intellectual property, entertainment & fashion law';
 const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', SITE.url).href;
 const ogImage = new URL(image, SITE.url).href;
@@ -56,7 +58,7 @@ const ld = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 <slot name="head" />
 {ld.map((x) => <script type="application/ld+json" set:html={JSON.stringify(x)} />)}
 </head>
-<body class={bodyClass}>
+<body class={bodyClass} data-tape-mode={tape}>
 <a class="skip-link" href="#main">Skip to content</a>
 <slot />
 </body>

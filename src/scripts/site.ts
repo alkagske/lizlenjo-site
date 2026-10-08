@@ -8,7 +8,7 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const header = document.querySelector<HTMLElement>('[data-header]');
 const tape = document.querySelector<HTMLElement>('[data-tape]');
 const floatTop = document.querySelector<HTMLElement>('[data-to-top-float]');
-const tapeMode = document.body.dataset.tape ?? 'page'; // 'page' | 'article'
+const tapeMode = document.body.dataset.tapeMode ?? 'page'; // 'page' | 'article'
 let raf = 0;
 function onScroll() {
   if (raf) return;
@@ -25,6 +25,7 @@ function onScroll() {
         p = total > 0 ? (-r.top + innerHeight * 0.25) / total : 0;
       }
     }
+    if (tapeMode === 'none') p = 0;
     p = Math.min(1, Math.max(0, p));
     if (tape) tape.style.transform = `scaleX(${p})`;
     header?.classList.toggle('is-scrolled', y > 40);

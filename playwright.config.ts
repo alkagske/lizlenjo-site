@@ -14,7 +14,7 @@ export default defineConfig({
     { name: 'mobile-375', use: { ...devices['Desktop Chrome'], viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true } },
   ],
   webServer: {
-    command: `npx wrangler d1 migrations apply DB --local && npx wrangler dev --local --port ${PORT} --ip 127.0.0.1`,
+    command: `npx wrangler d1 migrations apply DB --local && npx wrangler d1 execute DB --local --file tests/e2e/fixtures.sql && npx wrangler dev --local --port ${PORT} --ip 127.0.0.1`,
     url: `http://127.0.0.1:${PORT}/`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
