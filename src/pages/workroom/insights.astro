@@ -1,0 +1,70 @@
+---
+import Workroom from '../../layouts/Workroom.astro';
+import { nairobiDay } from '../../lib/format';
+export const prerender = false;
+
+const db = Astro.locals.runtime.env.DB;
+const day = (offset: number) => nairobiDay(new Date(Date.now() - offset * 86400000));
+const [today, d30, d60, d14] = [day(0), day(29), day(59), day(13)];
+type Sum = { reads: number; completions: number; signups: number };
+const sum = (from: string, to: string) => db.prepare(`SELECT COALESCE(SUM(reads),0) AS reads, COALESCE(SUM(completions),0) AS completions, COALESCE(SUM(signups),0) AS signups FROM post_stats_daily WHERE date BETWEEN ? AND ?`).bind(from, to).first<Sum>();
+const [cur, prev, subs, prevSubs] = await Promise.all([
+  sum(d30, today),
+  sum(d60, day(30)),
+  db.prepare(`SELECT COUNT(*) AS n FROM subscribers WHERE confirmed = 1 AND COALESCE(confirmed_at, created_at) >= ?`).bind(new Date(Date.now() - 30 * 86400000).toISOString()).first<{ n: number }>(),
+  db.prepare(`SELECT COUNT(*) AS n FROM subscribers WHERE confirmed = 1 AND COALESCE(confirmed_at, created_at) BETWEEN ? AND ?`).bind(new Date(Date.now() - 60 * 86400000).toISOString(), new Date(Date.now() - 30 * 86400000).toISOString()).first<{ n: number }>(),
+]);
+const { results: rows } = await db
+  .prepare(`SELECT p.id, p.title, COALESCE(SUM(s.reads),0) AS reads, COALESCE(SUM(s.completions),0) AS completions, COALESCE(SUM(s.signups),0) AS signups FROM posts p LEFT JOIN post_stats_daily s ON s.post_id = p.id AND s.date BETWEEN ? AND ? WHERE p.status = 'published' GROUP BY p.id ORDER BY reads DESC`)
+  .bind(d30, today)
+  .all<{ id: number; title: string } & Sum>();
+const { results: daily } = await db.prepare(`SELECT post_id, date, reads FROM post_stats_daily WHERE date BETWEEN ? AND ?`).bind(d14, today).all<{ post_id: number; date: string; reads: number }>();
+const days = Array.from({ length: 14 }, (_, i) => day(13 - i));
+const spark = (id: number) => {
+  const vals = days.map((d) => daily.find((x) => x.post_id === id && x.date === d)?.reads ?? 0);
+  const max = Math.max(1, ...vals);
+  return vals.map((v) => Math.max(4, Math.round((v / max) * 100)));
+};
+const pct = (a: number, b: number) => (b > 0 ? Math.round((a / b) * 100) : 0);
+const delta = (a: number, b: number) => (b > 0 ? Math.round(((a - b) / b) * 100) : null);
+const c = cur ?? { reads: 0, completions: 0, signups: 0 };
+const p = prev ?? { reads: 0, completions: 0, signups: 0 };
+const readsDelta = delta(c.reads, p.reads);
+const endNow = pct(c.completions, c.reads);
+const endPrev = pct(p.completions, p.reads);
+const tiles = [
+  { k: 'Reads', v: c.reads.toLocaleString('en-GB'), d: readsDelta == null ? 'No earlier data yet' : `${readsDelta >= 0 ? '+' : ''}${readsDelta}% on previous 30 days`, down: (readsDelta ?? 0) < 0 },
+  { k: 'Read to the end', v: `${endNow}%`, d: p.reads ? `${endNow - endPrev >= 0 ? '+' : ''}${endNow - endPrev} points` : 'Average across posts', down: endNow < endPrev },
+  { k: 'New subscribers', v: `+${subs?.n ?? 0}`, d: `${c.signups} from post sign-ups${prevSubs?.n ? ` · ${prevSubs.n} the month before` : ''}`, down: false },
+];
+const cols = 'grid-template-columns:minmax(0,1fr) 80px 170px 90px 130px';
+---
+<Workroom title="Insights" current="insights">
+  <div class="wr-head">
+    <div><div class="wr-kicker">Workroom</div><h1 class="wr-h1">Insights</h1></div>
+    <span style="font-size:12px;color:var(--mat-text)">Last 30 days · cookieless counts, no tracking</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px">
+    {tiles.map((t) => <div class="wr-tile"><span class="k">{t.k}</span><span class="v">{t.v}</span><span class:list={['d', t.down && 'down']}>{t.d}</span></div>)}
+  </div>
+  <div class="wr-card wr-table">
+    <div style="min-width:700px">
+      <div class="wr-row head" style={cols}><span>Post</span><span>Reads</span><span>Read to the end</span><span>Sign-ups</span><span>14 days</span></div>
+      {rows.map((r) => {
+        const done = pct(r.completions, r.reads);
+        return (
+          <a class="wr-row" style={cols} href={`/workroom/editor/${r.id}`}>
+            <span class="wr-title" style="font-size:19px">{r.title}</span>
+            <span>{r.reads.toLocaleString('en-GB')}</span>
+            <span style="display:flex;align-items:center;gap:10px"><span style="flex:1;height:6px;background:#eef0f5;border-radius:3px;overflow:hidden"><span style={`display:block;height:100%;width:${done}%;background:var(--cobalt)`}></span></span><span style="font-size:12px;color:var(--text-3);width:34px">{done}%</span></span>
+            <span>+{r.signups}</span>
+            <span style="display:flex;align-items:flex-end;gap:2px;height:28px" aria-label="Reads per day, last 14 days">{spark(r.id).map((h) => <span style={`flex:1;height:${h}%;background:#9fc4dc;border-radius:1px`}></span>)}</span>
+          </a>
+        );
+      })}
+      {rows.length === 0 && <p style="padding:24px;margin:0;color:var(--muted)">Publish a post to start counting reads.</p>}
+    </div>
+  </div>
+  <div class="wr-chalk">“read to the end” counts readers who scrolled past the final paragraph</div>
+  <p class="wr-note">Page views across the whole site are in Cloudflare → Analytics &amp; Logs → Web Analytics.</p>
+</Workroom>

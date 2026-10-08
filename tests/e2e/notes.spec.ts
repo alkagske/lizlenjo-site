@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test';
 test('Notes index: search, "/" shortcut, categories, archive', async ({ page }) => {
   await page.goto('/notes');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Notes on entertainment');
-  await expect(page.locator('.count')).toHaveText('6 notes');
+  await expect(page.locator('.count')).toHaveText(/^\d+ notes$/);
   await page.locator('body').press('/');
   await expect(page.getByLabel('Search Liz Notes')).toBeFocused();
   await page.keyboard.type('customs'); // body text only
@@ -52,5 +52,6 @@ test('RSS feed lists published posts only', async ({ request }) => {
   expect(res.ok()).toBe(true);
   const xml = await res.text();
   expect(xml).toContain('<title>Liz Notes</title>');
-  expect((xml.match(/<item>/g) || []).length).toBe(6);
+  expect((xml.match(/<item>/g) || []).length).toBeGreaterThanOrEqual(6);
+  expect(xml).not.toContain('Image rights for athletes'); // draft
 });

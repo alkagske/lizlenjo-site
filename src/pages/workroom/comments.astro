@@ -1,0 +1,60 @@
+---
+import Workroom from '../../layouts/Workroom.astro';
+import { relativeTime } from '../../lib/format';
+import { verdict } from '../../lib/spam';
+export const prerender = false;
+
+const db = Astro.locals.runtime.env.DB;
+type Row = { id: number; name: string; email: string; text: string; spam_score: number; created_at: string; title: string; slug: string; status: string };
+const { results: pending } = await db.prepare(`SELECT c.*, p.title, p.slug FROM comments c JOIN posts p ON p.id = c.post_id WHERE c.status = 'pending' ORDER BY c.spam_score DESC, c.created_at DESC`).all<Row>();
+const { results: approved } = await db.prepare(`SELECT c.*, p.title, p.slug FROM comments c JOIN posts p ON p.id = c.post_id WHERE c.status = 'approved' ORDER BY c.created_at DESC LIMIT 30`).all<Row>();
+---
+<Workroom title="Comments" current="comments">
+  <div><div class="wr-kicker">Workroom</div><h1 class="wr-h1">Comments</h1></div>
+  <p class="wr-note">Turnstile screens every submission. Workers AI then scores the text; anything likely to be spam waits here instead of publishing. Every comment waits for your approval.</p>
+  <div style="display:flex;flex-direction:column;gap:12px" data-queue>
+    {pending.map((c) => {
+      const v = verdict(c.spam_score);
+      return (
+        <article class="wr-card" style="padding:22px 24px;display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:flex-start" data-comment-id={c.id}>
+          <div style="display:flex;flex-direction:column;gap:8px;min-width:0;flex:1 1 360px">
+            <div style="display:flex;gap:14px;font-size:12px;color:var(--muted);flex-wrap:wrap"><span style="color:var(--ink);font-weight:500">{c.name}</span><span>{c.email}</span><span>on “<a href={`/notes/${c.slug}`} target="_blank" rel="noopener">{c.title}</a>”</span><span>{relativeTime(c.created_at)}</span></div>
+            <div style="font-size:15px;line-height:1.65;color:var(--body);white-space:pre-wrap;overflow-wrap:anywhere">{c.text}</div>
+            <div style={`font-family:var(--mono);display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:${v.likelySpam ? 'var(--spam)' : 'var(--published)'}`}><span style="width:60px;height:3px;background:#f1eee9;position:relative;overflow:hidden"><span style={`position:absolute;left:0;top:0;bottom:0;width:${v.percent}%;background:currentColor`}></span></span>{v.label}</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button type="button" class="wr-btn" data-act="approve">Approve</button>
+            <button type="button" class="wr-btn ghost" data-act="delete">Delete</button>
+          </div>
+        </article>
+      );
+    })}
+    {pending.length === 0 && <p class="wr-empty">All caught up.</p>}
+  </div>
+  {approved.length > 0 && (
+    <>
+      <h2 class="wr-kicker" style="margin:20px 0 0;font-weight:400">Recently approved</h2>
+      <div class="wr-card wr-table">
+        {approved.map((c) => (
+          <div class="wr-row" style="grid-template-columns:minmax(0,1fr) auto" data-comment-id={c.id}>
+            <span style="min-width:0"><strong style="font-weight:500">{c.name}</strong> <span style="color:var(--muted)">on {c.title} · {relativeTime(c.created_at)}</span><br><span style="color:var(--text-2);overflow-wrap:anywhere">{c.text.slice(0, 220)}</span></span>
+            <button type="button" class="wr-btn ghost" data-act="delete">Delete</button>
+          </div>
+        ))}
+      </div>
+    </>
+  )}
+</Workroom>
+<script>
+  document.addEventListener('click', async (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-act]');
+    if (!btn) return;
+    const row = btn.closest<HTMLElement>('[data-comment-id]')!;
+    const act = btn.dataset.act!;
+    if (act === 'delete' && !confirm('Delete this comment? This cannot be undone.')) return;
+    btn.disabled = true;
+    const res = await fetch(`/api/admin/comments/${row.dataset.commentId}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: act }) });
+    if (res.ok) row.remove();
+    else { btn.disabled = false; alert('That did not work. Please try again.'); }
+  });
+</script>

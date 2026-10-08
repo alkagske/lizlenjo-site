@@ -1,5 +1,6 @@
 import { defineMiddleware } from 'astro:middleware';
 import { devBypassAllowed, isProtectedPath, verifyAccessJwt } from './lib/access';
+import { sameOrigin } from './lib/http';
 
 /**
  * Runs for on-demand routes only (prerendered pages are plain files).
@@ -14,6 +15,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
   }
 
   if (isProtectedPath(url.pathname)) {
+    if (!['GET', 'HEAD'].includes(context.request.method) && !sameOrigin(context.request)) {
+      return new Response(JSON.stringify({ ok: false, error: 'Bad origin' }), { status: 403, headers: { 'content-type': 'application/json' } });
+    }
     const env = context.locals.runtime?.env;
     if (env && devBypassAllowed(url, env.DEV_ACCESS_BYPASS)) {
       context.locals.user = { email: 'dev@localhost', dev: true };

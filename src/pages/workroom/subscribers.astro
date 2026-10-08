@@ -1,0 +1,30 @@
+---
+import Workroom from '../../layouts/Workroom.astro';
+import { longDate } from '../../lib/format';
+export const prerender = false;
+const db = Astro.locals.runtime.env.DB;
+const { results } = await db.prepare(`SELECT s.email, s.confirmed, s.source, s.created_at, p.title FROM subscribers s LEFT JOIN posts p ON p.id = s.source_post_id ORDER BY s.created_at DESC LIMIT 500`).all<{ email: string; confirmed: number; source: string; created_at: string; title: string | null }>();
+const confirmed = results.filter((r) => r.confirmed).length;
+const cols = 'grid-template-columns:minmax(0,1fr) 110px minmax(0,1fr) 150px';
+---
+<Workroom title="Subscribers" current="subscribers">
+  <div class="wr-head">
+    <div><div class="wr-kicker">Workroom</div><h1 class="wr-h1">Subscribers</h1></div>
+    <a class="wr-btn light" href="/api/admin/subscribers.csv" download>Download CSV</a>
+  </div>
+  <p class="wr-note">{confirmed} confirmed of {results.length}. Download the CSV to import into Buttondown, Mailchimp or any other newsletter tool.</p>
+  <div class="wr-card wr-table">
+    <div style="min-width:620px">
+      <div class="wr-row head" style={cols}><span>Email</span><span>Status</span><span>Signed up from</span><span>Date</span></div>
+      {results.map((r) => (
+        <div class="wr-row" style={cols}>
+          <span style="overflow:hidden;text-overflow:ellipsis">{r.email}</span>
+          <span style="display:flex;align-items:center;gap:8px"><span class="dot" style={`background:${r.confirmed ? 'var(--published)' : 'var(--draft)'}`}></span>{r.confirmed ? 'Confirmed' : 'Pending'}</span>
+          <span style="color:var(--text-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{r.title ?? r.source}</span>
+          <span style="color:var(--text-3)">{longDate(r.created_at)}</span>
+        </div>
+      ))}
+      {results.length === 0 && <p style="padding:24px;margin:0;color:var(--muted)">No subscribers yet.</p>}
+    </div>
+  </div>
+</Workroom>

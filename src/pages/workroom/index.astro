@@ -1,0 +1,37 @@
+---
+import Workroom from '../../layouts/Workroom.astro';
+import { listAllPosts } from '../../lib/db';
+import { dateTime, longDate } from '../../lib/format';
+export const prerender = false;
+
+const status = Astro.url.searchParams.get('status') ?? 'all';
+const posts = await listAllPosts(Astro.locals.runtime.env.DB);
+const counts = { all: posts.length, published: 0, scheduled: 0, draft: 0 } as Record<string, number>;
+posts.forEach((p) => counts[p.status]!++);
+const shown = posts.filter((p) => status === 'all' || p.status === status);
+const tabs = [['all', 'All'], ['published', 'Published'], ['scheduled', 'Scheduled'], ['draft', 'Draft']] as const;
+const dot = { published: 'var(--published)', scheduled: 'var(--scheduled)', draft: 'var(--draft)' };
+const cols = 'grid-template-columns:minmax(0,1fr) 130px 110px 180px';
+---
+<Workroom title="Posts" current="posts">
+  <div class="wr-head">
+    <div><div class="wr-kicker">Workroom</div><h1 class="wr-h1">Posts</h1></div>
+    <nav class="wr-tabs" aria-label="Filter by status">
+      {tabs.map(([k, label]) => <a class="wr-tab" href={k === 'all' ? '/workroom' : `/workroom?status=${k}`} aria-current={status === k ? 'page' : undefined}>{label} <span class="n">{counts[k]}</span></a>)}
+    </nav>
+  </div>
+  <div class="wr-card wr-table">
+    <div style="min-width:640px">
+      <div class="wr-row head" style={cols}><span>Title</span><span>Category</span><span>Status</span><span>Date</span></div>
+      {shown.map((p) => (
+        <a class="wr-row" style={cols} href={`/workroom/editor/${p.id}`}>
+          <span class="wr-title">{p.title || 'Untitled'}{p.is_sample ? <span class="sample" title="Prototype sample content">Sample</span> : null}</span>
+          <span style="color:var(--text-3)">{p.category}</span>
+          <span style="display:flex;align-items:center;gap:8px"><span class="dot" style={`background:${dot[p.status]}`}></span>{p.status[0]!.toUpperCase() + p.status.slice(1)}</span>
+          <span style="color:var(--text-3)">{p.status === 'scheduled' ? `Goes live ${dateTime(p.publish_at)}` : p.status === 'published' ? longDate(p.published_at) : `Edited ${longDate(p.updated_at)}`}</span>
+        </a>
+      ))}
+      {shown.length === 0 && <p style="padding:24px;margin:0;color:var(--muted)">No posts here yet.</p>}
+    </div>
+  </div>
+</Workroom>

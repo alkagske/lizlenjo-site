@@ -1,0 +1,28 @@
+---
+import Workroom from '../../../layouts/Workroom.astro';
+import Editor from '../../../islands/editor/Editor';
+import { getPost, listSeries } from '../../../lib/db';
+import { intParam, isoToNairobiLocal } from '../../../lib/admin';
+import { CATEGORIES } from '../../../content/site';
+import '../../../styles/notes.css';
+export const prerender = false;
+
+const env = Astro.locals.runtime.env;
+const id = intParam(Astro.params.id);
+const post = id ? await getPost(env.DB, id) : null;
+if (!post) return Astro.redirect('/workroom', 302);
+const series = await listSeries(env.DB);
+---
+<Workroom title={post.title || 'Untitled'} current="posts">
+  <Editor
+    client:only="preact"
+    post={{
+      id: post.id, title: post.title, excerpt: post.excerpt, category: post.category, tags: post.tags, body_json: post.body_json,
+      slug: post.slug, cover_key: post.cover_key, cover_alt: post.cover_alt, status: post.status, publish_local: isoToNairobiLocal(post.publish_at),
+      published_at: post.published_at, series_id: post.series_id, is_sample: post.is_sample,
+    }}
+    categories={[...CATEGORIES]}
+    series={series}
+  />
+  <noscript><p class="wr-note">The editor needs JavaScript.</p></noscript>
+</Workroom>

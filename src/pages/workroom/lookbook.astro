@@ -1,0 +1,13 @@
+---
+import Workroom from '../../layouts/Workroom.astro';
+import LookbookManager from '../../islands/LookbookManager';
+import { listPhotos } from '../../lib/db';
+import { mediaUrl, transformsOn } from '../../lib/media';
+import { LOOKBOOK_COLLECTIONS } from '../../content/site';
+export const prerender = false;
+const env = Astro.locals.runtime.env;
+const photos = (await listPhotos(env.DB, true)).map((p) => ({ id: p.id, r2_key: p.r2_key, caption: p.caption, alt: p.alt, collection: p.collection, published: p.published, thumb: mediaUrl(p.r2_key, 480, transformsOn(env)) }));
+---
+<Workroom title="Lookbook" current="lookbook">
+  <LookbookManager client:load photos={photos} collections={[...LOOKBOOK_COLLECTIONS]} />
+</Workroom>

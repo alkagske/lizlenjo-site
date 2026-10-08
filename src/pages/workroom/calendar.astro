@@ -1,0 +1,11 @@
+---
+import Workroom from '../../layouts/Workroom.astro';
+import Calendar from '../../islands/Calendar';
+import { listAllPosts } from '../../lib/db';
+import { nairobiDay } from '../../lib/format';
+export const prerender = false;
+const posts = (await listAllPosts(Astro.locals.runtime.env.DB)).map((p) => ({ id: p.id, title: p.title, status: p.status, at: p.status === 'published' ? p.published_at : p.publish_at }));
+---
+<Workroom title="Calendar" current="calendar">
+  <Calendar client:load posts={posts} today={nairobiDay()} />
+</Workroom>

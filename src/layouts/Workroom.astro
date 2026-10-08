@@ -1,0 +1,68 @@
+---
+import '@fontsource/instrument-serif/400.css';
+import '@fontsource/instrument-serif/400-italic.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '@fontsource/manrope/300.css';
+import '@fontsource/manrope/400.css';
+import '@fontsource/manrope/500.css';
+import '@fontsource/caveat/500.css';
+import '../styles/atelier.css';
+import '../styles/workroom.css';
+import { pendingCount } from '../lib/db';
+
+interface Props {
+  title: string;
+  current: 'posts' | 'calendar' | 'comments' | 'insights' | 'lookbook' | 'subscribers';
+}
+const { title, current } = Astro.props;
+const env = Astro.locals.runtime.env;
+const user = Astro.locals.user;
+const [counts, pending] = await Promise.all([
+  env.DB.prepare(`SELECT COUNT(*) AS posts, SUM(status = 'scheduled') AS scheduled FROM posts`).first<{ posts: number; scheduled: number }>(),
+  pendingCount(env.DB),
+]);
+const nav = [
+  ['posts', 'Posts', '/workroom', counts?.posts ?? 0],
+  ['calendar', 'Calendar', '/workroom/calendar', counts?.scheduled ?? 0],
+  ['comments', 'Comments', '/workroom/comments', pending],
+  ['insights', 'Insights', '/workroom/insights', ''],
+  ['lookbook', 'Lookbook', '/workroom/lookbook', ''],
+  ['subscribers', 'Subscribers', '/workroom/subscribers', ''],
+] as const;
+---
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>{title} · Workroom · Liz Lenjo</title>
+<link rel="icon" href="/favicon.png" type="image/png">
+<slot name="head" />
+</head>
+<body class="workroom">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="wr">
+  <aside class="wr-side">
+    <a href="/workroom" style="display:flex;flex-direction:column;gap:6px">
+      <img src="/logo-white.webp" alt="Liz Lenjo" width="48" height="44" style="height:44px;width:auto;align-self:flex-start">
+      <span class="wr-kicker" style="color:var(--on-dark-3);padding-top:8px">Workroom</span>
+    </a>
+    <nav aria-label="Workroom">
+      {nav.map(([k, label, href, n]) => <a href={href} aria-current={current === k ? 'page' : undefined}>{label}<span class="n">{n}</span></a>)}
+    </nav>
+    <form method="post" action="/api/admin/posts"><button type="submit" class="wr-new">New post</button></form>
+    <div class="wr-foot">
+      <span style="color:var(--on-dark-1)">{user?.email ?? 'Liz Lenjo'}</span>
+      <span>{user?.dev ? 'Local development (no Access)' : 'Signed in with Cloudflare Access'}</span>
+      <a href="/" target="_blank" rel="noopener" style="color:var(--on-dark-4);padding-top:6px">View site ↗</a>
+      {!user?.dev && <a href="/cdn-cgi/access/logout" style="color:var(--on-dark-3)">Sign out</a>}
+    </div>
+  </aside>
+  <main id="main" tabindex="-1" class="wr-main">
+    <slot />
+  </main>
+</div>
+</body>
+</html>
