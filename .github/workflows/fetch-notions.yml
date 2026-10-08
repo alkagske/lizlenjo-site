@@ -3,8 +3,6 @@ name: Fetch line-art notions
 # into public/notions/ and commits them. Run it from the Actions tab → "Run workflow".
 on:
   workflow_dispatch:
-  push:
-    paths: ['.github/workflows/fetch-notions.yml', 'scripts/fetch-notions.mjs']
 
 permissions:
   contents: write
