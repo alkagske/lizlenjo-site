@@ -1,0 +1,25 @@
+# Copy this file to .dev.vars for local development. Never commit .dev.vars.
+# In production, set these in Cloudflare: Workers & Pages → lizlenjo-site → Settings → Variables and Secrets.
+
+# Cloudflare Turnstile (spam protection). Test keys below always pass.
+TURNSTILE_SITE_KEY=1x00000000000000000000AA
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+
+# Resend (enquiry notifications and newsletter confirmation). Leave blank to skip sending.
+RESEND_API_KEY=
+ENQUIRY_TO=you@example.com
+
+# Cloudflare Access (protects /workroom and /api/admin).
+# Team domain looks like "lizlenjo.cloudflareaccess.com". AUD is the Application Audience tag.
+ACCESS_TEAM_DOMAIN=
+ACCESS_AUD=
+ADMIN_EMAILS=
+
+# Optional
+MAIL_FROM=Liz Lenjo <notes@lizlenjo.com>
+# "on" once Cloudflare Images transformations are enabled on the lizlenjo.com zone.
+IMAGE_TRANSFORMS=off
+
+# Local only: lets you open /workroom on localhost without Cloudflare Access.
+# Ignored on any other hostname.
+DEV_ACCESS_BYPASS=1

@@ -1,0 +1,47 @@
+// Cloudflare Worker configuration for lizlenjo.com.
+// No secrets live here. Secrets are set in the Cloudflare dashboard (see README §Secrets)
+// or locally in .dev.vars (copy .dev.vars.example).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "lizlenjo-site",
+  "main": "./dist/_worker.js/index.js",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": true,
+  "preview_urls": true,
+  "observability": { "enabled": true },
+
+  // Prerendered pages, fonts and images. The Worker only runs for routes that are not files.
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+
+  // Database: posts, comments, enquiries, subscribers, stats, photos.
+  // database_id is filled in automatically by Wrangler on the first deploy if missing.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "lizlenjo-db",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  // Media library: post covers, inline images and Lookbook uploads.
+  "r2_buckets": [
+    { "binding": "MEDIA", "bucket_name": "lizlenjo-media" }
+  ],
+
+  // Workers AI, used to score comment spam.
+  "ai": { "binding": "AI" },
+
+  // Publishes scheduled posts every 5 minutes.
+  "triggers": { "crons": ["*/5 * * * *"] },
+
+  // Only non-secret defaults live here. Everything else (Access, Turnstile, Resend, enquiry
+  // address) is set in the Cloudflare dashboard as encrypted "Secret" values, which survive
+  // every deploy. See README → "Step 5: Add the settings and secrets".
+  "vars": {
+    "SITE_URL": "https://lizlenjo.com"
+  }
+}

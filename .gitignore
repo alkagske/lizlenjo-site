@@ -15,3 +15,9 @@ dist/
 .astro/
 .dev.vars
 .env*
+
+# Generated
+worker-configuration.d.ts.bak
+public/lookbook/
+playwright-report/
+test-results/
