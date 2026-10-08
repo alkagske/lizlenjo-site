@@ -3,6 +3,8 @@ name: Fetch line-art notions
 # into public/notions/ and commits them. Run it from the Actions tab → "Run workflow".
 on:
   workflow_dispatch:
+  push:
+    paths: ['.github/workflows/fetch-notions.yml', 'scripts/fetch-notions.mjs']
 
 permissions:
   contents: write
@@ -17,8 +19,13 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run notions:fetch
+      - name: Skip if the originals are already in place
+        id: need
+        run: grep -q "placeholder" public/notions/*.svg && echo "go=1" >> "$GITHUB_OUTPUT" || echo "Originals already present"
+      - if: steps.need.outputs.go == '1'
+        run: npm run notions:fetch
       - name: Commit
+        if: steps.need.outputs.go == '1'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
