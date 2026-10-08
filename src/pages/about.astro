@@ -1,0 +1,227 @@
+---
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Notion from '../components/Notion.astro';
+import { EDUCATION, PHOTOS, SITE } from '../content/site';
+import { breadcrumbLd, personLd } from '../lib/seo';
+
+// Copy from design/uploads/profile-2026.pdf. Do not add facts that are not in the profile.
+const committees = [
+  { t: 'Chairperson', o: 'Human Resource & General Purpose Committee' },
+  { t: 'Chairperson', o: 'Finance & Strategic Planning Committee' },
+  { t: 'Chairperson', o: 'Audit Committee' },
+];
+const consulting = [
+  { name: 'WIPO', note: 'Consulting for governments', logo: '/logos/wipo.png' },
+  { name: 'CANEX by Afreximbank', note: 'Pan-African creative economy forum', logo: '/logos/canex.png' },
+  { name: 'GiZ', note: 'International development', logo: '/logos/giz.png' },
+  { name: 'Intra-African Trade Fair', note: 'Pan-African trade forum', logo: '/logos/iatf.png' },
+];
+const timeline = [
+  { y: '2018', items: ['Business Daily Top 40 Under 40 Women'] },
+  { y: '2021', items: ['WIPR Diversity Shining Lights'] },
+  { y: '2022', items: ['Africa Legal Innovation Awards: IP Lawyer of the Year', 'WIPR Diversity Beacon of Light'] },
+  { y: '2024', items: ['WTR (World Trademark Review) Bronze Award'] },
+  { y: '2025', items: ['WTR Bronze Award'] },
+  { y: '2026', items: ['WTR Bronze Award', 'Chambers and Partners, Band 3, Intellectual Property'] },
+];
+---
+<Base title="About" description="The full profile of Liz Lenjo: Chairperson of the Copyright Tribunal, Founder of MyIP Legal Studio, Interim Chairperson of the Kenya Fashion Council and Adjunct Faculty at Strathmore University Law School." type="profile" jsonLd={[personLd(), breadcrumbLd([{ name: 'Home', url: SITE.url }, { name: 'About', url: `${SITE.url}/about` }])]}>
+  <SiteHeader current="about" />
+  <main id="main" tabindex="-1">
+
+    <section class="wrap two-col about-hero" aria-labelledby="about-h">
+      <div style="display:flex;flex-direction:column;gap:24px;align-self:center">
+        <div class="eyebrow"><Notion name="scissors" height={52} rotate={-12} /><div class="label">The full profile</div></div>
+        <h1 class="h1" id="about-h">Liz Lenjo, <span class="underline-chalk">Advocate of the High Court of Kenya.</span></h1>
+        <p class="lede" style="font-size:17px">An accomplished legal practitioner and governance leader with a distinguished record across intellectual property, regulated industries and complex commercial environments.</p>
+        <p class="lede">She is the Founder and Managing Consultant of <a href={SITE.myip} class="inline-link" rel="noopener">MyIP Legal Studio</a>, a boutique advisory firm serving clients across Africa’s creative, digital, technology and energy sectors.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;padding-top:6px">
+          <a href="/#enquire" class="btn btn-primary">Invite Liz to speak →</a>
+          <a href="/lookbook" class="btn">The lookbook</a>
+        </div>
+      </div>
+      <figure class="portrait">
+        <span class="chalk portrait-note" aria-hidden="true">Nairobi, measured twice</span>
+        <div class="portrait-frame">
+          <Picture src={PHOTOS.reflection} alt="Portrait of Liz Lenjo" formats={['avif', 'webp']} widths={[480, 800, 1200]} sizes="(min-width: 1000px) 560px, 100vw" loading="eager" fetchpriority="high" style="object-position:50% 30%" />
+        </div>
+        <span class="crop tl"></span><span class="crop tr"></span><span class="crop bl"></span><span class="crop br"></span>
+        <figcaption class="label-muted" style="padding-top:18px">Look 02 · Portrait</figcaption>
+      </figure>
+    </section>
+
+    <section class="wrap" data-reveal aria-labelledby="tribunal-h" style="padding-bottom:var(--section-y)">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow"><Notion name="spool" height={56} rotate={6} /><div class="label">Pattern No. 01 — The Tribunal</div></div>
+          <h2 class="h2" id="tribunal-h">Judicial leadership on <span class="it">intangible assets.</span></h2>
+        </div>
+      </div>
+      <div class="two-col" style="padding-top:44px;align-items:start">
+        <div class="care role-big">
+          <div class="t">Chairperson</div>
+          <div class="o">Copyright Tribunal, Kenya</div>
+          <div class="d"></div>
+          <div class="n">Kenya’s specialised court, constituted under Section 48 of the Copyright Act (CAP 130).</div>
+        </div>
+        <div class="rule-left prose-col">
+          <p class="lede">Liz offers strategic judicial leadership on disputes involving commercial rights, licensing, compliance and the cross-border exploitation of intangible assets.</p>
+          <p class="lede">That experience translates directly into modern governance demands in sectors such as international shipping, maritime IP, logistics technologies, digital platforms and supply-chain management.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band-white" data-reveal aria-labelledby="board-h">
+      <div class="wrap" style="padding-top:var(--section-y);padding-bottom:var(--section-y);display:flex;flex-direction:column;gap:44px">
+        <div class="two-col" style="align-items:end">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="eyebrow"><Notion name="thimble" height={48} rotate={10} /><div class="label">Pattern No. 02 — The Boardroom</div></div>
+            <h2 class="h2" id="board-h">Governance in a <span class="it">high-compliance</span> environment.</h2>
+            <span class="chalk" style="font-size:24px;transform:rotate(-2deg);transform-origin:0 50%;display:inline-block">three committees, one steady hand</span>
+          </div>
+          <div class="prose-col">
+            <p class="lede">Liz served on the Board of the Nuclear Power and Energy Agency (NuPEA) under the Energy Act (2019). She assisted in overseeing corporate governance, policy alignment and risk management for a state corporation operating in a high-compliance, security-sensitive and globally regulated environment.</p>
+            <p class="lede">She also provided expertise on intellectual property strategy, technology transfer and regulatory frameworks.</p>
+          </div>
+        </div>
+        <ul class="grid-roles" role="list" style="list-style:none;margin:0;padding:0">
+          {committees.map((c) => (
+            <li class="care lift role"><div class="t">{c.t}</div><div class="o">{c.o}</div><div class="d"></div><div class="n">Board of the Nuclear Power and Energy Agency</div></li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="wrap" data-reveal aria-labelledby="industry-h" style="padding-top:var(--section-y);padding-bottom:var(--section-y)">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow"><Notion name="needle" height={26} rotate={-6} /><div class="label">Pattern No. 03 — The Industry</div></div>
+          <h2 class="h2" id="industry-h">Volunteer work for <span class="it">Kenya’s creative economy.</span></h2>
+        </div>
+        <p style="margin:0;font-size:14px;color:var(--text-2);max-width:380px">Stakeholder engagement, organisational structuring and guiding industry bodies through regulatory reform.</p>
+      </div>
+      <ul class="grid-roles" role="list" style="list-style:none;margin:0;padding:44px 0 0">
+        <li class="care lift role"><div class="t">Interim Chairperson</div><div class="o">Kenya Fashion Council</div><div class="d"></div><div class="n">Also Head of its Legal, Policy and Intellectual Property portfolio.</div></li>
+        <li class="care lift role"><div class="t">Head of Legal</div><div class="o">Partners Against Piracy</div><div class="d"></div><div class="n">Volunteer role in anti-piracy and enforcement.</div></li>
+        <li class="care lift role"><div class="t">Member</div><div class="o">International Trademark Association</div><div class="d"></div><div class="n">Served on global committees including the Anti-Counterfeiting Committee and the Programming Council.</div></li>
+      </ul>
+      <p class="lede prose-col" style="padding-top:36px;max-width:760px">Her INTA work strengthens her understanding of global supply-chain IP risks, anti-counterfeiting interventions, cross-border enforcement, digital trade, branding and the commercial realities of international logistics.</p>
+    </section>
+
+    <section class="denim" aria-labelledby="class-h">
+      <span class="topstitch" style="top:14px"></span><span class="topstitch" style="top:22px"></span>
+      <span class="topstitch" style="bottom:14px"></span><span class="topstitch" style="bottom:22px"></span>
+      <div class="wrap two-col" data-reveal style="position:relative;padding-top:var(--section-y);padding-bottom:var(--section-y);gap:clamp(48px,7vw,100px)">
+        <div style="display:flex;flex-direction:column;gap:22px">
+          <div class="label" style="color:var(--on-dark-4)">Pattern No. 04 — The Classroom &amp; the Library</div>
+          <h2 id="class-h" style="margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(34px,4vw,52px);line-height:1.04">Teaching, standards and <span class="it">published scholarship.</span></h2>
+          <p style="margin:0;color:#c4c9d6">An adjunct faculty member at Strathmore University Law School, Liz teaches Media and Entertainment Law and tutors with CopyrightX (HarvardX – Kenya).</p>
+          <p style="margin:0;color:#c4c9d6">She chairs the Intellectual Property Technical Committee at the Kenya Bureau of Standards (KEBS), reinforcing her fluency with standards, compliance, certification processes and cross-sector regulatory ecosystems.</p>
+          <p style="margin:0;color:#c4c9d6">Her LL.M. thesis, <em style="color:#f2f0ea">“Inspiration versus Exploitation: Traditional Cultural Expressions at the Hem of the Fashion Industry”</em>, is published in the Marquette Intellectual Property Law Review and available on Westlaw and Nexis.</p>
+        </div>
+        <div class="composition">
+          <Notion name="safety-pins" height={58} rotate={18} class="pins" style="position:absolute;pointer-events:none;opacity:.95;width:auto;right:18px;top:-58px;filter:invert(1) brightness(1.8)" />
+          <div class="cap" style="padding-bottom:12px;border-bottom:1px solid var(--ink)">COMPOSITION</div>
+          {EDUCATION.map((e) => (
+            <div class="row"><div><span class="t">{e.title}</span><span class="i">{e.inst}</span></div><span class="code">{e.code}</span></div>
+          ))}
+          <div class="row"><div><span class="t">Tutor, CopyrightX</span><span class="i">HarvardX – Kenya</span></div><span class="code">TUTOR</span></div>
+          <div class="cap" style="padding-top:12px">MADE IN NAIROBI · TURIN · GENEVA</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap" data-reveal aria-labelledby="global-h" style="padding-top:var(--section-y);padding-bottom:var(--section-y);display:flex;flex-direction:column;gap:44px">
+      <div class="two-col" style="align-items:end">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="label">Pattern No. 05 — The Runway</div>
+          <h2 class="h2" id="global-h">Consulting through WIPO, and on stages <span class="it">across Africa and beyond.</span></h2>
+        </div>
+        <div class="rule-left prose-col">
+          <p class="lede">Her global profile includes consulting for governments through WIPO, international development institutions and pan-African economic forums.</p>
+          <p class="lede">She has presented and moderated at industry and policy events across Africa and beyond on IP, trade, creative economy governance and cross-border commerce, and has written for and been featured in major local and international media.</p>
+        </div>
+      </div>
+      <ul class="grid-consult" role="list">
+        {consulting.map((c) => (
+          <li class="care consult"><img src={c.logo} alt="" loading="lazy" decoding="async"><span class="o">{c.name}</span><span class="n">{c.note}</span></li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="band-white" data-reveal aria-labelledby="rec-h">
+      <div class="wrap" style="padding-top:var(--section-y);padding-bottom:var(--section-y);display:flex;flex-direction:column;gap:40px">
+        <div class="section-head">
+          <div>
+            <div class="label">Pattern No. 06 — Measured in years</div>
+            <h2 class="h2" id="rec-h">Recognition, <span class="it">on the tape.</span></h2>
+          </div>
+          <p style="margin:0;font-family:var(--serif);font-style:italic;font-size:21px;color:var(--text-2)">Also: Top 25 Women in Digital – Kenya.</p>
+        </div>
+        <ol class="timeline" role="list">
+          {timeline.map((t) => (
+            <li>
+              <span class="yr">{t.y}</span>
+              <span class="tick" aria-hidden="true"></span>
+              <ul role="list">{t.items.map((x) => <li>{x}</li>)}</ul>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="wrap two-col" data-reveal aria-labelledby="work-h" style="padding-top:var(--section-y);padding-bottom:var(--section-y);align-items:end">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="label">Pattern No. 07 — The Fitting</div>
+        <h2 class="h2" id="work-h">Work with Liz, <span class="it">or book her to speak.</span></h2>
+      </div>
+      <div class="rule-left" style="display:flex;flex-direction:column;gap:20px">
+        <p class="lede">For advisory work, contact MyIP Legal Studio. For keynotes, panels, moderation and advisory roles, send an enquiry through the order book.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a href="#enquire" class="btn btn-primary">Invite Liz to speak →</a>
+          <a href={SITE.myip} class="btn" rel="noopener">MyIP Legal Studio ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</Base>
+
+<style>
+  .about-hero { padding-top: clamp(56px, 8vw, 110px); padding-bottom: var(--section-y); align-items: center; }
+  .inline-link { color: var(--cobalt); border-bottom: 1px dashed var(--cobalt); }
+  .portrait { position: relative; margin: 10px; }
+  .portrait-frame { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--ink); }
+  .portrait-frame :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .portrait-note { position: absolute; right: 8px; top: -40px; font-size: 24px; transform: rotate(-4deg); z-index: 1; }
+  .prose-col { display: flex; flex-direction: column; gap: 18px; }
+  .role-big { padding: 40px 28px; display: flex; flex-direction: column; gap: 12px; text-align: center; }
+  .role-big .t { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; }
+  .role-big .o { font-family: var(--serif); font-size: clamp(28px, 3vw, 36px); line-height: 1.1; }
+  .role-big .d { width: 28px; border-top: 1px solid var(--ink); margin: 4px auto; }
+  .role-big .n { font-size: 14px; color: var(--text-3); }
+  .grid-consult { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 22px; }
+  .consult { padding: 30px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+  .consult img { height: 48px; width: auto; max-width: 150px; object-fit: contain; filter: grayscale(1); opacity: .8; transition: filter .4s ease, opacity .4s ease; }
+  .consult:hover img { filter: none; opacity: 1; }
+  .consult .o { font-family: var(--serif); font-size: 22px; line-height: 1.15; }
+  .consult .n { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--cobalt); }
+  .timeline { list-style: none; margin: 0; padding: 26px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); position: relative; border-top: 1px solid var(--ink);
+    background-image: repeating-linear-gradient(90deg, var(--ink) 0 1px, transparent 1px 8px), repeating-linear-gradient(90deg, var(--ink) 0 1px, transparent 1px 40px);
+    background-size: 100% 4px, 100% 9px; background-repeat: no-repeat; }
+  .timeline > li { position: relative; padding: 0 18px 0 0; display: flex; flex-direction: column; gap: 10px; }
+  .timeline .yr { font-family: var(--serif); font-size: 48px; line-height: 1; color: var(--ink); }
+  .timeline .tick { position: absolute; top: -26px; left: 0; width: 1px; height: 16px; background: var(--cobalt); }
+  .timeline ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .timeline ul li { font-size: 14px; line-height: 1.45; color: var(--text-2); padding-top: 8px; border-top: 1px dashed var(--faint-3); }
+  @media (max-width: 720px) {
+    .timeline { grid-template-columns: 1fr; background-image: none; border-top: 0; border-left: 1px solid var(--ink); padding: 0 0 0 20px; gap: 26px; }
+    .timeline .tick { top: 18px; left: -20px; width: 14px; height: 1px; }
+  }
+</style>
+<script>
+  import '../scripts/site';
+</script>

@@ -1,0 +1,157 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Notion from '../components/Notion.astro';
+import { listPhotos, type PhotoRow } from '../lib/db';
+import { mediaUrl, srcset, transformsOn } from '../lib/media';
+import { LOOKBOOK_COLLECTIONS, SITE } from '../content/site';
+import { breadcrumbLd } from '../lib/seo';
+export const prerender = false;
+
+const env = Astro.locals.runtime.env;
+let photos: PhotoRow[] = [];
+try {
+  photos = await listPhotos(env.DB);
+} catch (e) {
+  console.error('lookbook: D1 unavailable', e);
+}
+const tf = transformsOn(env);
+const counts = Object.fromEntries(LOOKBOOK_COLLECTIONS.map((c) => [c, photos.filter((p) => p.collection === c).length]));
+Astro.response.headers.set('Cache-Control', 'public, max-age=60, s-maxage=300');
+---
+<Base title="Lookbook" description="Photographs of Liz Lenjo: the advocate, the lecturer, fashion and editorial portraits." jsonLd={breadcrumbLd([{ name: 'Home', url: SITE.url }, { name: 'Lookbook', url: `${SITE.url}/lookbook` }])}>
+  <SiteHeader />
+  <main id="main" tabindex="-1" class="wrap lookbook">
+    <header class="two-col" style="align-items:end">
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div class="eyebrow"><Notion name="safety-pins" height={50} rotate={-8} /><div class="label">The lookbook</div></div>
+        <h1 class="h1">Four collections, <span class="underline-chalk">one wardrobe.</span></h1>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <p class="lede">The advocate, the lecturer, the runway and the portrait. Select a photograph to see it full screen; use the arrow keys or swipe to move through the collection.</p>
+        <div class="filters" role="group" aria-label="Collections">
+          <button type="button" class="chip" aria-pressed="true" data-filter="all">All <span class="n">{photos.length}</span></button>
+          {LOOKBOOK_COLLECTIONS.map((c) => counts[c] ? <button type="button" class="chip" aria-pressed="false" data-filter={c}>{c} <span class="n">{counts[c]}</span></button> : null)}
+        </div>
+      </div>
+    </header>
+
+    {photos.length === 0 ? (
+      <p class="empty">The lookbook is being pressed. Check back soon.</p>
+    ) : (
+      <ul class="masonry" role="list" data-gallery>
+        {photos.map((p, i) => {
+          const set = srcset(p.r2_key, tf);
+          return (
+            <li class="tile" data-collection={p.collection}>
+              <button type="button" class="tile-btn" data-index={i} data-full={mediaUrl(p.r2_key, 1600, tf)} data-caption={p.caption} data-collection-label={p.collection} aria-label={`Open photo: ${p.caption || p.alt}`}>
+                <img src={mediaUrl(p.r2_key, 960, tf)} srcset={set || undefined} sizes="(min-width: 1100px) 400px, (min-width: 700px) 50vw, 100vw" alt={p.alt || p.caption} width={p.width || undefined} height={p.height || undefined} loading={i < 3 ? 'eager' : 'lazy'} decoding="async" style={`object-position:${p.object_position}`}>
+              </button>
+              <div class="tile-cap"><span class="mono">{String(i + 1).padStart(2, '0')} · {p.collection}</span><span class="serif">{p.caption}</span></div>
+            </li>
+          );
+        })}
+      </ul>
+    )}
+  </main>
+
+  <dialog class="lightbox" data-lightbox aria-label="Photo viewer">
+    <div class="lb-top"><span class="mono" data-lb-count></span><button type="button" class="btn btn-square lb-close" data-lb-close aria-label="Close">×</button></div>
+    <figure class="lb-fig">
+      <img data-lb-img alt="">
+      <figcaption><span class="mono" data-lb-coll></span> <span class="serif" data-lb-cap></span></figcaption>
+    </figure>
+    <button type="button" class="btn btn-square lb-prev" data-lb-prev aria-label="Previous photo">←</button>
+    <button type="button" class="btn btn-square lb-next" data-lb-next aria-label="Next photo">→</button>
+  </dialog>
+  <SiteFooter />
+</Base>
+
+<style>
+  .lookbook { padding-top: clamp(56px, 8vw, 110px); padding-bottom: var(--section-y); display: flex; flex-direction: column; gap: 56px; }
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filters .n { opacity: .55; margin-left: 4px; }
+  .empty { font-family: var(--serif); font-style: italic; font-size: 24px; color: var(--text-3); }
+  .masonry { list-style: none; margin: 0; padding: 0; columns: 3 320px; column-gap: 28px; }
+  .tile { break-inside: avoid; margin: 0 0 34px; display: flex; flex-direction: column; gap: 10px; }
+  .tile[hidden] { display: none; }
+  .tile-btn { all: unset; cursor: zoom-in; display: block; position: relative; background: #fff; padding: 10px; border: 1px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); transition: transform .35s var(--lift), box-shadow .35s ease; }
+  .tile-btn:hover, .tile-btn:focus-visible { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--cobalt); }
+  .tile-btn:focus-visible { outline: 1px dashed var(--cobalt); outline-offset: 4px; }
+  .tile-btn img { display: block; width: 100%; height: auto; }
+  .tile-cap { display: flex; flex-direction: column; gap: 2px; }
+  .tile-cap .mono { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--cobalt); }
+  .tile-cap .serif { font-size: 20px; line-height: 1.2; }
+  .lightbox { width: 100vw; height: 100vh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgba(20, 33, 61, .96); color: var(--paper); }
+  .lightbox::backdrop { background: rgba(20, 33, 61, .9); }
+  .lightbox[open] { display: grid; grid-template-rows: auto 1fr; }
+  .lb-top { display: flex; justify-content: space-between; align-items: center; padding: 16px var(--pad-x); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--on-dark-2); }
+  .lb-fig { margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 0 clamp(56px, 8vw, 110px) 28px; min-height: 0; }
+  .lb-fig img { max-width: 100%; max-height: calc(100vh - 150px); object-fit: contain; box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .6); }
+  .lb-fig figcaption { text-align: center; }
+  .lb-fig .mono { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--on-dark-4); margin-right: 8px; }
+  .lb-fig .serif { font-size: 22px; }
+  .lightbox .btn { border-color: var(--paper); color: var(--paper); }
+  .lightbox .btn:hover { background: var(--paper); color: var(--ink); }
+  .lb-prev, .lb-next { position: fixed; top: 50%; transform: translateY(-50%); }
+  .lb-prev { left: clamp(10px, 2vw, 28px); }
+  .lb-next { right: clamp(10px, 2vw, 28px); }
+  @media (max-width: 600px) { .lb-fig { padding: 0 12px 70px; } .lb-prev, .lb-next { top: auto; bottom: 16px; transform: none; } }
+</style>
+<script>
+  import '../scripts/site';
+  const gallery = document.querySelector('[data-gallery]');
+  const dlg = document.querySelector<HTMLDialogElement>('[data-lightbox]');
+  if (gallery && dlg) {
+    const tiles = [...gallery.querySelectorAll<HTMLLIElement>('.tile')];
+    const img = dlg.querySelector<HTMLImageElement>('[data-lb-img]')!;
+    const cap = dlg.querySelector('[data-lb-cap]')!;
+    const coll = dlg.querySelector('[data-lb-coll]')!;
+    const count = dlg.querySelector('[data-lb-count]')!;
+    let list: HTMLButtonElement[] = [];
+    let at = 0;
+    let opener: HTMLElement | null = null;
+    const visible = () => tiles.filter((t) => !t.hidden).map((t) => t.querySelector<HTMLButtonElement>('.tile-btn')!);
+    const show = (k: number) => {
+      at = (k + list.length) % list.length;
+      const b = list[at]!;
+      const thumb = b.querySelector('img')!;
+      img.src = b.dataset.full!;
+      img.alt = thumb.alt;
+      cap.textContent = b.dataset.caption ?? '';
+      coll.textContent = b.dataset.collectionLabel ?? '';
+      count.textContent = `${String(at + 1).padStart(2, '0')} / ${String(list.length).padStart(2, '0')}`;
+      // Preload neighbours for instant paging.
+      [at + 1, at - 1].forEach((j) => { const n = list[(j + list.length) % list.length]; if (n) new Image().src = n.dataset.full!; });
+    };
+    gallery.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('.tile-btn');
+      if (!b) return;
+      list = visible();
+      opener = b;
+      show(list.indexOf(b));
+      dlg.showModal();
+    });
+    dlg.querySelector('[data-lb-close]')!.addEventListener('click', () => dlg.close());
+    dlg.querySelector('[data-lb-prev]')!.addEventListener('click', () => show(at - 1));
+    dlg.querySelector('[data-lb-next]')!.addEventListener('click', () => show(at + 1));
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); show(at + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); show(at - 1); }
+    });
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('close', () => opener?.focus());
+    let tx = 0;
+    dlg.addEventListener('touchstart', (e) => { tx = e.touches[0]!.clientX; }, { passive: true });
+    dlg.addEventListener('touchend', (e) => { const dx = e.changedTouches[0]!.clientX - tx; if (Math.abs(dx) > 40) show(at + (dx < 0 ? 1 : -1)); });
+
+    document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((b, _, all) =>
+      b.addEventListener('click', () => {
+        all.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        const f = b.dataset.filter;
+        tiles.forEach((t) => (t.hidden = f !== 'all' && t.dataset.collection !== f));
+      }),
+    );
+  }
+</script>

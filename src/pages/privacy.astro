@@ -1,0 +1,79 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Notion from '../components/Notion.astro';
+// DRAFT copy for Liz to review (see CONTENT-TODO.md item 3). Written for the Kenya Data Protection Act, 2019.
+const updated = '8 October 2026';
+const sections = [
+  { id: 'who', h: 'Who we are', body: [
+    'This website, lizlenjo.com, is the personal website of Liz Lenjo, Advocate of the High Court of Kenya. Liz Lenjo is the data controller for the personal data collected through it, under the Data Protection Act, 2019 (Kenya).',
+    'Advisory work is carried out by MyIP Legal Studio, which has its own terms and privacy notice.',
+  ] },
+  { id: 'what', h: 'What we collect, and why', list: [
+    ['Speaking and advisory enquiries', 'Your name, email address, the type of engagement and the event details you choose to share. We use them only to reply to your enquiry and to arrange the engagement. Lawful basis: your request (steps before entering a contract) and our legitimate interest in replying.'],
+    ['Liz Notes by email', 'Your email address and, if you signed up from a post, which post. We use it only to send new posts. You confirm your subscription by email, and every email has a way to unsubscribe. Lawful basis: your consent.'],
+    ['Comments', 'Your name, email address and comment. Your name and comment are published once approved. Your email address is never published. Lawful basis: your consent, given when you post.'],
+    ['Reading statistics', 'Anonymous counts of how many people read a post and how many reach the end. These counts are not linked to you. We use Cloudflare Web Analytics, which does not use cookies or track you across sites.'],
+  ] },
+  { id: 'spam', h: 'Spam protection', body: [
+    'The enquiry and comment forms use Cloudflare Turnstile to tell people from bots. Comments are also checked by an automated spam classifier running on Cloudflare’s network before Liz reviews them. No decision with legal or similarly significant effect is made automatically: every comment is reviewed by a person.',
+  ] },
+  { id: 'cookies', h: 'Cookies', body: [
+    'Public pages set no cookies. The site remembers your preferred text size for Liz Notes in your browser’s local storage; it never leaves your device. The private Workroom, used only by Liz, uses a Cloudflare Access sign-in cookie.',
+  ] },
+  { id: 'share', h: 'Who we share it with', body: [
+    'We do not sell or rent personal data. We use a small number of service providers to run the site: Cloudflare (hosting, database, storage, security and analytics) and Resend (sending emails). They process data on our instructions. Some of their servers are outside Kenya; where data leaves Kenya, we rely on the safeguards these providers offer, as the Act requires.',
+  ] },
+  { id: 'keep', h: 'How long we keep it', body: [
+    'Enquiries: up to two years after our last contact, unless an engagement follows. Newsletter: until you unsubscribe. Comments: for as long as the post is online, or until you ask us to remove yours.',
+  ] },
+  { id: 'rights', h: 'Your rights', body: [
+    'Under the Data Protection Act, 2019 you can ask to be informed about how your data is used, to access it, to correct it, to have it deleted, and to object to its use. To make a request, use the enquiry form on the home page and choose “Advisory”, or reply to any email from us. We will respond within the time the Act allows.',
+    'If you are unhappy with how we handle your data, you can complain to the Office of the Data Protection Commissioner (odpc.go.ke).',
+  ] },
+  { id: 'changes', h: 'Changes', body: ['We will update this page if anything changes, and show the date at the top.'] },
+];
+---
+<Base title="Privacy" description="How lizlenjo.com collects and uses personal data under Kenya’s Data Protection Act, 2019.">
+  <SiteHeader />
+  <main id="main" tabindex="-1" class="wrap privacy">
+    <header style="display:flex;flex-direction:column;gap:20px;max-width:760px">
+      <div class="eyebrow"><Notion name="thimble" height={44} rotate={10} /><div class="label">Care instructions — Privacy</div></div>
+      <h1 class="h1">How this site <span class="underline-chalk">handles your data.</span></h1>
+      <p class="lede">Plain English, short and specific. Last updated {updated}.</p>
+    </header>
+    <div class="privacy-grid">
+      <nav aria-label="On this page" class="care privacy-toc">
+        <div class="label-muted" style="padding-bottom:8px">Contents</div>
+        <ol>{sections.map((s) => <li><a href={`#${s.id}`}>{s.h}</a></li>)}</ol>
+      </nav>
+      <div class="privacy-body">
+        {sections.map((s) => (
+          <section id={s.id} aria-labelledby={`${s.id}-h`}>
+            <h2 id={`${s.id}-h`}>{s.h}</h2>
+            {s.body?.map((p) => <p>{p}</p>)}
+            {s.list && <dl>{s.list.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>}
+          </section>
+        ))}
+      </div>
+    </div>
+  </main>
+  <SiteFooter />
+</Base>
+<style>
+  .privacy { padding-top: clamp(56px, 8vw, 110px); padding-bottom: var(--section-y); display: flex; flex-direction: column; gap: 56px; }
+  .privacy-grid { display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 720px); gap: clamp(28px, 5vw, 72px); align-items: start; }
+  .privacy-toc { padding: 24px; }
+  .privacy-toc ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+  .privacy-body section { padding: 0 0 28px; margin-bottom: 28px; border-bottom: 1px dashed var(--faint-3); scroll-margin-top: 110px; }
+  .privacy-body h2 { margin: 0 0 12px; font-family: var(--serif); font-size: 30px; line-height: 1.15; }
+  .privacy-body p { margin: 0 0 14px; color: var(--text-2); font-size: 16px; }
+  .privacy-body dl { margin: 0; display: flex; flex-direction: column; gap: 16px; }
+  .privacy-body dt { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--cobalt); }
+  .privacy-body dd { margin: 4px 0 0; color: var(--text-2); font-size: 16px; }
+  @media (max-width: 820px) { .privacy-grid { grid-template-columns: 1fr; } }
+</style>
+<script>
+  import '../scripts/site';
+</script>
