@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /workroom
+Disallow: /api/
+
+Sitemap: https://lizlenjo.com/sitemap-index.xml
+Sitemap: https://lizlenjo.com/sitemap-notes.xml

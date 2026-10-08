@@ -13,7 +13,7 @@ const interval = 6;
             src={s.img}
             alt={s.alt}
             formats={['avif', 'webp']}
-            widths={[640, 960, 1280, ...(s.img.width >= 1920 ? [1920] : [])]}
+            widths={[480, 720, 960, 1280, ...(s.img.width >= 1920 ? [1600, 1920] : [])]}
             sizes="(min-width: 1360px) 1240px, calc(100vw - 2 * clamp(20px, 4vw, 56px))"
             loading={i === 0 ? 'eager' : 'lazy'}
             fetchpriority={i === 0 ? 'high' : 'auto'}

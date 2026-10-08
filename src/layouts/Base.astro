@@ -10,6 +10,10 @@ import '@fontsource/caveat/500.css';
 import '@fontsource/caveat/600.css';
 import '../styles/atelier.css';
 import { SITE } from '../content/site';
+import serif400 from '@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2?url';
+import serifItalic from '@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2?url';
+import manrope300 from '@fontsource/manrope/files/manrope-latin-300-normal.woff2?url';
+import mono400 from '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url';
 
 export interface Props {
   title?: string;
@@ -36,6 +40,7 @@ const ld = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{fullTitle}</title>
+{[serif400, serifItalic, manrope300, mono400].map((f) => <link rel="preload" href={f} as="font" type="font/woff2" crossorigin />)}
 <meta name="description" content={description}>
 <link rel="canonical" href={canonical}>
 {noindex && <meta name="robots" content="noindex, nofollow">}
