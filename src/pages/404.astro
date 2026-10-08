@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import Notion from '../components/Notion.astro';
+---
+<Base title="Not found" noindex>
+  <SiteHeader />
+  <main id="main" tabindex="-1" class="wrap" style="padding-top:clamp(80px,12vw,160px);padding-bottom:clamp(80px,12vw,160px);display:flex;flex-direction:column;gap:22px;align-items:flex-start">
+    <div class="eyebrow"><Notion name="scissors" height={52} rotate={-12} /><div class="label">Pattern No. 404 — Off the bolt</div></div>
+    <h1 class="h1">This page has been <span class="underline-chalk">cut from the pattern.</span></h1>
+    <p class="lede" style="max-width:520px">The link may be old, or the note may have moved. Try the home page or Liz Notes.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-ink" href="/">Home →</a><a class="btn" href="/notes">Liz Notes</a></div>
+    <span class="chalk" style="font-size:24px;transform:rotate(-3deg);display:inline-block">measure twice, cut once</span>
+  </main>
+</Base>

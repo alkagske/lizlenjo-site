@@ -1,0 +1,45 @@
+/* Design tokens: design/design_handoff_liz_lenjo_atelier/README.md § Design tokens */
+:root {
+  --ink: #14213d;
+  --cobalt: #0c6b9d;
+  --paper: #fbfaf7;
+  --grid: #ebe8f0;
+  --white: #ffffff;
+  --chalk: #c4372c;
+  --body: #1f2a44;
+  --text-2: #3a4256;
+  --text-3: #4a5268;
+  --muted: #6a7186;
+  --faint-1: #8a90a0;
+  --faint-2: #9aa1b3;
+  --faint-3: #b9bfcc;
+  --faint-4: #c9cdd8;
+  --faint-5: #d4d7e0;
+  --faint-6: #e1e3ea;
+  --on-dark-1: #d4d8e2;
+  --on-dark-2: #aab1c2;
+  --on-dark-3: #7f88a0;
+  --on-dark-4: #8fc3e0;
+  --denim: #26406b;
+  --denim-stitch: #d9902f;
+  --mat: #2f4a3f;
+  --mat-text: #cfe0d6;
+  --published: #2f7d4f;
+  --scheduled: #0c6b9d;
+  --draft: #b9b4ad;
+  --spam: #b3261e;
+
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --sans: 'Manrope', system-ui, sans-serif;
+  --hand: 'Caveat', cursive;
+
+  --pad-x: clamp(20px, 4vw, 56px);
+  --section-y: clamp(80px, 10vw, 140px);
+  --max: 1240px;
+
+  --ease: cubic-bezier(.4, 0, .2, 1);
+  --lift: cubic-bezier(.2, .7, .2, 1);
+
+  --pattern-paper: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+}

@@ -1,0 +1,64 @@
+---
+import { ENQUIRY_KINDS, SITE } from '../content/site';
+const year = new Date().getFullYear();
+---
+<footer id="enquire" class="site-footer" data-reveal-skip>
+  <div class="wrap" style="padding-top:clamp(80px,10vw,130px);padding-bottom:36px;display:flex;flex-direction:column;gap:clamp(60px,8vw,100px)">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:48px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div class="label" style="color:var(--on-dark-4)">The order book</div>
+        <h2 style="margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(36px,4.4vw,58px);line-height:1;color:var(--paper)">Invite Liz to speak, moderate <span class="it">or advise.</span></h2>
+        <p style="margin:0;font-size:14px;color:var(--on-dark-2);max-width:420px">Keynotes, panels and moderation on IP, trade and the creative economy.</p>
+      </div>
+      <div class="order-card">
+        <div data-enquiry-done hidden style="flex-direction:column;gap:10px;padding:20px 4px;text-align:center" role="status">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:.2em">ORDER RECEIVED</div>
+          <div style="font-family:var(--serif);font-size:28px;line-height:1.15">Thank you. Liz’s office will be in touch.</div>
+        </div>
+        <form data-enquiry data-turnstile action="/api/enquiry" method="post" style="display:flex;flex-direction:column;gap:14px" novalidate>
+          <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.18em;border-bottom:1px solid var(--ink);padding-bottom:12px"><span>ENQUIRY</span><span>NO. <span data-order-no>LL-{year}-0···</span></span></div>
+          <fieldset style="border:0;margin:0;padding:0">
+            <legend class="sr-only">Type of engagement</legend>
+            <div style="display:flex;gap:6px;flex-wrap:wrap" data-kinds>
+              {ENQUIRY_KINDS.map((k, i) => <button type="button" class="chip" aria-pressed={i === 0 ? 'true' : 'false'} data-kind={k}>{k}</button>)}
+            </div>
+          </fieldset>
+          <input type="hidden" name="type" value={ENQUIRY_KINDS[0]}>
+          <label class="sr-only" for="enq-name">Your name</label>
+          <input class="field" id="enq-name" name="name" required maxlength="120" autocomplete="name" placeholder="Your name">
+          <label class="sr-only" for="enq-email">Email</label>
+          <input class="field" id="enq-email" name="email" type="email" required maxlength="254" autocomplete="email" placeholder="Email">
+          <label class="sr-only" for="enq-event">Event, date and city</label>
+          <input class="field" id="enq-event" name="event" maxlength="500" placeholder="Event, date and city">
+          <input type="text" name="website" tabindex="-1" autocomplete="off" class="sr-only" aria-hidden="true">
+          <div class="ts-slot"></div>
+          <button type="submit" class="btn btn-ink" style="padding:14px;margin-top:6px">Send enquiry →</button>
+          <p class="form-msg" data-msg role="alert"></p>
+        </form>
+      </div>
+    </div>
+    <div class="footer-links">
+      <div><div class="h">SITE</div><a href="/about">About</a><a href="/notes">Liz Notes</a><a href="/lookbook">Lookbook</a><a href="/#enquire">Speaking</a></div>
+      <div><div class="h">FOLLOW</div><a href={SITE.linkedin} rel="noopener">LinkedIn ↗</a><a href={SITE.myip} rel="noopener">MyIP Legal Studio ↗</a></div>
+      <div>
+        <div class="h" id="sub-label">LIZ NOTES BY EMAIL</div>
+        <span data-sub-done hidden style="font-family:var(--serif);font-style:italic;font-size:18px;color:var(--on-dark-4)" role="status">Check your inbox to confirm. Thank you.</span>
+        <form class="inline-sub" data-subscribe data-source="home" action="/api/subscribe" method="post" aria-labelledby="sub-label">
+          <input required type="email" name="email" placeholder="Email address" autocomplete="email" aria-label="Email address">
+          <button type="submit" aria-label="Subscribe">→</button>
+        </form>
+        <p class="form-msg" data-msg role="alert"></p>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:28px;flex-wrap:wrap">
+      <div class="woven">
+        <img src="/logo-white.webp" alt="Liz Lenjo" width="70" height="64" style="height:64px;width:auto" loading="lazy">
+        <span style="font-family:var(--mono);font-size:9px;letter-spacing:.24em">MADE IN KENYA</span>
+      </div>
+      <div class="footer-meta">
+        <span>© {year} Liz Lenjo</span><span>Nairobi · <time data-clock>--:--</time> EAT</span><a href="/privacy">Privacy</a><button type="button" data-to-top>Back to top ↑</button>
+      </div>
+    </div>
+  </div>
+</footer>
+<button type="button" class="to-top" data-to-top data-to-top-float aria-label="Back to top">↑</button>

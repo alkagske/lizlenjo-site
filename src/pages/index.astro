@@ -1,0 +1,169 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Slider from '../components/Slider.astro';
+import Notion from '../components/Notion.astro';
+import { SPEC, PARTNERS, ROLES, PRACTICE, EDUCATION, AWARDS, AWARD_TILT, MEDIA, SITE } from '../content/site';
+import { personLd, legalServiceLd } from '../lib/seo';
+---
+<Base jsonLd={[personLd(), legalServiceLd()]}>
+  <SiteHeader variant="home" />
+  <main id="main" tabindex="-1">
+    <Slider />
+    <div class="wrap" style="max-width:none;padding:0 var(--pad-x)">
+      <dl class="spec" aria-label="Specification">
+        {SPEC.map((x) => <div><dt>{x.k}</dt><dd>{x.v}</dd></div>)}
+      </dl>
+    </div>
+
+    <section aria-labelledby="advocate-h" data-reveal style="position:relative;max-width:calc(var(--max) + 2 * var(--pad-x));margin:0 auto;padding:clamp(80px,11vw,150px) var(--pad-x) clamp(60px,8vw,100px);align-items:end" class="two-col home-advocate">
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <div class="eyebrow"><Notion name="scissors" height={52} rotate={-12} /><div class="label">Pattern No. 01 — The Advocate</div></div>
+        <div style="position:relative">
+          <span class="chalk chalk-bespoke" aria-hidden="true">bespoke, never off the rack ↘</span>
+          <h1 class="h1" id="advocate-h">Law, cut to measure for Africa’s <span class="underline-chalk">creative industries.</span></h1>
+        </div>
+      </div>
+      <div class="rule-left" style="display:flex;flex-direction:column;gap:18px;align-self:end">
+        <p class="lede">Liz Lenjo is an Advocate of the High Court of Kenya and the Founder and Managing Consultant of MyIP Legal Studio, a boutique advisory firm serving clients across Africa’s creative, digital, technology and energy sectors.</p>
+        <p class="lede">She chairs the Copyright Tribunal, teaches Media and Entertainment Law at Strathmore University Law School, and leads the Legal, Policy and Intellectual Property portfolio of the Kenya Fashion Council.</p>
+        <a href="/about" class="link-arrow"><span class="scissor" aria-hidden="true">✂</span>Read the full profile</a>
+      </div>
+    </section>
+
+    <section aria-label="Organisations Liz has worked with" data-reveal style="padding:0 0 clamp(70px,9vw,120px)">
+      <div class="wrap label-muted" style="padding-bottom:14px">Selvedge · worked with</div>
+      <div class="selvedge">
+        <div class="marquee">
+          {[0, 1].map((loop) => PARTNERS.map((p) => (
+            <div class="marquee-cell" aria-hidden={loop === 1 ? 'true' : undefined}><img src={p.logo} alt={loop === 1 ? '' : p.name} loading="lazy" decoding="async"></div>
+          )))}
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="roles-h" data-reveal class="wrap" style="padding-bottom:var(--section-y);display:flex;flex-direction:column;gap:44px">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow"><Notion name="spool" height={56} rotate={6} /><div class="label">Pattern No. 02 — The Offices</div></div>
+          <h2 class="h2" id="roles-h">Current roles, <span class="it">label by label.</span></h2>
+        </div>
+        <p style="margin:0;font-size:14px;color:var(--text-2);max-width:380px">The tribunal, the boardroom, the classroom and the industry bodies shaping Kenya’s creative economy.</p>
+      </div>
+      <ul class="grid-roles" role="list" style="list-style:none;margin:0;padding:0">
+        {ROLES.map((r) => (
+          <li class="care lift role">
+            <div class="t">{r.title}</div>
+            <div class="o">{r.org}</div>
+            <div class="d"></div>
+            <div class="n">{r.note}</div>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="practice-h" data-reveal class="band-white">
+      <div class="wrap" style="padding-top:var(--section-y);padding-bottom:var(--section-y);display:flex;flex-direction:column;gap:52px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:32px;align-items:end">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="eyebrow"><Notion name="thimble" height={48} rotate={10} /><div class="label">Pattern No. 03 — The Practice</div></div>
+            <h2 class="h2" id="practice-h">Six swatches of <span class="it">practice.</span></h2>
+            <span class="chalk" style="font-size:24px;transform:rotate(-2deg);transform-origin:0 50%;display:inline-block">pinned for the season’s fittings</span>
+          </div>
+          <a href={SITE.myip} class="btn practice-cta" rel="noopener">Work with MyIP Legal Studio ↗</a>
+        </div>
+        <ul class="grid-swatches" role="list" style="list-style:none;margin:0;padding:0">
+          {PRACTICE.map((p) => (
+            <li class="swatch">
+              <span class="pin" aria-hidden="true"></span>
+              <div class="cloth" style={`background-color:${p.c}`} aria-hidden="true"><span>SWATCH {p.n}</span><span>{p.c.toUpperCase()}</span></div>
+              <h3 class="st" style="margin:0;font-weight:400">{p.title}</h3>
+              <p class="sb" style="margin:0">{p.body}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="denim-h" class="denim">
+      <span class="topstitch" style="top:14px"></span><span class="topstitch" style="top:22px"></span>
+      <span class="topstitch" style="bottom:14px"></span><span class="topstitch" style="bottom:22px"></span>
+      <div class="wrap two-col" data-reveal style="position:relative;padding-top:var(--section-y);padding-bottom:var(--section-y);gap:clamp(48px,7vw,100px)">
+        <div style="display:flex;flex-direction:column;gap:26px">
+          <div class="label" style="color:var(--on-dark-4)">Pattern No. 04 — The Denim · Published scholarship</div>
+          <h2 id="denim-h" style="margin:0;font-family:var(--serif);font-weight:400;font-style:italic;font-size:clamp(32px,3.6vw,48px);line-height:1.1;text-wrap:pretty">“Inspiration versus Exploitation: Traditional Cultural Expressions at the Hem of the Fashion Industry”</h2>
+          <p style="margin:0;font-size:14px;color:#c4c9d6;max-width:460px">Her LL.M. thesis, published in the Marquette Intellectual Property Law Review and available on Westlaw and Nexis.</p>
+        </div>
+        <div class="composition">
+          <Notion name="safety-pins" height={58} rotate={18} class="pins" style="position:absolute;pointer-events:none;opacity:.95;width:auto;right:18px;top:-58px;filter:invert(1) brightness(1.8)" />
+          <div class="cap" style="padding-bottom:12px;border-bottom:1px solid var(--ink)">COMPOSITION</div>
+          {EDUCATION.map((e) => (
+            <div class="row"><div><span class="t">{e.title}</span><span class="i">{e.inst}</span></div><span class="code">{e.code}</span></div>
+          ))}
+          <div class="cap" style="padding-top:12px">MADE IN NAIROBI · TURIN · GENEVA</div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="runway-h" data-reveal class="wrap two-col" style="padding-top:var(--section-y);padding-bottom:var(--section-y);gap:clamp(36px,6vw,90px);align-items:end">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="label">Pattern No. 05 — The Runway · Speaking</div>
+        <h2 class="h2" id="runway-h">Consulting through WIPO, and on stages <span class="it">across Africa and beyond.</span></h2>
+      </div>
+      <div class="rule-left" style="display:flex;flex-direction:column;gap:20px">
+        <p class="lede">Liz has consulted for international development institutions and pan-African economic forums including CANEX by Afreximbank, GiZ and the Intra-African Trade Fair, and presents and moderates on IP, trade, creative economy governance and cross-border commerce.</p>
+        <a href="#enquire" class="btn btn-primary" style="align-self:flex-start">Invite Liz to speak →</a>
+      </div>
+    </section>
+
+    <section aria-labelledby="tags-h" data-reveal class="wrap" style="padding-bottom:var(--section-y);display:flex;flex-direction:column;gap:48px">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow"><Notion name="needle" height={26} rotate={-6} /><div class="label">Pattern No. 06 — The Tags</div></div>
+          <h2 class="h2" id="tags-h">Recognition <span class="chalk" aria-hidden="true" style="font-size:26px;display:inline-block;transform:rotate(-5deg) translateY(-14px)">hover to straighten</span></h2>
+        </div>
+        <p style="margin:0;font-family:var(--serif);font-style:italic;font-size:21px;color:var(--text-2)">Ranked in Chambers and Partners 2026, Intellectual Property</p>
+      </div>
+      <ul class="grid-tags" role="list" style="list-style:none;margin:0">
+        {AWARDS.map((a, k) => (
+          <li class="swing" style={`--tilt:${AWARD_TILT[k] ?? 0}deg`} tabindex="0">
+            <span class="string" aria-hidden="true"></span>
+            <div class="tag">
+              <span class="hole" aria-hidden="true"></span>
+              <div class="logo">{a.logo ? <img src={a.logo} alt="" loading="lazy" decoding="async"> : <span class="txt" aria-hidden="true">{a.name}</span>}</div>
+              <span class="rule" aria-hidden="true"></span>
+              <div class="nm">{a.name}</div>
+              <div class="dt">{a.detail}</div>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="media-h" data-reveal style="padding:0 0 var(--section-y)">
+      <div class="wrap" style="padding-bottom:18px;display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap">
+        <h2 class="label" id="media-h" style="margin:0;font-weight:400">Pattern No. 07 — In the media</h2>
+        <p style="margin:0;font-family:var(--serif);font-style:italic;font-size:20px;color:var(--text-2)">On IP, governance, digital innovation and the creative industries.</p>
+      </div>
+      <div class="selvedge">
+        <div class="marquee reverse">
+          {[0, 1].map((loop) => MEDIA.map((m) => (
+            <div class="marquee-cell" aria-hidden={loop === 1 ? 'true' : undefined}><img src={m.src} alt={loop === 1 ? '' : m.name} style={`max-height:${m.h}px`} loading="lazy" decoding="async"></div>
+          )))}
+        </div>
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</Base>
+
+<style>
+  .chalk-bespoke { position: absolute; right: 0; top: -34px; font-size: 26px; transform: rotate(-4deg); white-space: nowrap; }
+  .practice-cta { justify-self: end; }
+  @media (max-width: 860px) { .practice-cta { justify-self: start; } }
+  @media (max-width: 480px) { .chalk-bespoke { font-size: 21px; top: -30px; } }
+</style>
+<script>
+  import '../scripts/site';
+</script>

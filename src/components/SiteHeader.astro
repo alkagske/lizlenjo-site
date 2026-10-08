@@ -1,0 +1,22 @@
+---
+interface Props {
+  variant?: 'home' | 'notes';
+  current?: 'about' | 'notes' | 'lookbook' | null;
+}
+const { variant = 'home', current = null } = Astro.props;
+---
+<header class:list={['site-header', variant === 'notes' && 'site-header--notes']} data-header>
+  <div class="bar">
+    <nav aria-label="Primary">
+      <a href="/about" aria-current={current === 'about' ? 'page' : undefined}>About</a>
+      <a href="/notes" aria-current={current === 'notes' ? 'page' : undefined}>Liz Notes</a>
+    </nav>
+    <a href="/" class="logo" aria-label="Liz Lenjo, home"><img src="/logo-9.webp" alt="Liz Lenjo" width="202" height="184"></a>
+    <nav class="right" aria-label="Speaking">
+      {variant === 'notes'
+        ? <a href="/#enquire" class="btn btn-solid-outline">Speaking</a>
+        : <a href="/#enquire" class="btn btn-cobalt-dashed">Book Liz <span class="hide-sm">&nbsp;to speak</span></a>}
+    </nav>
+  </div>
+  <div class="tape" aria-hidden="true"><div class="tape-fill" data-tape></div></div>
+</header>

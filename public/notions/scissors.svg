@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 120" fill="none" stroke="#1a1a1a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><title>Scissors (line art placeholder)</title>
+<ellipse cx="34" cy="34" rx="24" ry="17" transform="rotate(-18 34 34)"/><ellipse cx="34" cy="34" rx="15" ry="9" transform="rotate(-18 34 34)"/>
+<ellipse cx="34" cy="86" rx="24" ry="17" transform="rotate(18 34 86)"/><ellipse cx="34" cy="86" rx="15" ry="9" transform="rotate(18 34 86)"/>
+<path d="M55 42 L108 58 L232 52 L118 64 Z"/><path d="M55 78 L108 62 L230 74 L116 58"/>
+<path d="M120 60 L222 72"/><path d="M118 60 L226 53"/><circle cx="110" cy="60" r="4"/><circle cx="110" cy="60" r="1.2" fill="#1a1a1a"/>
+<path d="M62 44 L100 56" stroke-width="1"/><path d="M62 76 L100 64" stroke-width="1"/><path d="M140 59 L210 54" stroke-width="0.8"/><path d="M140 63 L208 71" stroke-width="0.8"/>
+</svg>

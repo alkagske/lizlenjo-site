@@ -1,0 +1,63 @@
+---
+import '@fontsource/instrument-serif/400.css';
+import '@fontsource/instrument-serif/400-italic.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '@fontsource/manrope/300.css';
+import '@fontsource/manrope/400.css';
+import '@fontsource/manrope/500.css';
+import '@fontsource/caveat/500.css';
+import '@fontsource/caveat/600.css';
+import '../styles/atelier.css';
+import { SITE } from '../content/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'article' | 'profile';
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  bodyClass?: string;
+}
+
+const { title, description = SITE.description, image = '/og-default.png', imageAlt = 'Liz Lenjo, Esq.', type = 'website', noindex = false, jsonLd, bodyClass } = Astro.props;
+const fullTitle = title ? `${title} · Liz Lenjo` : 'Liz Lenjo, Esq. · Intellectual property, entertainment & fashion law';
+const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', SITE.url).href;
+const ogImage = new URL(image, SITE.url).href;
+const ld = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+---
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{fullTitle}</title>
+<meta name="description" content={description}>
+<link rel="canonical" href={canonical}>
+{noindex && <meta name="robots" content="noindex, nofollow">}
+<meta name="theme-color" content="#fbfaf7">
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" type="application/rss+xml" title="Liz Notes" href="/notes/rss.xml">
+<meta property="og:site_name" content="Liz Lenjo">
+<meta property="og:locale" content="en_GB">
+<meta property="og:type" content={type}>
+<meta property="og:title" content={title ?? 'Liz Lenjo, Esq.'}>
+<meta property="og:description" content={description}>
+<meta property="og:url" content={canonical}>
+<meta property="og:image" content={ogImage}>
+<meta property="og:image:alt" content={imageAlt}>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content={title ?? 'Liz Lenjo, Esq.'}>
+<meta name="twitter:description" content={description}>
+<meta name="twitter:image" content={ogImage}>
+<slot name="head" />
+{ld.map((x) => <script type="application/ld+json" set:html={JSON.stringify(x)} />)}
+</head>
+<body class={bodyClass}>
+<a class="skip-link" href="#main">Skip to content</a>
+<slot />
+</body>
+</html>

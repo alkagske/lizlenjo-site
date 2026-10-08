@@ -1,0 +1,103 @@
+---
+import { Picture } from 'astro:assets';
+import { SLIDES } from '../content/site';
+const pad = (n: number) => String(n).padStart(2, '0');
+const interval = 6;
+---
+<section class="slider" aria-roledescription="carousel" aria-label="Looks" data-slider data-interval={interval}>
+  <div class="slider-frame">
+    <div class="slider-stage" data-stage style={`--interval:${interval}s`}>
+      {SLIDES.map((s, i) => (
+        <div class:list={['slide', i === 0 && 'is-active']} role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${SLIDES.length}: ${s.label}`} aria-hidden={i === 0 ? 'false' : 'true'} data-slide data-label={s.label}>
+          <Picture
+            src={s.img}
+            alt={s.alt}
+            formats={['avif', 'webp']}
+            widths={[640, 960, 1280, ...(s.img.width >= 1920 ? [1920] : [])]}
+            sizes="(min-width: 1360px) 1240px, calc(100vw - 2 * clamp(20px, 4vw, 56px))"
+            loading={i === 0 ? 'eager' : 'lazy'}
+            fetchpriority={i === 0 ? 'high' : 'auto'}
+            decoding="async"
+            style={`object-position:${s.pos}`}
+          />
+        </div>
+      ))}
+      <div class="slider-progress" data-progress></div>
+    </div>
+    <span class="crop tl"></span><span class="crop tr"></span><span class="crop bl"></span><span class="crop br"></span>
+  </div>
+  <div class="slider-controls">
+    <div class="slider-look" aria-live="polite"><span aria-hidden="true">✂</span><span class="dashes" aria-hidden="true">– – – –</span><span>Look <span data-counter>01 / {pad(SLIDES.length)}</span></span><span class="name" data-name>{SLIDES[0]!.label}</span></div>
+    <div class="slider-dots">
+      {SLIDES.map((s, i) => <button type="button" aria-label={`Show look ${i + 1}: ${s.label}`} aria-current={i === 0 ? 'true' : 'false'} data-dot={i}></button>)}
+    </div>
+    <div class="slider-arrows">
+      <button type="button" class="btn btn-square" aria-label="Previous look" data-prev>←</button>
+      <button type="button" class="btn btn-square" aria-label="Next look" data-next>→</button>
+    </div>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-slider]');
+  if (root) {
+    const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
+    const dots = [...root.querySelectorAll<HTMLButtonElement>('[data-dot]')];
+    const counter = root.querySelector('[data-counter]')!;
+    const name = root.querySelector('[data-name]')!;
+    const bar = root.querySelector<HTMLElement>('[data-progress]')!;
+    const n = slides.length;
+    const ms = Number(root.dataset.interval || 6) * 1000;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let i = 0;
+    let timer = 0;
+    let paused = reduce; // no autoplay when the reader prefers reduced motion
+    const pad = (x: number) => String(x).padStart(2, '0');
+
+    const restartBar = () => {
+      bar.classList.remove('run');
+      void bar.offsetWidth;
+      if (!paused) bar.classList.add('run');
+    };
+    const show = (k: number) => {
+      i = (k + n) % n;
+      slides.forEach((s, j) => {
+        s.classList.toggle('is-active', j === i);
+        s.setAttribute('aria-hidden', String(j !== i));
+      });
+      dots.forEach((d, j) => d.setAttribute('aria-current', String(j === i)));
+      counter.textContent = `${pad(i + 1)} / ${pad(n)}`;
+      name.textContent = slides[i]!.dataset.label ?? '';
+      restartBar();
+    };
+    const start = () => {
+      clearInterval(timer);
+      if (paused) return;
+      timer = window.setInterval(() => show(i + 1), ms);
+      restartBar();
+    };
+    const step = (d: number) => { show(i + d); start(); };
+
+    root.querySelector('[data-prev]')!.addEventListener('click', () => step(-1));
+    root.querySelector('[data-next]')!.addEventListener('click', () => step(1));
+    dots.forEach((d, j) => d.addEventListener('click', () => { show(j); start(); }));
+    root.addEventListener('mouseenter', () => { paused = true; clearInterval(timer); bar.classList.remove('run'); });
+    root.addEventListener('mouseleave', () => { paused = reduce; start(); });
+    root.addEventListener('focusin', () => { paused = true; clearInterval(timer); bar.classList.remove('run'); });
+    root.addEventListener('focusout', (e) => { if (!root.contains(e.relatedTarget as Node)) { paused = reduce; start(); } });
+    let tx = 0;
+    root.addEventListener('touchstart', (e) => { tx = e.touches[0]!.clientX; }, { passive: true });
+    root.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0]!.clientX - tx;
+      if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+    });
+    addEventListener('keydown', (e) => {
+      const t = document.activeElement;
+      if (t && (/INPUT|TEXTAREA|SELECT/.test(t.tagName) || (t as HTMLElement).isContentEditable)) return;
+      if (e.key === 'ArrowRight') step(1);
+      if (e.key === 'ArrowLeft') step(-1);
+    });
+    document.addEventListener('visibilitychange', () => (document.hidden ? clearInterval(timer) : start()));
+    start();
+  }
+</script>

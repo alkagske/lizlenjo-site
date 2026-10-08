@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 120" fill="none" stroke="#1a1a1a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><title>Safety pins (line art placeholder)</title>
+<g transform="rotate(-20 60 60)"><path d="M20 70 L110 70 C122 70 122 54 110 54 L30 54"/><circle cx="16" cy="62" r="9"/><path d="M110 54 H124 V70 H110" stroke-width="2"/><path d="M24 70 L30 54"/></g>
+<g transform="rotate(14 70 80) translate(10 24)"><path d="M20 70 L100 70 C110 70 110 56 100 56 L28 56"/><circle cx="17" cy="63" r="8"/><path d="M100 56 H113 V70 H100" stroke-width="2"/><path d="M22 70 L28 56"/></g>
+</svg>

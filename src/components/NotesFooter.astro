@@ -1,0 +1,23 @@
+---
+import { SITE } from '../content/site';
+interface Props { postId?: number }
+const { postId } = Astro.props;
+const year = new Date().getFullYear();
+---
+<footer class="site-footer" style="color:var(--on-dark-2);margin-top:clamp(72px,9vw,120px)">
+  <div style="max-width:1200px;margin:0 auto;padding:56px var(--pad-x);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:40px;align-items:end">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <h2 id="notes-sub" style="margin:0;font-family:var(--serif);font-weight:400;font-size:30px;color:var(--paper)">New posts, by email.</h2>
+      <div data-sub-done hidden style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--on-dark-4)" role="status">Thank you. Check your inbox to confirm.</div>
+      <form data-subscribe data-source={postId ? 'post' : 'notes'} data-post-id={postId} action="/api/subscribe" method="post" aria-labelledby="notes-sub" style="display:flex;border-bottom:1px solid #5a6684;max-width:420px">
+        <input required type="email" name="email" placeholder="Email address" autocomplete="email" aria-label="Email address" style="all:unset;flex:1;padding:12px 0;font-size:14px;color:var(--paper);min-width:0">
+        <button type="submit" style="all:unset;font-family:var(--mono);cursor:pointer;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper);padding:12px 0 12px 16px">Subscribe →</button>
+      </form>
+      <p class="form-msg" data-msg role="alert"></p>
+    </div>
+    <div style="font-family:var(--mono);display:flex;justify-content:flex-end;align-items:center;gap:28px;flex-wrap:wrap;font-size:11px;letter-spacing:.14em;text-transform:uppercase">
+      <img src="/logo-white.webp" alt="Liz Lenjo" width="53" height="48" style="height:48px;width:auto" loading="lazy">
+      <a href={SITE.linkedin} rel="noopener">LinkedIn</a><a href={SITE.myip} rel="noopener">MyIP Legal Studio</a><a href="/privacy">Privacy</a><span style="color:var(--muted)">© {year}</span>
+    </div>
+  </div>
+</footer>

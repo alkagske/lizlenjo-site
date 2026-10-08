@@ -1,0 +1,12 @@
+---
+/** Vintage line-art notions (Pearson Scott Foresman, public domain), self-hosted in /public/notions. */
+interface Props {
+  name: 'scissors' | 'spool' | 'thimble' | 'needle' | 'safety-pins';
+  height: number;
+  rotate?: number;
+  class?: string;
+  style?: string;
+}
+const { name, height, rotate = 0, class: cls = 'notion', style = '' } = Astro.props;
+---
+<img src={`/notions/${name}.svg`} alt="" aria-hidden="true" loading="lazy" decoding="async" class={cls} style={`height:${height}px;transform:rotate(${rotate}deg);${style}`}>
