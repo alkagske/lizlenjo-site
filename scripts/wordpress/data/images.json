@@ -1,0 +1,390 @@
+{
+ "note": "Images used by the imported posts. Downloaded by .github/workflows/wordpress-images.yml into public/.",
+ "images": [
+  {
+   "key": "wp-content/uploads/2011/02/turntables.jpg.scaled500.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2011/02/turntables.jpg.scaled500.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2013/01/2013-01-14-20.02.41.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2013/01/2013-01-14-20.02.41.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2013/01/As-famous-as-Beyonce.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2013/01/As-famous-as-Beyonce.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2013/01/Beyonce-Pepsi-Endorsment.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2013/01/Beyonce-Pepsi-Endorsment.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2013/04/sliced-bread.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2013/04/sliced-bread.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2013/08/Handshake.gif",
+   "url": "https://lizlenjo.com/wp-content/uploads/2013/08/Handshake.gif"
+  },
+  {
+   "key": "wp-content/uploads/2013/08/Jim-Iyke-and-myself.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2013/08/Jim-Iyke-and-myself.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2013/09/20130911_213738-300x225.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2013/09/20130911_213738-300x225.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2013/09/20130911_220027-300x225.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2013/09/20130911_220027-300x225.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2013/09/20130911_220134-300x225.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2013/09/20130911_220134-300x225.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2013/09/crossed-fingers-at-handshake.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2013/09/crossed-fingers-at-handshake.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2013/10/Entertainment-and-Money.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2013/10/Entertainment-and-Money.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2013/10/GreedyPig.gif",
+   "url": "https://lizlenjo.com/wp-content/uploads/2013/10/GreedyPig.gif"
+  },
+  {
+   "key": "wp-content/uploads/2013/10/mixtape.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2013/10/mixtape.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2013/11/20131114_085639-300x225.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2013/11/20131114_085639-300x225.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2013/11/20131114_085639.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2013/11/20131114_085639.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2014/01/Ignorance-vs.-Knowledge.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2014/01/Ignorance-vs.-Knowledge.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2014/01/banned-stamp.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2014/01/banned-stamp.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2014/01/enforcement.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2014/01/enforcement.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2014/01/ignorance-is-bliss.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2014/01/ignorance-is-bliss.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2014/02/Nation-compe1.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2014/02/Nation-compe1.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2014/02/nation-competition-poster2.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2014/02/nation-competition-poster2.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2014/03/1798802_10152025651422569_1416715216_n.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2014/03/1798802_10152025651422569_1416715216_n.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2014/03/20140305_110354-300x225.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2014/03/20140305_110354-300x225.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2014/03/20140305_110354.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2014/03/20140305_110354.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2014/03/BAKE-Logo.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2014/03/BAKE-Logo.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2014/03/victory.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2014/03/victory.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2014/04/Kikao-Poster.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2014/04/Kikao-Poster.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2014/04/Oscar-Statuette.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2014/04/Oscar-Statuette.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2014/07/IMG_2011-300x225.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2014/07/IMG_2011-300x225.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2014/10/Hadithi-Poster-2.png",
+   "url": "https://lizlenjo.com/wp-content/uploads/2014/10/Hadithi-Poster-2.png"
+  },
+  {
+   "key": "wp-content/uploads/2015/02/Cashcow1.png",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/02/Cashcow1.png"
+  },
+  {
+   "key": "wp-content/uploads/2015/02/Milkingcow.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/02/Milkingcow.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/02/Opportunity-blog-pic.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/02/Opportunity-blog-pic.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/03/11019417_10152846352001748_6969576020946494878_n.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/03/11019417_10152846352001748_6969576020946494878_n.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/03/559101_471134412958890_121346314_n.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/03/559101_471134412958890_121346314_n.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/03/Money-smart.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/03/Money-smart.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/04/10928181_1393571560966322_3069403669772254287_o.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/04/10928181_1393571560966322_3069403669772254287_o.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/04/11188429_1001591783199435_8127838160263476972_n.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/04/11188429_1001591783199435_8127838160263476972_n.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/04/IMG_2582-300x225.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/04/IMG_2582-300x225.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/04/IMG_2582.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/04/IMG_2582.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/04/WIPD15-1.png",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/04/WIPD15-1.png"
+  },
+  {
+   "key": "wp-content/uploads/2015/04/image.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/04/image.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/05/images.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/05/images.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/05/make-money-12.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/05/make-money-12.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/05/social-media-apps.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/05/social-media-apps.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/05/the-future-of-social-media-marketing-2013.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/05/the-future-of-social-media-marketing-2013.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/08/DSCN0017-300x225.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/08/DSCN0017-300x225.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/08/DSCN0017.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/08/DSCN0017.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/08/farmer.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/08/farmer.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/08/gmo-debate.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/08/gmo-debate.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/09/craftafrica.png",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/09/craftafrica.png"
+  },
+  {
+   "key": "wp-content/uploads/2015/12/band-984164_960_720.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/12/band-984164_960_720.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/12/iFreeKe1-2.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/12/iFreeKe1-2.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/12/microphone-1003559_960_720.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/12/microphone-1003559_960_720.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2015/12/music-studio-hd-wallpapers.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2015/12/music-studio-hd-wallpapers.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2016/01/Elani.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2016/01/Elani.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2016/01/IMG-20160115-WA0009.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2016/01/IMG-20160115-WA0009.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2016/07/13700156_522836797913357_3155490418510557573_n.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2016/07/13700156_522836797913357_3155490418510557573_n.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2016/07/maxresdefault.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2016/07/maxresdefault.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2016/10/DRAFT-BILL-KFCB-21-7-Draft-10.pdf",
+   "url": "https://lizlenjo.com/wp-content/uploads/2016/10/DRAFT-BILL-KFCB-21-7-Draft-10.pdf"
+  },
+  {
+   "key": "wp-content/uploads/2016/10/devilKFCB.png",
+   "url": "https://lizlenjo.com/wp-content/uploads/2016/10/devilKFCB.png"
+  },
+  {
+   "key": "wp-content/uploads/2017/03/13412153_1645970729059736_1728415738365767502_o-200x300.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2017/03/13412153_1645970729059736_1728415738365767502_o-200x300.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2017/03/IMG-20170215-WA0001.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2017/03/IMG-20170215-WA0001.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2017/03/books-1.png",
+   "url": "https://lizlenjo.com/wp-content/uploads/2017/03/books-1.png"
+  },
+  {
+   "key": "wp-content/uploads/2017/05/GK7_7566-scaled.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2017/05/GK7_7566-scaled.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2018/11/10136693_fpx.jpeg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2018/11/10136693_fpx.jpeg"
+  },
+  {
+   "key": "wp-content/uploads/2019/02/51518527_2401253939903313_3964777597627269120_o.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2019/02/51518527_2401253939903313_3964777597627269120_o.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2019/02/horses.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2019/02/horses.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2020/04/20200414_075619_0000-1024x1024.png",
+   "url": "https://lizlenjo.com/wp-content/uploads/2020/04/20200414_075619_0000-1024x1024.png"
+  },
+  {
+   "key": "wp-content/uploads/2020/04/fashion_getty.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2020/04/fashion_getty.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2021/04/Photo-from-Liz-Lenjo.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2021/04/Photo-from-Liz-Lenjo.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2021/08/Screen-Shot-2021-08-20-at-4.34.06-PM.png",
+   "url": "https://lizlenjo.com/wp-content/uploads/2021/08/Screen-Shot-2021-08-20-at-4.34.06-PM.png"
+  },
+  {
+   "key": "wp-content/uploads/2021/08/kelli-tungay-2LJ4rqK2qfU-unsplash-1.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2021/08/kelli-tungay-2LJ4rqK2qfU-unsplash-1.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2021/09/New-Business-Models-for-Financing-the-Creative-Sector-Research.pdf",
+   "url": "https://lizlenjo.com/wp-content/uploads/2021/09/New-Business-Models-for-Financing-the-Creative-Sector-Research.pdf"
+  },
+  {
+   "key": "wp-content/uploads/2021/10/IMG-20211014-WA0008.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2021/10/IMG-20211014-WA0008.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2021/10/IMG-20211014-WA0016.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2021/10/IMG-20211014-WA0016.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2021/12/Canex-PR-fashionpresser.png",
+   "url": "https://lizlenjo.com/wp-content/uploads/2021/12/Canex-PR-fashionpresser.png"
+  },
+  {
+   "key": "wp-content/uploads/2021/12/Screen-Shot-2021-12-17-at-1.29.39-PM.png",
+   "url": "https://lizlenjo.com/wp-content/uploads/2021/12/Screen-Shot-2021-12-17-at-1.29.39-PM.png"
+  },
+  {
+   "key": "wp-content/uploads/2021/12/Screen-Shot-2021-12-17-at-12.49.05-PM.png",
+   "url": "https://lizlenjo.com/wp-content/uploads/2021/12/Screen-Shot-2021-12-17-at-12.49.05-PM.png"
+  },
+  {
+   "key": "wp-content/uploads/2021/12/Screen-Shot-2021-12-17-at-2.19.33-PM.png",
+   "url": "https://lizlenjo.com/wp-content/uploads/2021/12/Screen-Shot-2021-12-17-at-2.19.33-PM.png"
+  },
+  {
+   "key": "wp-content/uploads/2021/12/canex.jpeg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2021/12/canex.jpeg"
+  },
+  {
+   "key": "wp-content/uploads/2021/12/canex3.jpeg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2021/12/canex3.jpeg"
+  },
+  {
+   "key": "wp-content/uploads/2021/12/canfash1.jpeg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2021/12/canfash1.jpeg"
+  },
+  {
+   "key": "wp-content/uploads/2022/01/20220112_151909.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2022/01/20220112_151909.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2023/05/Liz-and-CJ-scaled-e1685104958487.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2023/05/Liz-and-CJ-scaled-e1685104958487.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2023/05/Liz-and-KJ-edited.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2023/05/Liz-and-KJ-edited.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2023/09/IMG-20230926-WA0038.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2023/09/IMG-20230926-WA0038.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2023/09/IMG-20230926-WA0041.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2023/09/IMG-20230926-WA0041.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2023/10/20230621_085947-1-768x1024.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2023/10/20230621_085947-1-768x1024.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2023/10/20231004_124449-1-scaled.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2023/10/20231004_124449-1-scaled.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2023/10/20231004_141110-scaled-e1696419554280.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2023/10/20231004_141110-scaled-e1696419554280.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2024/08/DALL·E-2024-08-21-16.39.25-Create-an-image-of-a-confused-creative-artist-of-African-descent-sitting-at-a-cluttered-desk-filled-with-papers-books-and-legal-documents.-The-artis.webp",
+   "url": "https://lizlenjo.com/wp-content/uploads/2024/08/DALL%C2%B7E-2024-08-21-16.39.25-Create-an-image-of-a-confused-creative-artist-of-African-descent-sitting-at-a-cluttered-desk-filled-with-papers-books-and-legal-documents.-The-artis.webp"
+  },
+  {
+   "key": "wp-content/uploads/2025/02/counterfeit-cosmetics-1.jpg",
+   "url": "https://lizlenjo.com/wp-content/uploads/2025/02/counterfeit-cosmetics-1.jpg"
+  },
+  {
+   "key": "wp-content/uploads/2025/02/gucci.webp",
+   "url": "https://lizlenjo.com/wp-content/uploads/2025/02/gucci.webp"
+  },
+  {
+   "key": "wp-content/uploads/2026/04/Colorful-fabric-and-sewing-accessories-arrangement.png",
+   "url": "https://lizlenjo.com/wp-content/uploads/2026/04/Colorful-fabric-and-sewing-accessories-arrangement.png"
+  }
+ ],
+ "external": []
+}

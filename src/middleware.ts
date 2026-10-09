@@ -1,6 +1,9 @@
 import { defineMiddleware } from 'astro:middleware';
 import { devBypassAllowed, isProtectedPath, verifyAccessJwt } from './lib/access';
 import { sameOrigin } from './lib/http';
+import wpRedirects from './content/wp-redirects.json';
+
+const WP: Record<string, string> = wpRedirects;
 
 /**
  * Runs for on-demand routes only (prerendered pages are plain files).
@@ -13,6 +16,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (url.hostname.startsWith('www.')) {
     return context.redirect(`${url.protocol}//${url.hostname.slice(4)}${url.pathname}${url.search}`, 301);
   }
+
+  // Old WordPress URLs (posts were at /<slug>/, plus category, tag and date archives).
+  const legacy = legacyRedirect(url.pathname);
+  if (legacy) return context.redirect(legacy, 301);
 
   if (isProtectedPath(url.pathname)) {
     if (!['GET', 'HEAD'].includes(context.request.method) && !sameOrigin(context.request)) {
@@ -55,3 +62,20 @@ export const onRequest = defineMiddleware(async (context, next) => {
   }
   return res;
 });
+
+/** Where an old WordPress address should go now, or null. */
+export function legacyRedirect(pathname: string): string | null {
+  let p: string;
+  try {
+    p = decodeURIComponent(pathname).toLowerCase().replace(/\/+$/, '') || '/';
+  } catch {
+    return null;
+  }
+  if (WP[p]) return WP[p]!;
+  if (/^\/(category|tag|author)\/./.test(p) || /^\/\d{4}(\/\d{2}){0,2}$/.test(p) || p === '/page' || /^\/page\/\d+$/.test(p)) return '/notes';
+  if (/^\/[a-z0-9-]+\/(feed|amp)$/.test(p)) {
+    const base = WP[p.replace(/\/(feed|amp)$/, '')];
+    if (base) return base;
+  }
+  return null;
+}

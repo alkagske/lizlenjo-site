@@ -3,6 +3,7 @@ import { Node, mergeAttributes } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
+import { mediaUrl } from '../../lib/media';
 
 /** Chalk aside in the margin. Attaches to the block before it when rendered. kind "cite" = case citation. */
 export const MarginNote = Node.create({
@@ -53,7 +54,7 @@ export const Figure = Node.create({
       alt.placeholder = 'Describe the image for screen readers (alt text)';
       const paint = () => {
         media.innerHTML = '';
-        const src = current.attrs.key ? `/media/${current.attrs.key}` : current.attrs.src;
+        const src = current.attrs.key ? mediaUrl(current.attrs.key) : current.attrs.src;
         if (src) {
           const img = document.createElement('img');
           img.src = src;

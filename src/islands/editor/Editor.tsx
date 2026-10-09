@@ -5,6 +5,7 @@ import { extensions } from './schema';
 import { renderDoc, type TNode } from '../../lib/tiptap';
 import { readMinutes } from '../../lib/readtime';
 import { slugify } from '../../lib/slug';
+import { mediaUrl } from '../../lib/media';
 
 export interface EditorPost {
   id: number;
@@ -261,9 +262,9 @@ export default function Editor({ post, categories, series: initialSeries }: Prop
   };
 
   const previewSlug = slug || slugify(title || 'untitled');
-  const preview = useMemo(() => (view === 'write' ? null : renderDoc(doc, { mediaUrl: (k) => `/media/${k}` })), [doc, view]);
+  const preview = useMemo(() => (view === 'write' ? null : renderDoc(doc, { mediaUrl: (k) => mediaUrl(k) })), [doc, view]);
   const read = `${readMinutes(words)} min`;
-  const coverSrc = cover.key ? `/media/${cover.key}` : null;
+  const coverSrc = cover.key ? mediaUrl(cover.key) : null;
   const items = slash ? slashItems(slash.q) : [];
 
   return (

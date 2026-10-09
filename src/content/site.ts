@@ -103,7 +103,7 @@ export const MEDIA = [
   { name: 'Sunday Nation', src: '/media/sunday-nation.jpeg', h: 64 },
 ];
 
-export const CATEGORIES = ['Copyright', 'Fashion law', 'Entertainment', 'Governance', 'Trademarks'] as const;
+export const CATEGORIES = ['Copyright', 'Trademarks', 'Entertainment', 'Fashion law', 'Governance', 'Life & Times'] as const;
 
 export const ENQUIRY_KINDS = ['Keynote', 'Panel', 'Moderation', 'Advisory'] as const;
 

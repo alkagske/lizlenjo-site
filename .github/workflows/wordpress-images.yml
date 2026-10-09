@@ -1,0 +1,44 @@
+name: Copy images from the old WordPress site
+# Must run BEFORE lizlenjo.com is pointed at Cloudflare (afterwards the old site no longer answers).
+# 1. Downloads the images used by Liz's imported posts into public/wp-content/uploads/ and commits them.
+# 2. Saves a full backup of every WordPress upload (originals) as a downloadable artifact for 90 days.
+on:
+  workflow_dispatch:
+  push:
+    paths: ['scripts/wordpress/data/images.json', 'scripts/wordpress/fetch-images.mjs', '.github/workflows/wordpress-images.yml']
+
+permissions:
+  contents: write
+
+concurrency: wordpress-images
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Images used by the posts
+        run: node scripts/wordpress/fetch-images.mjs
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/wp-content scripts/wordpress/data/images-report.json
+          git diff --cached --quiet && echo "No new images" && exit 0
+          git commit -m "Import images from the old WordPress site"
+          git pull --rebase
+          git push
+      - name: Full backup of every WordPress upload
+        run: node scripts/wordpress/fetch-images.mjs --all wordpress-backup || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wordpress-uploads-backup
+          path: wordpress-backup/
+          retention-days: 90
+          if-no-files-found: warn

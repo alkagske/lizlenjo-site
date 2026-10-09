@@ -11,7 +11,9 @@ export function mediaUrl(key: string, width?: number, transforms = false): strin
     const w = LOOKBOOK_WIDTHS.find((x) => x >= (width ?? 960)) ?? 1600;
     return `/lookbook/${name}-${w}.webp`;
   }
-  const path = `/media/${key.split('/').map(encodeURIComponent).join('/')}`;
+  // Images imported from the old WordPress site are static files at their original URLs.
+  const encoded = key.split('/').map(encodeURIComponent).join('/');
+  const path = key.startsWith('wp-content/') ? `/${encoded}` : `/media/${encoded}`;
   if (!transforms || !width) return path;
   return `/cdn-cgi/image/width=${width},quality=82,format=auto,fit=scale-down${path}`;
 }
