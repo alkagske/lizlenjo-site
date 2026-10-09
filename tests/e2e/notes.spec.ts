@@ -4,19 +4,31 @@ import { expect, test } from '@playwright/test';
 test('Notes index: search, "/" shortcut, categories, archive', async ({ page }) => {
   await page.goto('/notes');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Notes on entertainment');
-  await expect(page.locator('.count')).toHaveText(/^\d+ notes$/);
+  const count = page.locator('.count').first();
+  await expect(count).toHaveText(/^\d+ notes?$/);
+  const total = Number((await count.textContent())!.split(' ')[0]);
+  expect(total).toBeGreaterThanOrEqual(60); // imported WordPress archive
   await page.locator('body').press('/');
   await expect(page.getByLabel('Search Liz Notes')).toBeFocused();
-  await page.keyboard.type('customs'); // body text only
-  await expect(page.locator('.count')).toHaveText('1 note');
+  await page.keyboard.type('Swakopmund'); // appears only in a sample post's margin note (body text)
+  await expect(count).toHaveText('1 note');
   await page.getByRole('button', { name: 'Clear ×' }).click();
   await page.getByRole('button', { name: 'Fashion law' }).click();
-  await page.getByRole('button', { name: 'Copyright' }).click();
-  await expect(page.locator('.count')).toHaveText('3 notes');
+  const fashion = Number((await count.textContent())!.split(' ')[0]);
+  expect(fashion).toBeGreaterThan(0);
+  expect(fashion).toBeLessThan(total);
   await page.getByRole('button', { name: 'Archive' }).click();
-  await expect(page.locator('.archive-year')).toHaveCount(2);
-  await page.getByLabel('Search Liz Notes').fill('zzzz');
+  expect(await page.locator('.archive-year').count()).toBeGreaterThanOrEqual(2);
+  await page.getByLabel('Search Liz Notes').fill('zzzzqqq');
   await expect(page.getByText('Nothing matches that search yet.')).toBeVisible();
+});
+
+test('Imported WordPress post renders with its comments, and the old URL redirects', async ({ page }) => {
+  const res = await page.goto('/realising-the-value-in-entertainment/');
+  expect(res?.url()).toMatch(/\/notes\/realising-the-value-in-entertainment$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Realising the Value in Entertainment');
+  await expect(page.locator('.body figure figcaption')).toHaveText('Christopher Grey and I');
+  await expect(page.locator('.meta').filter({ hasText: '2013' }).first()).toBeVisible();
 });
 
 test('Article: reading tools, series, related, comment', async ({ page }) => {

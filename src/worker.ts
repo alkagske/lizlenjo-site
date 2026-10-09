@@ -7,12 +7,17 @@ import { App } from 'astro/app';
 import { handle } from '@astrojs/cloudflare/handler';
 import { publishDue } from './lib/db';
 import { nowIso } from './lib/format';
+import { legacyRedirect } from './lib/redirects';
 
 export function createExports(manifest: SSRManifest) {
   const app = new App(manifest);
   return {
     default: {
       async fetch(request, env, ctx) {
+        // Old WordPress addresses match no page, so Astro's middleware never sees them. Redirect here first.
+        const url = new URL(request.url);
+        const to = legacyRedirect(url.pathname);
+        if (to) return Response.redirect(new URL(to, url).toString(), 301);
         // @ts-expect-error: the adapter's handler accepts the Worker's env and context
         return handle(manifest, app, request, env, ctx);
       },

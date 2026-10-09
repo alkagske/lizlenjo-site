@@ -43,6 +43,10 @@ The build was done on a branch called **`main-wy8juq`**. Cloudflare will deploy 
 2. GitHub shows a yellow bar: "main-wy8juq had recent pushes". Click **Compare & pull request**. (If there is no bar: click **Pull requests** → **New pull request**, set *base* to `main` and *compare* to `main-wy8juq`.)
 3. Click **Create pull request**, wait for the green tick ("All checks have passed"), then click **Merge pull request** → **Confirm merge**.
 
+### Before Step 1: the WordPress content is already copied ✅
+
+Liz's 69 posts, 169 comments and their images were copied from the old WordPress site on 9 October 2026 (see [Importing from WordPress](#importing-from-wordpress)). A full backup of all 689 WordPress uploads is stored as a GitHub Actions artifact until 7 January 2027. Once the nameservers change, the old WordPress site stops answering, so do not run the import again after Step 1.
+
 ### Step 1. Add lizlenjo.com to Cloudflare
 
 1. Sign in at <https://dash.cloudflare.com>.
@@ -222,6 +226,20 @@ Nothing secret is in the repository. `wrangler.jsonc` holds only bindings and `S
 | `DEV_ACCESS_BYPASS` | `.dev.vars` only | no | `1` opens the Workroom on localhost only |
 
 Security notes: the Workroom and `/api/admin/*` are protected twice: by Cloudflare Access at the edge, and by `src/middleware.ts`, which verifies the Access JWT signature, audience, issuer and expiry (and fails closed if Access is not configured). Admin write requests must also come from the same origin.
+
+## Importing from WordPress
+
+The old site's posts were imported once, from a WordPress export (Tools → Export) taken on 7 October 2026.
+
+```sh
+node scripts/wordpress/import.mjs extract path/to/export.xml   # → scripts/wordpress/data/wordpress.json (no emails or IPs)
+node scripts/wordpress/import.mjs build                        # → migrations/0003_wordpress_import.sql, src/content/wp-redirects.json, images.json
+```
+
+- Images used by the posts were downloaded by the **"Copy images from the old WordPress site"** GitHub Action into `public/wp-content/uploads/`, so the old image addresses still work.
+- The same run saved every WordPress upload (689 files, 95 MB) as the artifact `wordpress-uploads-backup`. Download it from **GitHub → Actions → Copy images from the old WordPress site → the latest run → Artifacts** before 7 January 2027 and keep it somewhere safe.
+- Old addresses redirect permanently: `/<post-slug>/` → `/notes/<post-slug>`, `/about-liz/` → `/about`, `/blog/`, categories, tags and date archives → `/notes`, `/feed/` → `/notes/rss.xml` (`src/lib/redirects.ts`, applied in `src/worker.ts`).
+- The raw export file is **not** in the repository because it contains commenters' email addresses.
 
 ## Tests and CI
 

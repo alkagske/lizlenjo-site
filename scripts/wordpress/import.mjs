@@ -218,7 +218,8 @@ function convert(html, ctx) {
       flush();
       if (tag === 'p' || tag === 'center') { emitInline(inline(n)); flush(); }
       else if (/^h[1-6]$/.test(tag)) {
-        const content = trimInline(inline(n).filter((x) => x.type !== '__img'));
+        // Headings are already styled; drop bold/italic inside them.
+        const content = trimInline(inline(n).filter((x) => x.type !== '__img').map((x) => (x.type === 'text' && x.marks ? { ...x, marks: x.marks.filter((m) => m.type === 'link') } : x)).map((x) => (x.marks && !x.marks.length ? { type: 'text', text: x.text } : x)));
         if (content.length) blocks.push({ type: 'heading', attrs: { level: Number(tag[1]) <= 2 ? 2 : 3 }, content });
       } else if (tag === 'blockquote') {
         const paras = [];
@@ -253,6 +254,8 @@ function convert(html, ctx) {
   }
   walk(root);
   flush();
+  // Many posts use only level-3 headings; promote them so they appear in the article's contents list.
+  if (!blocks.some((b) => b.type === 'heading' && b.attrs.level === 2)) blocks.forEach((b) => { if (b.type === 'heading') b.attrs.level = 2; });
   // Drop leading/trailing empties and collapse runs of figures with identical keys.
   return { type: 'doc', content: blocks.length ? blocks.filter((b, i, a) => !(b.type === 'figure' && a[i - 1]?.type === 'figure' && a[i - 1].attrs.key && a[i - 1].attrs.key === b.attrs.key)) : [{ type: 'paragraph' }] };
 }
