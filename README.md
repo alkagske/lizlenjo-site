@@ -142,6 +142,26 @@ Left menu → **Analytics & logs** → **Web analytics** → **Add a site** → 
 3. In the footer, subscribe with your own email. A confirmation email should arrive.
 4. Open `https://lizlenjo.com/notes`: Liz's imported posts should be listed. Then open an old address, for example `https://lizlenjo.com/branding-suicide/`, and check it lands on the same post under `/notes/`.
 
+### Optional: Google Photos button in the Workroom
+
+This lets Liz click **Workroom → Lookbook → Add from Google Photos**, pick photos (including from her albums) in Google's own window, and have them copied into the Lookbook. It needs a free Google Cloud project, set up once (about 15 minutes).
+
+1. Go to <https://console.cloud.google.com/> and sign in with the Google account you want to own this (yours or Liz's).
+2. Top bar → project picker → **New project** → name `lizlenjo-site` → **Create**. Make sure it is selected.
+3. Search bar → type **Photos Picker API** → open it → **Enable**.
+4. Left menu → **Google Auth Platform** (or **APIs & Services → OAuth consent screen**) → **Get started**:
+   - App name `Liz Lenjo Workroom`, user support email: yours. **Audience: External.** Contact email: yours. Agree and **Create**.
+   - **Data access** → **Add or remove scopes** → filter for `photospicker` → tick `.../auth/photospicker.mediaitems.readonly` → **Update** → **Save**.
+   - **Audience** → **Test users** → **Add users** → Liz's Google email (and yours) → **Save**. (Leaving the app in "Testing" is fine: only these people can use it.)
+5. **Clients** (or **Credentials → Create credentials → OAuth client ID**) → **Create client** → Application type **Web application** → name `Workroom`.
+   - **Authorised redirect URIs** → **Add URI**: `https://lizlenjo.com/api/admin/google/callback`
+   - Add a second one for testing before the domain moves: `https://lizlenjo-site.<your-name>.workers.dev/api/admin/google/callback`
+   - **Create**. 📋 Copy the **Client ID** and **Client secret**.
+6. Cloudflare → **Workers & Pages** → **lizlenjo-site** → **Settings** → **Variables and Secrets** → add two **Secrets**: `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` → **Deploy**.
+7. Test: Workroom → Lookbook → pick a collection in the drop-down → **Add from Google Photos**. The first time, Google asks Liz to sign in and allow "View the photos you select". Choose photos, click **Done**, and they appear in the list, ready for captions.
+
+Notes: Google only lets the site see the photos Liz picks, never her whole library. Photos are copied (up to 2400 px) into the site's own storage, so deleting them from Google Photos later does not affect the Lookbook. Videos are skipped.
+
 ### Optional extras
 
 - **Faster images for uploads:** domain `lizlenjo.com` → **Images** → **Transformations** → **Enable for zone**. Then add a plain variable `IMAGE_TRANSFORMS` = `on` in **Variables and Secrets**.
@@ -224,6 +244,7 @@ Nothing secret is in the repository. `wrangler.jsonc` holds only bindings and `S
 | `RESEND_API_KEY` | secret | yes | If unset, no emails are sent; enquiries are still saved in the database and subscribers are stored as confirmed |
 | `ENQUIRY_TO` | secret | yes | Where speaking enquiries are emailed |
 | `MAIL_FROM` | secret/var | no | Sender, default `Liz Lenjo <notes@lizlenjo.com>` |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | secret | no | Google Photos button in Workroom → Lookbook (see "Optional: Google Photos button") |
 | `IMAGE_TRANSFORMS` | var | no | `on` once Cloudflare image transformations are enabled |
 | `DEV_ACCESS_BYPASS` | `.dev.vars` only | no | `1` opens the Workroom on localhost only |
 

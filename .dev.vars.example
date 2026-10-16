@@ -15,6 +15,10 @@ ACCESS_TEAM_DOMAIN=
 ACCESS_AUD=
 ADMIN_EMAILS=
 
+# Google Photos (Workroom → Lookbook → "Add from Google Photos"). See README → Google Photos.
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
 # Optional
 MAIL_FROM=Liz Lenjo <notes@lizlenjo.com>
 # "on" once Cloudflare Images transformations are enabled on the lizlenjo.com zone.

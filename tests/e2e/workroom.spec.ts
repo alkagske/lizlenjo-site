@@ -88,3 +88,12 @@ test('admin API rejects cross-site writes', async ({ request }) => {
   const res = await request.post('/api/admin/posts', { headers: { origin: 'https://evil.example' }, data: {} });
   expect(res.status()).toBe(403);
 });
+
+test('Google Photos button explains when it is not set up yet', async ({ page }) => {
+  await page.goto('/workroom/lookbook');
+  const popup = page.waitForEvent('popup').catch(() => null);
+  await page.getByRole('button', { name: 'Add from Google Photos' }).click();
+  await expect(page.getByRole('status').filter({ hasText: 'Google Photos is not set up yet' })).toBeVisible();
+  const w = await popup;
+  if (w) await expect.poll(() => w.isClosed()).toBe(true);
+});
