@@ -13,6 +13,7 @@ export const PUT: APIRoute = async ({ params, locals, request }) => {
   if (typeof b.caption === 'string') { sets.push('caption = ?'); vals.push(b.caption.slice(0, 200)); }
   if (typeof b.alt === 'string') { sets.push('alt = ?'); vals.push(b.alt.slice(0, 300)); }
   if ((LOOKBOOK_COLLECTIONS as readonly string[]).includes(String(b.collection))) { sets.push('collection = ?'); vals.push(b.collection); }
+  if (['auto', 'tall', 'portrait', 'square', 'wide'].includes(String(b.shape))) { sets.push('shape = ?'); vals.push(b.shape); }
   if (typeof b.published === 'boolean') { sets.push('published = ?'); vals.push(b.published ? 1 : 0); }
   if (typeof b.object_position === 'string' && /^\d{1,3}% \d{1,3}%$/.test(b.object_position)) { sets.push('object_position = ?'); vals.push(b.object_position); }
   if (!sets.length) return bad('Nothing to update');

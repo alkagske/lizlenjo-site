@@ -1,7 +1,8 @@
 /** Workroom → Lookbook: upload photos, caption them, choose a collection, reorder, hide or delete. */
 import { useState } from 'preact/hooks';
 
-export interface MPhoto { id: number; r2_key: string; caption: string; alt: string; collection: string; published: number; thumb: string }
+export interface MPhoto { id: number; r2_key: string; caption: string; alt: string; collection: string; shape: string; published: number; thumb: string }
+const SHAPES = [['auto', 'Natural shape'], ['tall', 'Tall 2:3'], ['portrait', 'Portrait 3:4'], ['square', 'Square'], ['wide', 'Wide 16:9']] as const;
 interface Props { photos: MPhoto[]; collections: string[] }
 
 const dims = (file: File) => new Promise<{ width: number; height: number }>((resolve) => {
@@ -76,6 +77,7 @@ export default function LookbookManager({ photos: initial, collections }: Props)
               <input class="wr-input" value={p.alt} placeholder="Alt text (describe the photo)" aria-label="Alt text" onChange={(e) => { const alt = (e.target as HTMLInputElement).value; update(p.id, { alt }); put(p.id, { alt }); }} />
               <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
                 <select class="wr-select" style="width:auto" value={p.collection} aria-label="Collection" onChange={(e) => { const collection = (e.target as HTMLSelectElement).value; update(p.id, { collection }); put(p.id, { collection }); }}>{collections.map((c) => <option>{c}</option>)}</select>
+                <select class="wr-select" style="width:auto" value={p.shape} aria-label="Shape on the Lookbook wall" onChange={(e) => { const shape = (e.target as HTMLSelectElement).value; update(p.id, { shape }); put(p.id, { shape }); }}>{SHAPES.map(([v, l]) => <option value={v}>{l}</option>)}</select>
                 <button type="button" class="wr-btn" aria-label="Move earlier" disabled={k === 0} onClick={() => shift(k, -1)}>↑</button>
                 <button type="button" class="wr-btn" aria-label="Move later" disabled={k === photos.length - 1} onClick={() => shift(k, 1)}>↓</button>
                 <button type="button" class="wr-btn" onClick={() => { const published = !p.published; update(p.id, { published: published ? 1 : 0 }); put(p.id, { published }); }}>{p.published ? 'Hide' : 'Show'}</button>

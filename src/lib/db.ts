@@ -51,6 +51,7 @@ export interface PhotoRow {
   width: number;
   height: number;
   object_position: string;
+  shape: 'auto' | 'tall' | 'portrait' | 'square' | 'wide';
   published: number;
 }
 

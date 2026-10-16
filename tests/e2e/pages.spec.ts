@@ -25,8 +25,8 @@ test('About has no sticky headings over content', async ({ page }) => {
 
 test('Lookbook opens a photo in the lightbox and pages with the keyboard', async ({ page }) => {
   await page.goto('/lookbook');
-  await expect(page.locator('.tile')).toHaveCount(7);
-  await page.locator('.tile-btn').first().click();
+  await expect(page.locator('.pin')).toHaveCount(7);
+  await page.locator('.pin-btn').first().click();
   const dlg = page.locator('[data-lightbox]');
   await expect(dlg).toBeVisible();
   await expect(page.locator('[data-lb-count]')).toHaveText('01 / 07');
@@ -39,7 +39,7 @@ test('Lookbook opens a photo in the lightbox and pages with the keyboard', async
 test('Lookbook filters by collection', async ({ page }) => {
   await page.goto('/lookbook');
   await page.getByRole('button', { name: /^Editorial/ }).click();
-  await expect(page.locator('.tile:visible')).toHaveCount(3);
+  await expect(page.locator('.pin:visible')).toHaveCount(3);
   await noOverflow(page);
 });
 
