@@ -4,7 +4,7 @@ The personal website of **Liz Lenjo, Esq.**, built in the "Atelier" design: a ta
 
 | Part | Address | What it is |
 |---|---|---|
-| Site | `/`, `/about`, `/lookbook`, `/privacy` | Home, full profile, photo lookbook, privacy notice |
+| Site | `/`, `/about`, `/privacy` | Home, full profile, privacy notice. (`/lookbook` is built but **on hold**: switch it on in `src/content/features.ts`.) |
 | Liz Notes | `/notes`, `/notes/<slug>`, `/notes/rss.xml` | The blog: search, categories, archive, articles, comments |
 | Workroom | `/workroom` | Liz's private writing room: posts, editor, calendar, comments, insights, lookbook, subscribers |
 

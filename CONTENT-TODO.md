@@ -13,7 +13,7 @@ These items need Liz (or her office) before or soon after launch. The site works
 | 7 | **Line-art "notions"** | Home section labels, About | **Done.** The original public-domain Pearson Scott Foresman drawings were fetched from Wikimedia Commons by a GitHub Action. | Nothing. |
 | 8 | **WIPR Diversity labels** | Recognition tags | Two tags: "Beacon of Light · 2022" and "Shining Lights · 2021" (per the PDF). | Confirm. |
 | 9 | **KEBS logo** | Partners strip | JPEG with a white background. Looks fine in the greyscale strip. | Optional: a transparent version would be cleaner. |
-| 10 | **Lookbook photos** | `/lookbook` | Shows the seven photos already on the site. | Optional: upload more in Workroom → Lookbook, with captions. |
+| 10 | **Lookbook** | `/lookbook` | **On hold.** Hidden from the public site (no page, no links, not in the sitemap). Liz can still prepare photos in Workroom → Lookbook. | When ready: set `lookbook: true` in `src/content/features.ts`, and optionally do the Google Photos setup in the README. |
 | 11 | **WordPress categories** | Liz Notes | Mapped to the new set: Entertainment Law → Entertainment; Fashion Law (Africa) → Fashion law; IP Law → Trademarks if about brands/counterfeits, otherwise Copyright; Life & Times, Lifestyle, Motherhood, Uncategorized → **Life & Times** (new category). | **Confirmed.** |
 | 12 | **"Kikao IP" page** | old `lizlenjo.com/kikao-ip` | **Deleted** (not imported; the old address now shows the 404 page). | Nothing. |
 | 13 | **Two missing PDFs** | Posts from 2016 (KFCB draft bill) and 2021 (creative-sector financing research) | The PDFs were already missing on the old site (404), so those links stay broken. | Send the PDFs if she still has them. |

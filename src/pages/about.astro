@@ -4,7 +4,7 @@ import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import Notion from '../components/Notion.astro';
-import { EDUCATION, PHOTOS, SITE } from '../content/site';
+import { EDUCATION, FEATURES, PHOTOS, SITE } from '../content/site';
 import { breadcrumbLd, personLd } from '../lib/seo';
 
 // Copy from design/uploads/profile-2026.pdf. Do not add facts that are not in the profile.
@@ -40,7 +40,7 @@ const timeline = [
         <p class="lede">She is the Founder and Managing Consultant of <a href={SITE.myip} class="inline-link" rel="noopener">MyIP Legal Studio</a>, a boutique advisory firm serving clients across Africa’s creative, digital, technology and energy sectors.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;padding-top:6px">
           <a href="/#enquire" class="btn btn-primary">Invite Liz to speak →</a>
-          <a href="/lookbook" class="btn">The lookbook</a>
+          {FEATURES.lookbook && <a href="/lookbook" class="btn">The lookbook</a>}
         </div>
       </div>
       <figure class="portrait">

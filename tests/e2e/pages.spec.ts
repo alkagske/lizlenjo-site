@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { FEATURES } from '../../src/content/features';
 
 const noOverflow = async (page: import('@playwright/test').Page) =>
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
@@ -23,7 +24,17 @@ test('About has no sticky headings over content', async ({ page }) => {
   expect(sticky).toBe(0);
 });
 
+test('Lookbook is hidden while on hold', async ({ page }) => {
+  test.skip(FEATURES.lookbook, 'Lookbook is live');
+  expect((await page.goto('/lookbook'))?.status()).toBe(404);
+  await page.goto('/');
+  await expect(page.locator('a[href="/lookbook"]')).toHaveCount(0);
+  await page.goto('/about');
+  await expect(page.locator('a[href="/lookbook"]')).toHaveCount(0);
+});
+
 test('Lookbook opens a photo in the lightbox and pages with the keyboard', async ({ page }) => {
+  test.skip(!FEATURES.lookbook, 'Lookbook on hold');
   await page.goto('/lookbook');
   await expect(page.locator('.pin')).toHaveCount(7);
   await page.locator('.pin-btn').first().click();
@@ -37,6 +48,7 @@ test('Lookbook opens a photo in the lightbox and pages with the keyboard', async
 });
 
 test('Lookbook filters by collection', async ({ page }) => {
+  test.skip(!FEATURES.lookbook, 'Lookbook on hold');
   await page.goto('/lookbook');
   await page.getByRole('button', { name: /^Editorial/ }).click();
   await expect(page.locator('.pin:visible')).toHaveCount(3);

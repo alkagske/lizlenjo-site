@@ -3,7 +3,7 @@ import { useEffect, useState } from 'preact/hooks';
 
 export interface MPhoto { id: number; r2_key: string; caption: string; alt: string; collection: string; shape: string; published: number; thumb: string }
 const SHAPES = [['auto', 'Natural shape'], ['tall', 'Tall 2:3'], ['portrait', 'Portrait 3:4'], ['square', 'Square'], ['wide', 'Wide 16:9']] as const;
-interface Props { photos: MPhoto[]; collections: string[]; googleReady: boolean }
+interface Props { photos: MPhoto[]; collections: string[]; googleReady: boolean; live: boolean }
 
 const dims = (file: File) => new Promise<{ width: number; height: number }>((resolve) => {
   const img = new Image();
@@ -12,7 +12,7 @@ const dims = (file: File) => new Promise<{ width: number; height: number }>((res
   img.src = URL.createObjectURL(file);
 });
 
-export default function LookbookManager({ photos: initial, collections, googleReady }: Props) {
+export default function LookbookManager({ photos: initial, collections, googleReady, live }: Props) {
   const [photos, setPhotos] = useState(initial);
   const [busy, setBusy] = useState('');
   const [gp, setGp] = useState<{ step: 'idle' | 'picking' | 'importing'; msg?: string }>({ step: 'idle' });
@@ -123,6 +123,7 @@ export default function LookbookManager({ photos: initial, collections, googleRe
           <label class="wr-btn primary" style="cursor:pointer">Upload photos<input type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple class="sr-only" onChange={(e) => uploadFiles((e.target as HTMLInputElement).files)} /></label>
         </div>
       </div>
+      {!live && <p class="wr-note" style="color:var(--paper);border:1px dashed var(--mat-text);padding:10px 14px;border-radius:6px">The Lookbook is on hold: it is not on the public site yet. You can still prepare photos here; they will appear when it is switched on.</p>}
       {gp.msg && <p class="wr-note" role="status" style="color:var(--paper)">{gp.msg}</p>}
       <p class="wr-note">{busy || 'Photos appear on lizlenjo.com/lookbook in this order. Captions show under each photo; alt text describes it for screen readers. Built-in photos can be hidden but not deleted.'}</p>
       <ul class="lbm" role="list">

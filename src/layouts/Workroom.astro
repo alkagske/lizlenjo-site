@@ -10,6 +10,7 @@ import '@fontsource/caveat/500.css';
 import '../styles/atelier.css';
 import '../styles/workroom.css';
 import { pendingCount } from '../lib/db';
+import { FEATURES } from '../content/site';
 
 interface Props {
   title: string;
@@ -27,7 +28,7 @@ const nav = [
   ['calendar', 'Calendar', '/workroom/calendar', counts?.scheduled ?? 0],
   ['comments', 'Comments', '/workroom/comments', pending],
   ['insights', 'Insights', '/workroom/insights', ''],
-  ['lookbook', 'Lookbook', '/workroom/lookbook', ''],
+  ['lookbook', 'Lookbook', '/workroom/lookbook', FEATURES.lookbook ? '' : 'hidden'],
   ['subscribers', 'Subscribers', '/workroom/subscribers', ''],
 ] as const;
 ---

@@ -10,6 +10,8 @@ import reflection from '../assets/photos/reflection-1920.jpg';
 import piano from '../assets/photos/piano-1920.jpg';
 import redTwirl from '../assets/photos/red-twirl-1920.jpg';
 
+export { FEATURES } from './features';
+
 export const SITE = {
   name: 'Liz Lenjo',
   formal: 'Liz Lenjo, Esq.',

@@ -5,11 +5,14 @@ import SiteFooter from '../components/SiteFooter.astro';
 import Notion from '../components/Notion.astro';
 import { listPhotos, type PhotoRow } from '../lib/db';
 import { mediaUrl, srcset, transformsOn } from '../lib/media';
-import { LOOKBOOK_COLLECTIONS, SITE } from '../content/site';
+import { FEATURES, LOOKBOOK_COLLECTIONS, SITE } from '../content/site';
+import { notFound } from '../lib/http';
 import { breadcrumbLd } from '../lib/seo';
 export const prerender = false;
 
 const env = Astro.locals.runtime.env;
+// On hold: the page does not exist publicly until FEATURES.lookbook is true (src/content/site.ts).
+if (!FEATURES.lookbook) return notFound(env, Astro.url);
 let photos: PhotoRow[] = [];
 try {
   photos = await listPhotos(env.DB);

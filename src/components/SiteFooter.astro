@@ -1,5 +1,5 @@
 ---
-import { ENQUIRY_KINDS, SITE } from '../content/site';
+import { ENQUIRY_KINDS, FEATURES, SITE } from '../content/site';
 const year = new Date().getFullYear();
 ---
 <footer id="enquire" class="site-footer" data-reveal-skip>
@@ -38,7 +38,7 @@ const year = new Date().getFullYear();
       </div>
     </div>
     <div class="footer-links">
-      <div><div class="h">SITE</div><a href="/about">About</a><a href="/notes">Liz Notes</a><a href="/lookbook">Lookbook</a><a href="/#enquire">Speaking</a></div>
+      <div><div class="h">SITE</div><a href="/about">About</a><a href="/notes">Liz Notes</a>{FEATURES.lookbook && <a href="/lookbook">Lookbook</a>}<a href="/#enquire">Speaking</a></div>
       <div><div class="h">FOLLOW</div><a href={SITE.linkedin} rel="noopener">LinkedIn ↗</a><a href={SITE.myip} rel="noopener">MyIP Legal Studio ↗</a></div>
       <div>
         <div class="h" id="sub-label">LIZ NOTES BY EMAIL</div>
