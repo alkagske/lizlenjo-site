@@ -118,7 +118,7 @@ export default function LookbookManager({ photos: initial, collections, googleRe
         <div><div class="wr-kicker">Workroom</div><h1 class="wr-h1">Lookbook</h1></div>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
           <label class="sr-only" for="lb-coll">Collection for new uploads</label>
-          <select id="lb-coll" class="wr-select" style="width:auto" value={coll} onChange={(e) => setColl((e.target as HTMLSelectElement).value)}>{collections.map((c) => <option>{c}</option>)}</select>
+          <select id="lb-coll" class="wr-select" style="width:auto" value={coll} onChange={(e) => setColl((e.target as HTMLSelectElement).value)}>{collections.map((c) => <option value={c} selected={c === coll}>{c}</option>)}</select>
           <button type="button" class="wr-btn light" disabled={gp.step !== 'idle'} title={googleReady ? 'Choose photos from Google Photos' : 'Needs the Google Photos setup in the README'} onClick={() => fromGoogle()}>{gp.step === 'idle' ? 'Add from Google Photos' : gp.step === 'picking' ? 'Waiting for Google Photos…' : 'Copying…'}</button>
           <label class="wr-btn primary" style="cursor:pointer">Upload photos<input type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple class="sr-only" onChange={(e) => uploadFiles((e.target as HTMLInputElement).files)} /></label>
         </div>
@@ -133,8 +133,8 @@ export default function LookbookManager({ photos: initial, collections, googleRe
               <input class="wr-input" value={p.caption} placeholder="Caption" aria-label="Caption" onChange={(e) => { const caption = (e.target as HTMLInputElement).value; update(p.id, { caption }); put(p.id, { caption }); }} />
               <input class="wr-input" value={p.alt} placeholder="Alt text (describe the photo)" aria-label="Alt text" onChange={(e) => { const alt = (e.target as HTMLInputElement).value; update(p.id, { alt }); put(p.id, { alt }); }} />
               <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-                <select class="wr-select" style="width:auto" value={p.collection} aria-label="Collection" onChange={(e) => { const collection = (e.target as HTMLSelectElement).value; update(p.id, { collection }); put(p.id, { collection }); }}>{collections.map((c) => <option>{c}</option>)}</select>
-                <select class="wr-select" style="width:auto" value={p.shape} aria-label="Shape on the Lookbook wall" onChange={(e) => { const shape = (e.target as HTMLSelectElement).value; update(p.id, { shape }); put(p.id, { shape }); }}>{SHAPES.map(([v, l]) => <option value={v}>{l}</option>)}</select>
+                <select class="wr-select" style="width:auto" value={p.collection} aria-label="Collection" onChange={(e) => { const collection = (e.target as HTMLSelectElement).value; update(p.id, { collection }); put(p.id, { collection }); }}>{collections.map((c) => <option value={c} selected={c === p.collection}>{c}</option>)}</select>
+                <select class="wr-select" style="width:auto" value={p.shape} aria-label="Shape on the Lookbook wall" onChange={(e) => { const shape = (e.target as HTMLSelectElement).value; update(p.id, { shape }); put(p.id, { shape }); }}>{SHAPES.map(([v, l]) => <option value={v} selected={v === p.shape}>{l}</option>)}</select>
                 <button type="button" class="wr-btn" aria-label="Move earlier" disabled={k === 0} onClick={() => shift(k, -1)}>↑</button>
                 <button type="button" class="wr-btn" aria-label="Move later" disabled={k === photos.length - 1} onClick={() => shift(k, 1)}>↓</button>
                 <button type="button" class="wr-btn" onClick={() => { const published = !p.published; update(p.id, { published: published ? 1 : 0 }); put(p.id, { published }); }}>{p.published ? 'Hide' : 'Show'}</button>

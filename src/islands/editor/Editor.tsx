@@ -380,13 +380,13 @@ export default function Editor({ post, categories, series: initialSeries }: Prop
           <div class="wr-panel">
             <label class="k" for="ed-cat">Category</label>
             <select id="ed-cat" class="wr-select" value={category} onChange={(e) => { const v = (e.target as HTMLSelectElement).value; setCategory(v); queue({ category: v }); }}>
-              {categories.map((c) => <option value={c}>{c}</option>)}
+              {categories.map((c) => <option value={c} selected={c === category}>{c}</option>)}
             </select>
             <label class="k" for="ed-series" style="padding-top:6px">Pattern set</label>
             <div style="display:flex;gap:6px">
               <select id="ed-series" class="wr-select" value={seriesId ?? ''} onChange={(e) => { const v = (e.target as HTMLSelectElement).value; const id = v ? Number(v) : null; setSeriesId(id); queue({ series_id: id }); }}>
-                <option value="">None</option>
-                {series.map((s) => <option value={s.id}>{s.name}</option>)}
+                <option value="" selected={seriesId == null}>None</option>
+                {series.map((s) => <option value={s.id} selected={s.id === seriesId}>{s.name}</option>)}
               </select>
               <button type="button" class="wr-btn" title="New pattern set" aria-label="New pattern set" onClick={addSeries}>+</button>
             </div>

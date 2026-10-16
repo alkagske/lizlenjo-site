@@ -97,3 +97,11 @@ test('Google Photos button explains when it is not set up yet', async ({ page })
   const w = await popup;
   if (w) await expect.poll(() => w.isClosed()).toBe(true);
 });
+
+test('Lookbook manager shows each photo’s own collection and shape', async ({ page }) => {
+  await page.goto('/workroom/lookbook');
+  const lecturer = page.locator('.lbm-item', { has: page.locator('input[value^="Lecturer"]') });
+  await expect(lecturer.getByLabel('Collection')).toHaveValue('Lecturer');
+  await expect(lecturer.getByLabel('Shape on the Lookbook wall')).toHaveValue('portrait');
+  await expect(page.locator('#lb-coll')).toHaveValue('Editorial');
+});
