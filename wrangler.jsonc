@@ -11,10 +11,13 @@
   "preview_urls": true,
   "observability": { "enabled": true },
 
-  // Prerendered pages, fonts and images. The Worker only runs for routes that are not files.
+  // Prerendered pages, fonts and images.
+  // run_worker_first: every request reaches src/worker.ts first, so www → lizlenjo.com and old
+  // WordPress addresses redirect everywhere. Files are then served from the assets binding.
   "assets": {
     "directory": "./dist",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    "run_worker_first": true
   },
 
   // Database: posts, comments, enquiries, subscribers, stats, photos.

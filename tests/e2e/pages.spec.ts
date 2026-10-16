@@ -62,3 +62,11 @@ test('Privacy page and 404', async ({ page }) => {
   expect(res?.status()).toBe(404);
   await expect(page.getByRole('heading', { level: 1 })).toContainText('cut from the pattern');
 });
+
+test('www forwards to the main address on every page and file', async ({ request }) => {
+  for (const path of ['/', '/about', '/logo-9.webp', '/notes']) {
+    const res = await request.get(path, { headers: { host: 'www.lizlenjo.com' }, maxRedirects: 0 });
+    expect(res.status()).toBe(301);
+    expect(res.headers()['location']).toMatch(new RegExp(`^https?://lizlenjo\\.com${path.replace('.', '\\.')}$`));
+  }
+});

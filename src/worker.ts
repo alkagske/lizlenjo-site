@@ -16,6 +16,10 @@ export function createExports(manifest: SSRManifest) {
       async fetch(request, env, ctx) {
         // Old WordPress addresses match no page, so Astro's middleware never sees them. Redirect here first.
         const url = new URL(request.url);
+        if (url.hostname.startsWith('www.')) {
+          url.hostname = url.hostname.slice(4);
+          return Response.redirect(url.toString(), 301);
+        }
         const to = legacyRedirect(url.pathname);
         if (to) return Response.redirect(new URL(to, url).toString(), 301);
         // @ts-expect-error: the adapter's handler accepts the Worker's env and context

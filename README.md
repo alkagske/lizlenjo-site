@@ -88,7 +88,7 @@ Wait until Step 1 shows the domain as **Active**.
 
 1. **Workers & Pages** → **lizlenjo-site** → **Settings** → **Domains & Routes** → **Add** → **Custom domain** → type `lizlenjo.com` → **Add domain**.
 2. Do it again for `www.lizlenjo.com`.
-3. Send `www` to the main address: left menu → choose the `lizlenjo.com` domain → **Rules** → **Overview** → **Create rule** → **Redirect rule** → pick the template **Redirect from WWW to root** → **Deploy**.
+3. Nothing else to do for `www`: the site itself forwards `www.lizlenjo.com` to `lizlenjo.com`.
 4. Visit `https://lizlenjo.com` and `https://www.lizlenjo.com` (the second should land on the first).
 
 ### Step 5. Lock the Workroom with Cloudflare Access
