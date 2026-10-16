@@ -2,10 +2,9 @@ name: Copy images from the old WordPress site
 # Must run BEFORE lizlenjo.com is pointed at Cloudflare (afterwards the old site no longer answers).
 # 1. Downloads the images used by Liz's imported posts into public/wp-content/uploads/ and commits them.
 # 2. Saves a full backup of every WordPress upload (originals) as a downloadable artifact for 90 days.
+# Done on 9 October 2026; the old site is offline now, so this only runs if started by hand.
 on:
   workflow_dispatch:
-  push:
-    paths: ['scripts/wordpress/data/images.json', 'scripts/wordpress/fetch-images.mjs', '.github/workflows/wordpress-images.yml']
 
 permissions:
   contents: write
