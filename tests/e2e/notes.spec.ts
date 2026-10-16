@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-// Uses tests/e2e/fixtures.sql, which publishes the sample posts in the LOCAL test database only.
+// Uses tests/e2e/fixtures.sql, which adds three test posts to the LOCAL test database only.
 
 test('Notes index: search, "/" shortcut, categories, archive', async ({ page }) => {
   await page.goto('/notes');
@@ -10,7 +10,7 @@ test('Notes index: search, "/" shortcut, categories, archive', async ({ page }) 
   expect(total).toBeGreaterThanOrEqual(60); // imported WordPress archive
   await page.locator('body').press('/');
   await expect(page.getByLabel('Search Liz Notes')).toBeFocused();
-  await page.keyboard.type('Swakopmund'); // appears only in a sample post's margin note (body text)
+  await page.keyboard.type('Swakopmund'); // appears only in a test post's margin note (body text)
   await expect(count).toHaveText('1 note');
   await page.getByRole('button', { name: 'Clear ×' }).click();
   await page.getByRole('button', { name: 'Fashion law' }).click();
@@ -32,8 +32,8 @@ test('Imported WordPress post renders with its comments, and the old URL redirec
 });
 
 test('Article: reading tools, series, related, comment', async ({ page }) => {
-  await page.goto('/notes/inspiration-versus-exploitation-traditional-cultural');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Inspiration versus exploitation');
+  await page.goto('/notes/test-pattern-part-three');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Test pattern: part three');
   await expect(page.locator('.dropcap')).toHaveCount(1);
   await expect(page.locator('.margin-note')).toHaveCount(3);
   await expect(page.getByRole('navigation', { name: 'Pattern set' })).toContainText('Part 3 of 3');
@@ -55,7 +55,7 @@ test('Article: reading tools, series, related, comment', async ({ page }) => {
 });
 
 test('Drafts and unknown slugs are not public', async ({ page }) => {
-  expect((await page.goto('/notes/image-rights-for-athletes-and-performers'))?.status()).toBe(404);
+  expect((await page.goto('/notes/wp-15447'))?.status()).toBe(404);
   expect((await page.goto('/notes/nope'))?.status()).toBe(404);
 });
 
@@ -65,5 +65,5 @@ test('RSS feed lists published posts only', async ({ request }) => {
   const xml = await res.text();
   expect(xml).toContain('<title>Liz Notes</title>');
   expect((xml.match(/<item>/g) || []).length).toBeGreaterThanOrEqual(6);
-  expect(xml).not.toContain('Image rights for athletes'); // draft
+  expect(xml).not.toContain('LUDICRIOUS PROPOSED DRAFT'); // imported draft
 });

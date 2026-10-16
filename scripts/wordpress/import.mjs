@@ -345,7 +345,6 @@ function build() {
     '/blog': '/notes',
     '/about-liz': '/about',
     '/left-menu': '/about',
-    '/kikao-ip': '/about',
     '/feed': '/notes/rss.xml',
     '/comments/feed': '/notes/rss.xml',
   });

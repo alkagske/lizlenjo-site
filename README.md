@@ -79,7 +79,7 @@ R2 holds the photos and post images. It is free up to 10 GB, but Cloudflare asks
    | Root directory | *(leave empty)* |
 
 4. Under **Advanced settings → Build variables** add `NODE_VERSION` = `22`.
-5. Click **Create and deploy**. The first build takes about three minutes. It creates the database (`lizlenjo-db`), the media bucket (`lizlenjo-media`), loads the database tables and the sample draft posts, and publishes the site at an address like `https://lizlenjo-site.<your-name>.workers.dev`.
+5. Click **Create and deploy**. The first build takes about three minutes. It creates the database (`lizlenjo-db`), the media bucket (`lizlenjo-media`), loads the database tables and Liz's imported posts, and publishes the site at an address like `https://lizlenjo-site.<your-name>.workers.dev`.
 6. Open that address. The home page should appear. (`/workroom` will say **"This room is locked"**. That is correct until Step 5.)
 
 ### Step 4. Point lizlenjo.com at the site
@@ -140,7 +140,7 @@ Left menu → **Analytics & logs** → **Web analytics** → **Add a site** → 
 1. `https://lizlenjo.com/workroom` → asks for an email → enter Liz's → a code arrives by email → the Workroom opens.
 2. On the home page, send a test enquiry. It should arrive at the `ENQUIRY_TO` address.
 3. In the footer, subscribe with your own email. A confirmation email should arrive.
-4. In the Workroom, open a sample post, choose **Publish now**, click **Publish**, and check it appears at `/notes`. Then set it back to **Save as draft**.
+4. Open `https://lizlenjo.com/notes`: Liz's imported posts should be listed. Then open an old address, for example `https://lizlenjo.com/branding-suicide/`, and check it lands on the same post under `/notes/`.
 
 ### Optional extras
 
@@ -175,7 +175,7 @@ npm run dev                         # http://localhost:4321
 ```
 
 - `/workroom` works on localhost without Cloudflare Access because `.dev.vars` sets `DEV_ACCESS_BYPASS=1`. The bypass only works on `localhost`/`127.0.0.1`; it is ignored everywhere else.
-- The sample posts are drafts. To see them in Liz Notes locally: `npx wrangler d1 execute DB --local --file tests/e2e/fixtures.sql`.
+- Liz's imported posts appear locally after `npm run db:migrate:local`. `tests/e2e/fixtures.sql` adds three extra test posts (local only).
 - Workers AI is not called locally; spam scoring falls back to the built-in heuristics.
 - To run the exact production build locally: `npm run build && npx wrangler dev --local`.
 
@@ -192,7 +192,9 @@ npm run db:migrate:remote                              # apply to production (ne
 Production migrations also run automatically on every deploy (`npm run deploy`). Never edit a migration that has already run in production; add a new one.
 
 - `0001_init.sql`: tables. The School tables (`courses`, `modules`, `lessons`, `enrolments`, `progress`) are reserved for Stage 3 and unused.
-- `0002_seed_samples.sql`: the prototype's sample posts (**drafts only**, marked `is_sample`) and the seven built-in Lookbook photos.
+- `0002_seed_samples.sql`: the seven built-in Lookbook photos (and the prototype's sample posts, which `0004` deletes again).
+- `0003_wordpress_import.sql`: Liz's posts and comments from WordPress.
+- `0004_remove_sample_posts.sql`: removes the prototype's sample posts.
 
 ## How deploys work
 
@@ -250,13 +252,12 @@ npm run build
 cp tests/e2e/e2e.dev.vars .dev.vars && npm run test:e2e   # Playwright smoke tests at 1440 px and 375 px
 ```
 
-The Playwright tests start `wrangler dev --local`, load `tests/e2e/fixtures.sql` (publishes the sample posts **in the local test database only**) and cover Home, About, Lookbook, Privacy, 404, Liz Notes, articles, comments, RSS and the Workroom (editor, slash menu, autosave, publish, calendar drag, moderation). CI runs all of this on every push.
+The Playwright tests start `wrangler dev --local`, load `tests/e2e/fixtures.sql` (adds three test posts **in the local test database only**) and cover Home, About, Lookbook, Privacy, 404, Liz Notes, articles, comments, RSS and the Workroom (editor, slash menu, autosave, publish, calendar drag, moderation). CI runs all of this on every push.
 
 Other scripts:
 
 - `npm run notions:fetch`: re-download the public-domain line-art notions from Wikimedia Commons (also available as the "Fetch line-art notions" GitHub Action).
 - `node scripts/og-default.mjs`: re-render the default social-share image.
-- `node scripts/gen-seed.mjs`: regenerate the sample-post seed migration.
 
 ## Project layout
 
