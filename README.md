@@ -260,7 +260,7 @@ node scripts/wordpress/import.mjs build                        # → migrations/
 ```
 
 - Images used by the posts were downloaded by the **"Copy images from the old WordPress site"** GitHub Action into `public/wp-content/uploads/`, so the old image addresses still work.
-- The same run saved every WordPress upload (689 files, 95 MB) as the artifact `wordpress-uploads-backup`. Download it from **GitHub → Actions → Copy images from the old WordPress site → the latest run → Artifacts** before 7 January 2027 and keep it somewhere safe.
+- The same run saved every WordPress upload (689 files, 95 MB) as the artifact `wordpress-uploads-backup`. Download it from **GitHub → Actions → Copy images from the old WordPress site → the run from **9 October 2026** → Artifacts** before 7 January 2027 and keep it somewhere safe.
 - Old addresses redirect permanently: `/<post-slug>/` → `/notes/<post-slug>`, `/about-liz/` → `/about`, `/blog/`, categories, tags and date archives → `/notes`, `/feed/` → `/notes/rss.xml` (`src/lib/redirects.ts`, applied in `src/worker.ts`).
 - The raw export file is **not** in the repository because it contains commenters' email addresses.
 
