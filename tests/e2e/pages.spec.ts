@@ -70,3 +70,11 @@ test('www forwards to the main address on every page and file', async ({ request
     expect(res.headers()['location']).toMatch(new RegExp(`^https?://lizlenjo\\.com${path.replace('.', '\\.')}$`));
   }
 });
+
+test('Sign-in page leads to the Workroom and is kept out of search', async ({ page }) => {
+  await page.goto('/signin');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Welcome back');
+  await expect(page.getByRole('link', { name: /Continue with Google/ })).toHaveAttribute('href', '/workroom');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  await noOverflow(page);
+});

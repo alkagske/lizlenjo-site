@@ -20,7 +20,7 @@ export default defineConfig({
   integrations: [
     preact(),
     sitemap({
-      filter: (page) => !/\/(workroom|api)\b|\/404\/?$/.test(page),
+      filter: (page) => !/\/(workroom|api|signin)\b|\/404\/?$/.test(page),
     }),
   ],
   build: { inlineStylesheets: 'auto' },

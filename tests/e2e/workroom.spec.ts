@@ -8,6 +8,9 @@ test.skip(({ isMobile }) => !!isMobile, 'Workroom flows are exercised at desktop
 test('Access is required away from localhost', async ({ request }) => {
   const res = await request.get('/workroom', { headers: { host: 'lizlenjo.com' } });
   expect([401, 403]).toContain(res.status());
+  const html = await res.text();
+  expect(html).toContain('This room is locked.');
+  expect(html).toContain('href="/signin"');
 });
 
 test('write, slash-command, autosave and publish a post', async ({ page }) => {

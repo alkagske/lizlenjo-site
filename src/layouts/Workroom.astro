@@ -56,7 +56,7 @@ const nav = [
     <form method="post" action="/api/admin/posts"><button type="submit" class="wr-new">New post</button></form>
     <div class="wr-foot">
       <span style="color:var(--on-dark-1)">{user?.email ?? 'Liz Lenjo'}</span>
-      <span>{user?.dev ? 'Local development (no Access)' : 'Signed in with Cloudflare Access'}</span>
+      <span>{user?.dev ? 'Local development (no Access)' : 'Signed in with Google'}</span>
       <a href="/" target="_blank" rel="noopener" style="color:var(--on-dark-4);padding-top:6px">View site ↗</a>
       {!user?.dev && <a href="/cdn-cgi/access/logout" style="color:var(--on-dark-3)">Sign out</a>}
     </div>

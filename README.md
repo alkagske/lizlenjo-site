@@ -93,17 +93,25 @@ Wait until Step 1 shows the domain as **Active**.
 
 ### Step 5. Lock the Workroom with Cloudflare Access
 
-This makes `lizlenjo.com/workroom` ask for Liz's email and a one-time code. No passwords to remember.
+This makes `lizlenjo.com/workroom` sign in with Google, and only for the invited addresses. Liz's front door is **`lizlenjo.com/signin`** (bookmark it): a page in the site's own style whose button goes to `/workroom`, which then goes straight to Google.
 
-1. Left menu: **Zero Trust**. First time only: choose a **team name** (for example `lizlenjo`), pick the **Free** plan, and finish the sign-up. 📋 Your **team domain** is `<team name>.cloudflareaccess.com` (shown under **Settings → Custom pages** if you need it again).
-2. **Access** → **Applications** → **Add an application** → **Self-hosted**.
-3. **Application name:** `Workroom`. **Session duration:** `1 week` (or as you prefer).
-4. Under **Public hostname / Destinations** add two entries:
+**As set up in October 2026:** team domain `sweet-thunder-9bb2.cloudflareaccess.com` (random name chosen by Cloudflare; it is only seen for a moment during sign-in), Google as the only login method with instant authentication, invited addresses `liz@lizlenjo.com` and `alkags@alkags.me`.
+
+1. Left menu: **Zero Trust**. First time only: pick the **Free** plan and finish the sign-up. 📋 Note the **team domain** (`<team name>.cloudflareaccess.com`), under **Settings → Team name and domain**.
+2. **Connect Google** (in Google Cloud Console, with any Google account):
+   - Create a project. In **Google Auth Platform**: app name `Liz Lenjo Workroom`, audience **External**, then **Publish app**.
+   - **Clients → Create client → Web application.** Authorised JavaScript origin `https://<team domain>`; authorised redirect URI `https://<team domain>/cdn-cgi/access/callback`. 📋 Copy the **Client ID** and **Client secret** (never into the repo).
+   - Back in Zero Trust: **Integrations → Identity providers → Add → Google** (not "Google Workspace", because the two invited addresses use different domains). Paste both values, save, and press **Test**.
+   - `Error 400: redirect_uri_mismatch` means the redirect URI does not match the team domain exactly; Google's "error details" link shows the address Cloudflare sent.
+3. **Access → Applications → Add an application → Self-hosted.** Name `Workroom`, session duration `1 week`.
+4. **Destinations** (public hostnames):
    - Domain `lizlenjo.com`, path `workroom*`
    - Domain `lizlenjo.com`, path `api/admin*`
-5. **Next** → **Add a policy**: name `Liz only`, action **Allow**, rule **Include → Emails →** Liz's email address (add yours too if you will help her). Save.
-6. **Login methods:** make sure **One-time PIN** is ticked.
-7. Save the application. Open it again and go to **Overview** (or **Basic information**). 📋 Copy the **Application Audience (AUD) Tag**, a long string of letters and numbers.
+5. **Policy:** name `Liz & Al only`, action **Allow**, rule **Include → Emails →** the invited addresses.
+6. **Authentication:** turn off "Accept all available identity providers", choose **Google** only, and turn on **Apply instant authentication** (this skips Cloudflare's own sign-in page). Turn off **Show application in App Launcher** (it cannot use paths with `*` and blocks saving).
+7. Save. Open the application → **Additional settings**. 📋 Copy the **Application Audience (AUD) Tag**.
+
+**If Google sign-in ever breaks** (for example the Google client is deleted: `Error 401: deleted_client`): in the Workroom application's **Authentication**, add **One-time PIN**, turn off instant authentication, and sign in with an emailed code while you fix Google.
 
 ### Step 6. Add the settings and secrets
 
