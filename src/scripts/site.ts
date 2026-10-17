@@ -88,25 +88,37 @@ function loadTurnstile(): Promise<void> {
   });
   return scriptPromise;
 }
-const widgets = new WeakMap<HTMLFormElement, string>();
-export async function armTurnstile(form: HTMLFormElement) {
-  if (widgets.has(form)) return;
-  widgets.set(form, '');
-  const key = await siteKey();
-  const slot = form.querySelector<HTMLElement>('.ts-slot');
-  if (!key || !slot) return;
-  try {
-    await loadTurnstile();
-    const id = window.turnstile!.render(slot, { sitekey: key, appearance: 'interaction-only', theme: 'light' });
-    widgets.set(form, id);
-  } catch { /* the server will reject if a token was required */ }
+/** Widget id per form ('' when Turnstile is not configured or failed to load). */
+const widgets = new WeakMap<HTMLFormElement, Promise<string>>();
+export function armTurnstile(form: HTMLFormElement): Promise<string> {
+  let widget = widgets.get(form);
+  if (!widget) {
+    widget = (async () => {
+      const key = await siteKey();
+      const slot = form.querySelector<HTMLElement>('.ts-slot');
+      if (!key || !slot) return '';
+      try {
+        await loadTurnstile();
+        return window.turnstile!.render(slot, { sitekey: key, appearance: 'interaction-only', theme: 'light' });
+      } catch {
+        return ''; // the server will reject if a token was required
+      }
+    })();
+    widgets.set(form, widget);
+  }
+  return widget;
 }
-export function turnstileToken(form: HTMLFormElement): string {
-  const id = widgets.get(form);
-  return (id && window.turnstile?.getResponse(id)) || '';
+/** The form's Turnstile token, waiting for the (usually invisible) check to finish if it is still running. */
+export async function turnstileToken(form: HTMLFormElement, waitMs = 10_000): Promise<string> {
+  const id = await armTurnstile(form);
+  if (!id) return '';
+  for (const end = Date.now() + waitMs; ; await new Promise((r) => setTimeout(r, 200))) {
+    const token = window.turnstile?.getResponse(id);
+    if (token || Date.now() > end) return token || '';
+  }
 }
-export function resetTurnstile(form: HTMLFormElement) {
-  const id = widgets.get(form);
+export async function resetTurnstile(form: HTMLFormElement) {
+  const id = await widgets.get(form);
   if (id) window.turnstile?.reset(id);
 }
 document.querySelectorAll<HTMLFormElement>('form[data-turnstile]').forEach((f) => {
@@ -146,9 +158,8 @@ if (enquiry) {
     if (!enquiry.reportValidity()) return;
     const btn = enquiry.querySelector<HTMLButtonElement>('button[type="submit"]')!;
     btn.disabled = true;
-    await armTurnstile(enquiry);
     const fd = new FormData(enquiry);
-    const res = await postJson('/api/enquiry', { ...Object.fromEntries(fd.entries()), token: turnstileToken(enquiry) });
+    const res = await postJson('/api/enquiry', { ...Object.fromEntries(fd.entries()), token: await turnstileToken(enquiry) });
     btn.disabled = false;
     if (res.ok) {
       enquiry.hidden = true;

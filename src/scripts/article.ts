@@ -1,5 +1,5 @@
 /** Article reading tools: minutes left, contents, text size, sharing, highlight-to-quote, comments, read beacons. */
-import { armTurnstile, postJson, resetTurnstile, turnstileToken } from './site';
+import { postJson, resetTurnstile, turnstileToken } from './site';
 import { minutesLeft } from '../lib/readtime';
 
 const art = document.querySelector<HTMLElement>('[data-article]');
@@ -107,9 +107,8 @@ if (art) {
       if (!form.reportValidity()) return;
       const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
       btn.disabled = true;
-      await armTurnstile(form);
       const fd = Object.fromEntries(new FormData(form).entries());
-      const res = await postJson('/api/comment', { ...fd, postId: Number(fd.postId), token: turnstileToken(form) });
+      const res = await postJson('/api/comment', { ...fd, postId: Number(fd.postId), token: await turnstileToken(form) });
       btn.disabled = false;
       if (res.ok) {
         form.hidden = true;
