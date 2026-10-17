@@ -111,4 +111,5 @@ export function devBypassAllowed(url: URL, flag: string | undefined): boolean {
   return flag === '1' && ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
 }
 
-export const isProtectedPath = (path: string) => /^\/(workroom|api\/admin)(\/|$)/.test(path);
+/** Everything under /workroom/ and /api/admin. /workroom itself is the public sign-in page. */
+export const isProtectedPath = (path: string) => /^\/(workroom\/.|api\/admin(\/|$))/.test(path);

@@ -19,6 +19,7 @@ describe('old WordPress URLs', () => {
   it('leaves everything else alone', () => {
     expect(legacyRedirect('/notes/branding-suicide')).toBeNull();
     expect(legacyRedirect('/workroom')).toBeNull();
+    expect(legacyRedirect('/signin')).toBe('/workroom');
     expect(legacyRedirect('/no-such-post/')).toBeNull();
     expect(legacyRedirect('/kikao-ip/')).toBeNull(); // page deleted
     expect(legacyRedirect('/%E0%A4%A')).toBeNull();

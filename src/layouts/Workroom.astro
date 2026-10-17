@@ -24,7 +24,7 @@ const [counts, pending] = await Promise.all([
   pendingCount(env.DB),
 ]);
 const nav = [
-  ['posts', 'Posts', '/workroom', counts?.posts ?? 0],
+  ['posts', 'Posts', '/workroom/posts', counts?.posts ?? 0],
   ['calendar', 'Calendar', '/workroom/calendar', counts?.scheduled ?? 0],
   ['comments', 'Comments', '/workroom/comments', pending],
   ['insights', 'Insights', '/workroom/insights', ''],
@@ -46,7 +46,7 @@ const nav = [
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="wr">
   <aside class="wr-side">
-    <a href="/workroom" style="display:flex;flex-direction:column;gap:6px">
+    <a href="/workroom/posts" style="display:flex;flex-direction:column;gap:6px">
       <img src="/logo-white.webp" alt="Liz Lenjo" width="48" height="44" style="height:44px;width:auto;align-self:flex-start">
       <span class="wr-kicker" style="color:var(--on-dark-3);padding-top:8px">Workroom</span>
     </a>

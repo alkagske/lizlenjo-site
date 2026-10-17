@@ -11,6 +11,7 @@ export function legacyRedirect(pathname: string): string | null {
   } catch {
     return null;
   }
+  if (p === '/signin') return '/workroom'; // first address of the sign-in page
   if (WP[p]) return WP[p]!;
   if (/^\/(category|tag|author)\/./.test(p) || /^\/\d{4}(\/\d{2}){0,2}$/.test(p) || p === '/page' || /^\/page\/\d+$/.test(p)) return '/notes';
   if (/^\/[a-z0-9-]+\/(feed|amp)$/.test(p)) {

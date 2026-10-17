@@ -90,7 +90,9 @@ describe('helpers', () => {
     expect(devBypassAllowed(new URL('http://localhost/workroom'), undefined)).toBe(false);
   });
   it('protects the Workroom and admin API only', () => {
-    expect(isProtectedPath('/workroom')).toBe(true);
+    expect(isProtectedPath('/workroom')).toBe(false); // the public sign-in page
+    expect(isProtectedPath('/workroom/')).toBe(false);
+    expect(isProtectedPath('/workroom/posts')).toBe(true);
     expect(isProtectedPath('/workroom/editor/3')).toBe(true);
     expect(isProtectedPath('/api/admin/posts')).toBe(true);
     expect(isProtectedPath('/api/comment')).toBe(false);

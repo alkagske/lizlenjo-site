@@ -93,7 +93,7 @@ Wait until Step 1 shows the domain as **Active**.
 
 ### Step 5. Lock the Workroom with Cloudflare Access
 
-This makes `lizlenjo.com/workroom` sign in with Google, and only for the invited addresses. Liz's front door is **`lizlenjo.com/signin`** (bookmark it): a page in the site's own style whose button goes to `/workroom`, which then goes straight to Google.
+This makes `lizlenjo.com/workroom` sign in with Google, and only for the invited addresses. Liz's front door is **`lizlenjo.com/workroom`**: a sign-in page in the site's own style (the only Workroom page outside Access). Its button opens `/workroom/posts`, which goes straight to Google. (`/signin` forwards there too.)
 
 **As set up in October 2026:** team domain `sweet-thunder-9bb2.cloudflareaccess.com` (random name chosen by Cloudflare; it is only seen for a moment during sign-in), Google as the only login method with instant authentication, invited addresses `liz@lizlenjo.com` and `alkags@alkags.me`.
 
@@ -105,7 +105,7 @@ This makes `lizlenjo.com/workroom` sign in with Google, and only for the invited
    - `Error 400: redirect_uri_mismatch` means the redirect URI does not match the team domain exactly; Google's "error details" link shows the address Cloudflare sent.
 3. **Access → Applications → Add an application → Self-hosted.** Name `Workroom`, session duration `1 week`.
 4. **Destinations** (public hostnames):
-   - Domain `lizlenjo.com`, path `workroom*`
+   - Domain `lizlenjo.com`, path `workroom/*` (with the slash, so the sign-in page at `/workroom` stays public)
    - Domain `lizlenjo.com`, path `api/admin*`
 5. **Policy:** name `Liz & Al only`, action **Allow**, rule **Include → Emails →** the invited addresses.
 6. **Authentication:** turn off "Accept all available identity providers", choose **Google** only, and turn on **Apply instant authentication** (this skips Cloudflare's own sign-in page). Turn off **Show application in App Launcher** (it cannot use paths with `*` and blocks saving).
@@ -145,7 +145,7 @@ Left menu → **Analytics & logs** → **Web analytics** → **Add a site** → 
 
 ### Step 8. Check everything works
 
-1. `https://lizlenjo.com/workroom` → asks for an email → enter Liz's → a code arrives by email → the Workroom opens.
+1. `https://lizlenjo.com/workroom` → the sign-in page → **Continue with Google** → choose Liz's account → the Workroom opens.
 2. On the home page, send a test enquiry. It should arrive at the `ENQUIRY_TO` address.
 3. In the footer, subscribe with your own email. A confirmation email should arrive.
 4. Open `https://lizlenjo.com/notes`: Liz's imported posts should be listed. Then open an old address, for example `https://lizlenjo.com/branding-suicide/`, and check it lands on the same post under `/notes/`.
@@ -179,7 +179,7 @@ Notes: Google only lets the site see the photos Liz picks, never her whole libra
 
 ## How Liz writes a post
 
-1. Go to `lizlenjo.com/workroom` and sign in with the emailed code.
+1. Go to `lizlenjo.com/workroom` and sign in with Google.
 2. Click **New post**. Type a **title** and a one-line **standfirst**.
 3. Write in the body. Type **/** at the start of an empty line for: **Heading**, **Pull quote**, **Margin note** (the red handwritten aside), **Case citation**, **Image**, **Stitch divider**, **List**. Use ↑ ↓ and Enter to pick.
 4. Click the striped box at the top to add a **cover image** (or drag a photo onto it), and describe it in the alt-text box.
@@ -316,7 +316,7 @@ design/                 the design handoff and client documents (not deployed)
 |---|---|
 | `/workroom` says "This room is locked (access not configured)" | `ACCESS_TEAM_DOMAIN` or `ACCESS_AUD` is missing. Step 6. |
 | "This room is locked (wrong audience)" | `ACCESS_AUD` does not match the Access application's AUD tag. Copy it again. |
-| "This room is locked (missing token)" | You opened the workers.dev address, or the Access application paths do not cover this URL. Use `lizlenjo.com/workroom` and check Step 5.4. |
+| "This room is locked (missing token)" | You opened the workers.dev address, or the Access application paths do not cover this URL. Use `lizlenjo.com/workroom` and check the paths in Step 5.4. |
 | Enquiry form says "Please complete the spam check" | Turnstile keys are wrong, or the hostname is not listed on the Turnstile widget. |
 | No enquiry emails | Check `RESEND_API_KEY`, `ENQUIRY_TO`, and that the domain shows **Verified** in Resend. Enquiries are still saved in the database. |
 | Build fails at "migrations apply" | Usually a permissions issue on the first run. In **Workers & Pages → lizlenjo-site → Settings → Build → API token**, make sure the token has **D1 Edit**; or run `npm run db:migrate:remote` once from a computer logged in with `npx wrangler login`. |

@@ -231,7 +231,7 @@ export default function Editor({ post, categories, series: initialSeries }: Prop
     if (mode === 'now' && !title.trim()) { alert('Add a title before publishing.'); return; }
     if (post.is_sample && mode !== 'draft' && !confirm('This is sample content from the design prototype. Publish it anyway?')) return;
     const ok = await flush({ title, excerpt, category, tags: tags.split(',').map((t) => t.trim()).filter(Boolean), body_json: ed.current?.getJSON(), slug: slug || undefined, series_id: seriesId, cover_alt: cover.alt, mode, publish_at: mode === 'schedule' ? whenLocal : null });
-    if (ok) location.href = '/workroom';
+    if (ok) location.href = '/workroom/posts';
   };
   const restore = (v: Version) => {
     if (!confirm(`Restore the version from ${when(v.created_at)}? The current text is kept in the history.`)) return;
@@ -258,7 +258,7 @@ export default function Editor({ post, categories, series: initialSeries }: Prop
   const remove = async () => {
     if (!confirm('Delete this post permanently? This cannot be undone.')) return;
     const r = await api(`/api/admin/posts/${post.id}`, 'DELETE');
-    if (r.ok) location.href = '/workroom';
+    if (r.ok) location.href = '/workroom/posts';
   };
 
   const previewSlug = slug || slugify(title || 'untitled');
@@ -270,7 +270,7 @@ export default function Editor({ post, categories, series: initialSeries }: Prop
   return (
     <>
       <div class="wr-head" style="align-items:center">
-        <a href="/workroom" class="wr-kicker" onClick={() => flush()}>← Posts</a>
+        <a href="/workroom/posts" class="wr-kicker" onClick={() => flush()}>← Posts</a>
         <div style="display:flex;gap:12px 14px;align-items:center;flex-wrap:wrap;justify-content:flex-end;font-size:12px;color:var(--mat-text)">
           <span style="display:flex;align-items:center;gap:8px;white-space:nowrap" role="status" aria-live="polite">
             <span class="dot" style={`background:${save.state === 'saving' ? '#e0a33a' : save.state === 'error' ? 'var(--spam)' : '#7fd19b'}`}></span>

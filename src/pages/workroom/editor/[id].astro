@@ -10,7 +10,7 @@ export const prerender = false;
 const env = Astro.locals.runtime.env;
 const id = intParam(Astro.params.id);
 const post = id ? await getPost(env.DB, id) : null;
-if (!post) return Astro.redirect('/workroom', 302);
+if (!post) return Astro.redirect('/workroom/posts', 302);
 const series = await listSeries(env.DB);
 ---
 <Workroom title={post.title || 'Untitled'} current="posts">

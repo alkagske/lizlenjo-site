@@ -71,10 +71,13 @@ test('www forwards to the main address on every page and file', async ({ request
   }
 });
 
-test('Sign-in page leads to the Workroom and is kept out of search', async ({ page }) => {
-  await page.goto('/signin');
+test('Sign-in page at /workroom leads into the Workroom and is kept out of search', async ({ page, request }) => {
+  const old = await request.get('/signin', { maxRedirects: 0 });
+  expect(old.status()).toBe(301);
+  expect(old.headers()['location']).toMatch(/\/workroom$/);
+  await page.goto('/workroom');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Welcome back');
-  await expect(page.getByRole('link', { name: /Continue with Google/ })).toHaveAttribute('href', '/workroom');
+  await expect(page.getByRole('link', { name: /Continue with Google/ })).toHaveAttribute('href', '/workroom/posts');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
   await noOverflow(page);
 });

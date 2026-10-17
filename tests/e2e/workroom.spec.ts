@@ -6,15 +6,15 @@ test.describe.configure({ mode: 'serial' });
 test.skip(({ isMobile }) => !!isMobile, 'Workroom flows are exercised at desktop width');
 
 test('Access is required away from localhost', async ({ request }) => {
-  const res = await request.get('/workroom', { headers: { host: 'lizlenjo.com' } });
+  const res = await request.get('/workroom/posts', { headers: { host: 'lizlenjo.com' } });
   expect([401, 403]).toContain(res.status());
   const html = await res.text();
   expect(html).toContain('This room is locked.');
-  expect(html).toContain('href="/signin"');
+  expect(html).toContain('href="/workroom"');
 });
 
 test('write, slash-command, autosave and publish a post', async ({ page }) => {
-  await page.goto('/workroom');
+  await page.goto('/workroom/posts');
   await page.getByRole('button', { name: 'New post' }).click();
   await expect(page).toHaveURL(/\/workroom\/editor\/\d+/);
   const title = `Smoke test post ${Date.now()}`;
@@ -46,7 +46,7 @@ test('write, slash-command, autosave and publish a post', async ({ page }) => {
   await page.getByLabel('Category').selectOption('Governance'); // keeps the reader tests' category counts stable
   await page.getByLabel('Publish now').check();
   await page.getByRole('button', { name: 'Publish' }).click();
-  await expect(page).toHaveURL(/\/workroom$/);
+  await expect(page).toHaveURL(/\/workroom\/posts$/);
   await expect(page.getByText(title)).toBeVisible();
 
   await page.goto('/notes');
@@ -64,7 +64,7 @@ test('schedule a draft from the calendar', async ({ page }) => {
   const target = page.locator('.cal-cell[data-day$="-15"]').first();
   await draft.dragTo(target);
   await expect(target.locator('.cal-chip', { hasText: name })).toBeVisible();
-  await page.goto('/workroom?status=scheduled');
+  await page.goto('/workroom/posts?status=scheduled');
   await expect(page.getByText(name)).toBeVisible();
 });
 
